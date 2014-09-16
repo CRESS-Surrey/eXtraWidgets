@@ -1,9 +1,8 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import org.nlogo.window.GUIWorkspace
+import org.nlogo.app.App
 
 import javax.swing.JPanel
 
-class ExtraWidgetsTab(workspace: GUIWorkspace) extends JPanel {
-
+class ExtraWidgetsTab(app: App) extends JPanel {
 }
