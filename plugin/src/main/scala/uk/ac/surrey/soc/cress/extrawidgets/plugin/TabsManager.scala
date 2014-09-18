@@ -1,8 +1,8 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
 import java.awt.Component
-
 import org.nlogo.app.Tabs
+import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 class TabsManager(tabs: Tabs) {
 
@@ -13,4 +13,6 @@ class TabsManager(tabs: Tabs) {
         tabs.remove(component)
         tabs.removeMenuItem(i)
       }
+
+  def addTab(component: Component) = throw new NotImplementedException
 }
