@@ -4,10 +4,15 @@ scalaVersion := "2.9.3"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "UTF8")
 
+resolvers ++= Seq(
+    "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+)
+
 libraryDependencies ++= Seq(
   "org.nlogo" % "NetLogo" % "5.1.0" from
     "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar",
-  "org.scalatest" %% "scalatest" % "1.9.2" % "test"
+  "org.scalatest" %% "scalatest" % "1.9.2" % "test",
+  "com.typesafe.akka" % "akka-actor" % "2.0.5" % "test"
 )
 
 // Dependencies for NetLogo controlling in tests
