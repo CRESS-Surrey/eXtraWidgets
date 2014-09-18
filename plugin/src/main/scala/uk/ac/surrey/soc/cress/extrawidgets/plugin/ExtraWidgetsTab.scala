@@ -6,7 +6,7 @@ import org.nlogo.swing.Implicits.thunk2runnable
 
 import javax.swing.JPanel
 
-class ExtraWidgetsTab(app: App) extends JPanel {
+class ExtraWidgetsPlugin(app: App) extends JPanel {
   val tabsManager = new TabsManager(app.tabs)
   invokeLater { () ⇒ tabsManager.removeTab(this) }
 }

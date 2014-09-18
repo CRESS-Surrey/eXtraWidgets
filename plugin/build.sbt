@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
 
 packageOptions += Package.ManifestAttributes(
   ("Tab-Name", "eXtraWidgets"),
-  ("Class-Name", "uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsTab"),
+  ("Class-Name", "uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin"),
   ("NetLogo-API-Version", "5.0")
 )
 
