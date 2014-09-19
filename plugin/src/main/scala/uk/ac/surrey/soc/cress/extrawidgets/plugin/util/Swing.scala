@@ -3,10 +3,10 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-
 import javax.swing.JComponent
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
+import javax.swing.JOptionPane
 
 object Swing {
 
@@ -63,6 +63,27 @@ object Swing {
         override def ancestorRemoved(e: AncestorEvent) = f(e)
       })
     }
+  }
+
+  def inputDialog(title: String, question: String, default: String): Option[String] = {
+    Option(JOptionPane.showInputDialog(
+      null, // parent frame
+      question,
+      title,
+      JOptionPane.QUESTION_MESSAGE,
+      null, // icon
+      null, // options
+      default))
+      .collect { case s: String ⇒ s }
+      .map(_.trim)
+  }
+
+  def warningDialog(title: String, message: String): Unit = {
+    JOptionPane.showMessageDialog(
+      null, // parent frame
+      message,
+      title,
+      JOptionPane.WARNING_MESSAGE)
   }
 
 }
