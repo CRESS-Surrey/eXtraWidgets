@@ -11,8 +11,7 @@ import javax.swing.JPanel
 class ExtraWidgetsPlugin(app: App) extends JPanel {
   self =>
 
-  private var _tabsManager: TabsManager = null
-  def tabsManager = _tabsManager
+  val tabsManager: TabsManager = new TabsManager(app.tabs)
   private var _toolsMenu: ToolsMenu = null
   def toolsMenu = _toolsMenu
 
@@ -28,8 +27,6 @@ class ExtraWidgetsPlugin(app: App) extends JPanel {
       firePropertyChange("toolsMenu", null, _toolsMenu)
       toolsMenu.addSeparator()
       toolsMenu.addMenuItem(GUIStrings.ToolsMenu.CreateTab, 'X', true)
-      _tabsManager = new TabsManager(app.tabs)
-      firePropertyChange("tabsManager", null, _tabsManager)
       tabsManager.removeTab(self)
     }
   })
