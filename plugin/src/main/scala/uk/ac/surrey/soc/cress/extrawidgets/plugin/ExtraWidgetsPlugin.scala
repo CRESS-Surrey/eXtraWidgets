@@ -12,12 +12,8 @@ case class ExtraWidgetsPlugin(
   val tabs: Tabs,
   val toolsMenu: ToolsMenu)
   extends JPanel {
-  self ⇒
 
-  val tabsManager: TabsManager = new TabsManager(tabs)
+  val tabsManager: TabsManager = new TabsManager(tabs, toolsMenu)
+  appFrame.onComponentShown(_ ⇒ tabsManager.removeTab(this))
 
-  toolsMenu.addSeparator()
-  toolsMenu.addMenuItem(GUIStrings.ToolsMenu.CreateTab, 'X', true)
-
-  appFrame.onComponentShown(_ ⇒ tabsManager.removeTab(self))
 }
