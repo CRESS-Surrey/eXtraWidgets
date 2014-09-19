@@ -1,23 +1,23 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import java.awt.event.ComponentAdapter
-import java.awt.event.ComponentEvent
-
-import org.nlogo.app.App
+import org.nlogo.app.AppFrame
+import org.nlogo.app.Tabs
 import org.nlogo.app.ToolsMenu
 
 import javax.swing.JPanel
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
 
-class ExtraWidgetsPlugin(app: App, toolsMenu: ToolsMenu) extends JPanel {
-  self =>
+case class ExtraWidgetsPlugin(
+  val appFrame: AppFrame,
+  val tabs: Tabs,
+  val toolsMenu: ToolsMenu)
+  extends JPanel {
+  self ⇒
 
-  val tabsManager: TabsManager = new TabsManager(app.tabs)
+  val tabsManager: TabsManager = new TabsManager(tabs)
 
-  app.frame.addComponentListener(new ComponentAdapter() {
-    override def componentShown(e: ComponentEvent) {
-      toolsMenu.addSeparator()
-      toolsMenu.addMenuItem(GUIStrings.ToolsMenu.CreateTab, 'X', true)
-      tabsManager.removeTab(self)
-    }
-  })
+  toolsMenu.addSeparator()
+  toolsMenu.addMenuItem(GUIStrings.ToolsMenu.CreateTab, 'X', true)
+
+  appFrame.onComponentShown(_ ⇒ tabsManager.removeTab(self))
 }
