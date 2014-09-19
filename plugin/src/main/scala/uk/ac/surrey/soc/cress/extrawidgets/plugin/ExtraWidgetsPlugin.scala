@@ -13,7 +13,7 @@ case class ExtraWidgetsPlugin(
   val toolsMenu: ToolsMenu)
   extends JPanel {
 
-  val tabsManager: TabsManager = new TabsManager(tabs, toolsMenu)
+  val tabsManager = new TabsManager(tabs, toolsMenu)
   appFrame.onComponentShown(_ ⇒ tabsManager.removeTab(this))
 
 }
