@@ -1,40 +1,33 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import java.beans.PropertyChangeEvent
-import java.beans.PropertyChangeListener
-
 import scala.Array.canBuildFrom
 
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
 import org.scalatest.FunSuite
+import org.scalatest.matchers.ShouldMatchers
 
-import akka.dispatch.Promise
 import javax.swing.JMenuItem
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.SwingExecutionContext.swingExecutionContext
+import util.NetLogoInitializer.app
 
-class TabsManagerTests extends FunSuite with PropertyChangeListener {
-
-  App.main(Array[String]())
-  val ewp = new ExtraWidgetsPlugin(App.app)
-  val toolsMenu = Promise[ToolsMenu]()
-
-  ewp.addPropertyChangeListener(this)
-
-  def propertyChange(e: PropertyChangeEvent): Unit = {
-    if (e.getPropertyName == "toolsMenu")
-      toolsMenu.success(ewp.toolsMenu)
-  }
+class TabsManagerTests extends FunSuite with ShouldMatchers {
 
   test("'" + GUIStrings.ToolsMenu.CreateTab + "' added to Tools menu") {
-    toolsMenu.onSuccess {
-      case tm: ToolsMenu =>
-        val items = tm.getMenuComponents.collect {
+    app.onSuccess {
+      case app: App =>
+        val jMenuBar = app.frame.getJMenuBar
+        val toolsMenu =
+          (0 until jMenuBar.getMenuCount)
+            .map(jMenuBar.getMenu)
+            .collect { case m: ToolsMenu => m }
+            .headOption
+            .getOrElse(throw new IllegalStateException("Can't find tools menu"))
+
+        val items = toolsMenu.getMenuComponents.collect {
           case item: JMenuItem if item.getText == GUIStrings.ToolsMenu.CreateTab =>
             item
         }
-        assert(items.size === 1)
+        items should have size 1
     }
   }
-
 }
