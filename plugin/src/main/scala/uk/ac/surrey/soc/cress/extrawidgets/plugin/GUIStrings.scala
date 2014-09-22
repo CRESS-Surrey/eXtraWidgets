@@ -5,8 +5,11 @@ object GUIStrings {
     val TabNameQuestion = "How would you like to name your new tab?"
     val DefaultTabName = "New Tab"
     val InvalidTabName = "Invalid tab name"
+  }
+  object Data {
     val TabNameMustBeNonEmpty = "You must enter a name for your tab."
-    val TabNameMustBeUnique = "The name of your tab must be unique."
+    def nameMustBeUnique(kind: String, name: String) =
+      "There is already a " + kind + " named \"" + name + "\". The name must be unique."
   }
   object ToolsMenu {
     val CreateTab = "Create Extra Widgets Tab..."

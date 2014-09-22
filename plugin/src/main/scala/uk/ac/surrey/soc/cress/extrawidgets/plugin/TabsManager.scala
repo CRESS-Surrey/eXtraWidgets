@@ -12,13 +12,12 @@ import org.nlogo.swing.TabsMenu
 
 import GUIStrings.TabsManager.DefaultTabName
 import GUIStrings.TabsManager.InvalidTabName
-import GUIStrings.TabsManager.TabNameMustBeNonEmpty
-import GUIStrings.TabsManager.TabNameMustBeUnique
 import GUIStrings.TabsManager.TabNameQuestion
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.data.MutableExtraWidgetsData
 import util.Swing.inputDialog
 import util.Swing.warningDialog
 
-class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu) {
+class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu, val data: MutableExtraWidgetsData) {
 
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(
@@ -52,15 +51,9 @@ class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu) {
       .foreach(warningDialog(InvalidTabName, _))
   }
 
-  def validateNonEmptyName(name: String) =
-    Either.cond(name.nonEmpty, name, TabNameMustBeNonEmpty)
-  def validateUniqueName(name: String) =
-    Either.cond(!extraWidgetTabs.exists(_.name == name), name, TabNameMustBeUnique)
-
   def addTab(name: String): Either[String, ExtraWidgetsTab] =
     for {
-      _ ← validateNonEmptyName(name).right
-      _ ← validateUniqueName(name).right
+      _ ← data.add("tab", name).right
     } yield {
       val tab = new ExtraWidgetsTab(name)
       tabs.addTab(name, tab)
