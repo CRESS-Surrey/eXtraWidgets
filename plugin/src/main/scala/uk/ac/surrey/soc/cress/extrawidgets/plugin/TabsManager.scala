@@ -18,7 +18,7 @@ import GUIStrings.TabsManager.TabNameQuestion
 import util.Swing.inputDialog
 import util.Swing.warningDialog
 
-class TabsManager(tabs: Tabs, toolsMenu: ToolsMenu) {
+class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu) {
 
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(

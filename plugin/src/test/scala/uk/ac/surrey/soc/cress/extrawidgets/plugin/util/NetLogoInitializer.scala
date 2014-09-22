@@ -1,25 +1,22 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 
 import org.nlogo.app.App
-import akka.dispatch.Promise
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
 import org.nlogo.app.ToolsMenu
-import org.nlogo.app.AppFrame
+
+import akka.dispatch.Promise
 import javax.swing.JFrame
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
 
 object NetLogoInitializer {
+
   import SwingExecutionContext.swingExecutionContext
+
   val extraWidgetsPlugin = Promise[ExtraWidgetsPlugin]()
   App.main(Array[String]())
   App.app.frame.onComponentShown { e ⇒
     extraWidgetsPlugin.success(
-      new ExtraWidgetsPlugin(
-        App.app.frame,
-        App.app.tabs,
-        getToolsMenu(App.app.frame)
-      )
+      new ExtraWidgetsPlugin(App.app, getToolsMenu(App.app.frame))
     )
   }
 
@@ -29,6 +26,6 @@ object NetLogoInitializer {
       .map(jMenuBar.getMenu)
       .collect { case m: ToolsMenu ⇒ m }
       .headOption
-      .getOrElse(throw new IllegalStateException("Can't find tools menu"))
+      .getOrElse(throw new Exception("Can't find tools menu."))
   }
 }

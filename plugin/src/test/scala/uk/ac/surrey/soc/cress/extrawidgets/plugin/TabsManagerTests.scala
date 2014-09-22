@@ -22,7 +22,7 @@ class TabsManagerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
     it("should add '" + GUIStrings.ToolsMenu.CreateTab + "' to Tools menu") {
       for (ewp ← extraWidgetsPlugin) {
-        val items = ewp.toolsMenu.getMenuComponents.collect {
+        val items = ewp.tabsManager.toolsMenu.getMenuComponents.collect {
           case item: JMenuItem if item.getText == GUIStrings.ToolsMenu.CreateTab ⇒
             item
         }
