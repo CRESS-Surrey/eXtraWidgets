@@ -1,22 +1,29 @@
 package uk.ac.surrey.soc.cress.extrawidgets.extension
 
-import org.nlogo.api.ClassManager
+import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
-import org.nlogo.api.ExtensionObject
-import org.nlogo.api.ImportErrorHandler
 import org.nlogo.api.PrimitiveManager
 
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.data.ExtraWidgetsData
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.data.MutableExtraWidgetsData
 
-class ExtraWidgetsExtension extends ClassManager {
+class ExtraWidgetsExtension extends DefaultClassManager {
+
+  private var _data: MutableExtraWidgetsData = null
+  def data = _data
 
   override def runOnce(em: ExtensionManager): Unit = {
-    println("runOnce() " + this)
+    _data = ExtraWidgetsData.getOrCreateIn(em)
   }
 
   def load(primitiveManager: PrimitiveManager): Unit = {
     println("load() " + this)
-    val prims = Seq(new Version("0.0.0-wip"))
+    val prims = Seq(
+      new Version("0.0.0-wip"),
+      new Add(data)
+    )
     for (p ← prims) primitiveManager.addPrimitive(p.primitiveName, p)
   }
 
@@ -27,14 +34,5 @@ class ExtraWidgetsExtension extends ClassManager {
   override def clearAll(): Unit = {
     println("unload clearAll() " + this)
   }
-
-  override def exportWorld: java.lang.StringBuilder = new java.lang.StringBuilder
-
-  override def importWorld(lines: java.util.List[Array[String]], reader: ExtensionManager, handler: ImportErrorHandler) {}
-
-  override def readExtensionObject(em: ExtensionManager, typeName: String, value: String): ExtensionObject =
-    throw new IllegalStateException("readExtensionObject not implemented for " + this)
-
-  override def additionalJars: java.util.List[String] = new java.util.ArrayList[String]
 
 }
