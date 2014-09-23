@@ -1,9 +1,15 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.data
 
-import scala.collection.mutable.{ Map ⇒ MMap }
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data.TabNameMustBeNonEmpty
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data._
+import java.util.concurrent.{ ConcurrentHashMap ⇒ JCMap }
+
+import scala.collection.JavaConverters.asScalaConcurrentMapConverter
+import scala.collection.mutable.{ ConcurrentMap ⇒ ScalaCMap }
+
 import org.nlogo.api.ExtensionManager
+
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data.propertyMustBeNonEmpty
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data.propertyMustBeUnique
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.eitherToRightBiased
 
 object ExtraWidgetsData {
   def getOrCreateIn(extensionManager: ExtensionManager): MutableExtraWidgetsData = {
@@ -13,7 +19,8 @@ object ExtraWidgetsData {
         catch { case e: ClassCastException ⇒ None }
       }
     def create(): Store = {
-      val store = MMap[WidgetName, MMap[PropertyName, PropertyValue]]()
+      val store: Store =
+        new JCMap[WidgetName, ScalaCMap[PropertyName, PropertyValue]](2).asScala
       extensionManager.storeObject(store)
       store
     }
@@ -27,35 +34,36 @@ class ExtraWidgetsData(store: Store) {
     try Some(x.asInstanceOf[A])
     catch { case e: ClassCastException ⇒ None }
 
-  def validateNonEmptyName(name: String) =
-    Either.cond(name.nonEmpty, name, TabNameMustBeNonEmpty)
+  def validateNonEmpty(property: PropertyName, value: String) =
+    Either.cond(value.nonEmpty, value, propertyMustBeNonEmpty(property))
 
-  def validateUniqueName(kind: String, name: String) = {
-    val otherNames = for {
-      (n, w) ← store
-      k ← w.get("kind")
-      if k == kind
-    } yield n
-    Either.cond(isUnique(name, otherNames), name, nameMustBeUnique(kind, name))
+  def validateUnique(
+    property: PropertyName,
+    value: PropertyValue,
+    filter: collection.Map[PropertyName, PropertyValue] ⇒ Boolean = _ ⇒ true) = {
+    val otherValues = for {
+      (v, w) ← store
+      if filter(w)
+    } yield v
+    Either.cond(isUnique(value, otherValues), value, propertyMustBeUnique(property, value))
   }
 
-  def isUnique(name: String, existingNames: Iterable[String]) =
-    !existingNames.exists(_ == name)
+  def isUnique[A](value: A, existingValues: Iterable[A]) =
+    !existingValues.exists(_ == value)
 
 }
 
 class MutableExtraWidgetsData(store: Store) extends ExtraWidgetsData(store) {
 
-  def add(kind: String, name: String): Either[String, String] =
+  def add(kind: Kind, id: String): Either[String, String] =
     for {
-      _ ← validateNonEmptyName(name).right
-      _ ← validateUniqueName(kind, name).right
+      _ ← validateNonEmpty("id", id)
+      _ ← validateUnique("id", id)
     } yield {
-      val w = MMap[PropertyName, PropertyValue]()
+      val w = new JCMap[PropertyName, PropertyValue]().asScala
       w += "kind" -> kind
-      store += name -> w
+      store += id -> w
       println(store)
-      name
+      id
     }
-
 }

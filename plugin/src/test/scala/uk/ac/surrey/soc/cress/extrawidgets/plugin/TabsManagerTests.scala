@@ -6,8 +6,8 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import GUIStrings.Data.TabNameMustBeNonEmpty
-import GUIStrings.Data.nameMustBeUnique
+import GUIStrings.Data.propertyMustBeNonEmpty
+import GUIStrings.Data.propertyMustBeUnique
 import akka.dispatch.Await
 import akka.util.duration.intToDurationInt
 import javax.swing.JMenuItem
@@ -34,15 +34,15 @@ class TabsManagerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
       tm.addTab("first tab") should be('right)
     }
 
-    it("should not able to create tabs with duplicate names") {
-      tm.addTab("first tab") shouldEqual Left(nameMustBeUnique("tab", "first tab"))
+    it("should not able to create tabs with duplicate id") {
+      tm.addTab("first tab") shouldEqual Left(propertyMustBeUnique("id", "first tab"))
     }
 
-    it("should not be able to create tabs with empty names") {
-      tm.addTab("") shouldEqual Left(TabNameMustBeNonEmpty)
+    it("should not be able to create tabs with empty id") {
+      tm.addTab("") shouldEqual Left(propertyMustBeNonEmpty("id"))
     }
 
-    it("should be able to create a second tab with a different name") {
+    it("should be able to create a second tab with a different id") {
       tm.addTab("second tab") should be('right)
     }
   }
