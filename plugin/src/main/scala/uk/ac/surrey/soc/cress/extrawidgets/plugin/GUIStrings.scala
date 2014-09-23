@@ -1,6 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import data._
+import model.PropertyName
+import model.PropertyValue
 
 object GUIStrings {
   object TabsManager {

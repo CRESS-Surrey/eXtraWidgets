@@ -3,7 +3,9 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
 
+import akka.dispatch.Await
 import akka.dispatch.Promise
+import akka.util.duration.intToDurationInt
 import javax.swing.JFrame
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
@@ -12,13 +14,15 @@ object NetLogoInitializer {
 
   import SwingExecutionContext.swingExecutionContext
 
-  val extraWidgetsPlugin = Promise[ExtraWidgetsPlugin]()
+  private val ewpPromise = Promise[ExtraWidgetsPlugin]()
   App.main(Array[String]())
   App.app.frame.onComponentShown { e ⇒
-    extraWidgetsPlugin.success(
+    ewpPromise.success(
       new ExtraWidgetsPlugin(App.app, getToolsMenu(App.app.frame))
     )
   }
+
+  def extraWidgetsPlugin = Await.result(ewpPromise, 30 seconds)
 
   def getToolsMenu(frame: JFrame) = {
     val jMenuBar = frame.getJMenuBar

@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin
+package uk.ac.surrey.soc.cress.extrawidgets.plugin.view
 
 import javax.swing.JPanel
 
