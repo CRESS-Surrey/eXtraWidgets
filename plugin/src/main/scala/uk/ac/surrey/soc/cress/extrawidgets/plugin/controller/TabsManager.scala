@@ -8,13 +8,13 @@ import scala.collection.TraversableOnce.flattenTraversableOnce
 import org.nlogo.app.Tabs
 import org.nlogo.app.ToolsMenu
 
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.TabsManager.DefaultTabName
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.TabsManager.InvalidTabName
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.TabsManager.TabNameQuestion
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.ToolsMenu.CreateTab
+import Strings.CreateTab
+import Strings.DefaultTabName
+import Strings.InvalidTabName
+import Strings.TabNameQuestion
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.inputDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
 
 class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) {
 

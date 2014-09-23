@@ -6,6 +6,7 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
+import controller.Strings.CreateTab
 import javax.swing.JMenuItem
 import util.NetLogoInitializer.extraWidgetsPlugin
 
@@ -15,9 +16,9 @@ class TabsManagerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
     val tm = extraWidgetsPlugin.tabsManager
 
-    it("should add '" + GUIStrings.ToolsMenu.CreateTab + "' to Tools menu") {
+    it("should add '" + CreateTab + "' to Tools menu") {
       val items = tm.toolsMenu.getMenuComponents.collect {
-        case item: JMenuItem if item.getText == GUIStrings.ToolsMenu.CreateTab ⇒
+        case item: JMenuItem if item.getText == CreateTab ⇒
           item
       }
       items should have size 1

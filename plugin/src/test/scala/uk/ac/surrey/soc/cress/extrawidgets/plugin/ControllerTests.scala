@@ -4,8 +4,8 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import GUIStrings.Data.propertyMustBeNonEmpty
-import GUIStrings.Data.propertyMustBeUnique
+import model.Strings.propertyMustBeNonEmpty
+import model.Strings.propertyMustBeUnique
 import util.NetLogoInitializer.extraWidgetsPlugin
 
 class ControllerTests extends FunSpec with ShouldMatchers with GivenWhenThen {

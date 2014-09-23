@@ -1,7 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.model
 
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data.propertyMustBeNonEmpty
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.GUIStrings.Data.propertyMustBeUnique
+import Strings.propertyMustBeNonEmpty
+import Strings.propertyMustBeUnique
 
 class Reader(store: Store) {
 
