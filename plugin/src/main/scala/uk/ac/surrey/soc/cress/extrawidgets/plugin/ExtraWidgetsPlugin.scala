@@ -6,14 +6,14 @@ import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.Controller
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model._
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.TabsManager
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.gui.GUI
 
 case class ExtraWidgetsPlugin(val app: App, toolsMenu: ToolsMenu) extends JPanel {
 
   val store = getOrCreateStoreIn(app.workspace.getExtensionManager)
   val writer = new Writer(store)
   val controller = new Controller(writer)
-  val tabsManager = new TabsManager(app.tabs, toolsMenu, controller)
+  val tabsManager = new GUI(app.tabs, toolsMenu, controller)
 
   app.frame.onComponentShown(_ ⇒ tabsManager.removeTab(this))
 

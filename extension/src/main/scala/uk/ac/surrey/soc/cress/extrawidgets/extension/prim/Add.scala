@@ -7,14 +7,14 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.commandSyntax
 
 import uk.ac.surrey.soc.cress.extrawidgets.extension.util.tryTo
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.data.MutableExtraWidgetsData
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Writer
 
-class Add(data: MutableExtraWidgetsData) extends DefaultCommand with NamedPrimitive {
+class Add(writer: Writer) extends DefaultCommand with NamedPrimitive {
   val primitiveName = "add"
   override def getSyntax = commandSyntax(Array(StringType, StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
     val kind = args(0).getString
     val name = args(1).getString
-    tryTo(data.add(kind, name))
+    tryTo(writer.add(kind, name))
   }
 }

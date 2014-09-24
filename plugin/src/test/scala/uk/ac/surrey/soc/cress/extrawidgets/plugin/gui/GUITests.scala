@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin
+package uk.ac.surrey.soc.cress.extrawidgets.plugin.gui
 
 import scala.Array.canBuildFrom
 
@@ -6,13 +6,13 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import controller.Strings.CreateTab
+import Strings.CreateTab
 import javax.swing.JMenuItem
-import util.NetLogoInitializer.extraWidgetsPlugin
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.NetLogoInitializer.extraWidgetsPlugin
 
-class TabsManagerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
+class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
-  describe("The TabsManager") {
+  describe("The GUI") {
 
     val tm = extraWidgetsPlugin.tabsManager
 

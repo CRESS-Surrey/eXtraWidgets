@@ -1,12 +1,11 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin
+package uk.ac.surrey.soc.cress.extrawidgets.plugin.controller
 
 import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import model.Strings.propertyMustBeNonEmpty
-import model.Strings.propertyMustBeUnique
-import util.NetLogoInitializer.extraWidgetsPlugin
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Strings._
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.NetLogoInitializer.extraWidgetsPlugin
 
 class ControllerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
 

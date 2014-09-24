@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin.controller
+package uk.ac.surrey.soc.cress.extrawidgets.plugin.gui
 
 import java.awt.Component
 
@@ -12,11 +12,12 @@ import Strings.CreateTab
 import Strings.DefaultTabName
 import Strings.InvalidTabName
 import Strings.TabNameQuestion
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.Controller
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.inputDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
 
-class TabsManager(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) {
+class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) {
 
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())

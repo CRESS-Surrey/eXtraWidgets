@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
+package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
@@ -7,7 +7,6 @@ import akka.dispatch.Await
 import akka.dispatch.Promise
 import akka.util.duration.intToDurationInt
 import javax.swing.JFrame
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.enrichComponent
 
 object NetLogoInitializer {

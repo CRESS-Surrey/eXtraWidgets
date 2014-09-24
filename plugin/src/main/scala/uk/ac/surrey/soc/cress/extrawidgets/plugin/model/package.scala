@@ -24,17 +24,16 @@ package object model {
   def getOrCreateStoreIn(extensionManager: ExtensionManager): MutableStore = {
     // TODO: if there is already some object stored in the extensionManager,
     // we should raise an exception and explain the situation to the user...
-    def store: Option[MutableStore] =
+    def getStore: Option[MutableStore] =
       Option(extensionManager.retrieveObject).flatMap(cast[MutableStore])
     def create(): MutableStore = {
-      val store: MutableStore =
-        new JCMap[WidgetName, CMap[PropertyName, PropertyValue]](2).asScala
+      val store = newMutableStore
       extensionManager.storeObject(store)
       store
     }
-    store.getOrElse(create())
+    getStore.getOrElse(create())
   }
-
+  def newMutableStore = new JCMap[WidgetName, CMap[PropertyName, PropertyValue]](2).asScala
   def newWidgetMap = new JCMap[PropertyName, PropertyValue]().asScala
 
 }
