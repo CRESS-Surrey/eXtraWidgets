@@ -11,14 +11,14 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
-  private var store: MutableStore = null
+  private var widgetMap: MutableWidgetMap = null
   private var writer: Writer = null
   private var reader: Reader = null
 
   override def runOnce(em: ExtensionManager): Unit = {
-    store = getOrCreateStoreIn(em)
-    writer = new Writer(store)
-    reader = new Reader(store)
+    widgetMap = getOrCreateWidgetMapIn(em)
+    reader = new Reader(widgetMap)
+    writer = new Writer(widgetMap, reader)
   }
 
   def load(primitiveManager: PrimitiveManager): Unit = {
