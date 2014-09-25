@@ -40,7 +40,10 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) 
     }
 
   def removeWidget(widget: ExtraWidget): Unit = {
-    println("Removing widget " + widget.id + " (not implemented)")
+    println("Removing widget " + widget.id)
+    widget match {
+      case tab: ExtraWidgetsTab ⇒ removeTab(tab)
+    }
   }
 
   def createWidget(id: WidgetID, propertyMap: PropertyMap): Unit = {

@@ -11,6 +11,7 @@ class Writer(
   widgetMap: MutableWidgetMap,
   publisher: SimpleChangeEventPublisher,
   reader: Reader) {
+
   def add(kind: WidgetKind, id: WidgetID): Either[String, Unit] =
     for {
       _ ← reader.validateNonEmpty("id", id)
@@ -21,4 +22,10 @@ class Writer(
       widgetMap += id -> w
       publisher.publish()
     }
+
+  def remove(id: WidgetID): Unit = {
+    widgetMap -= id
+    publisher.publish()
+  }
+
 }
