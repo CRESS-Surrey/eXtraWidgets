@@ -3,15 +3,13 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+
 import javax.swing.JComponent
+import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
-import javax.swing.JOptionPane
 
 object Swing {
-
-  implicit def functionToRunnable[T](f: ⇒ T) =
-    new Runnable() { def run() { f } }
 
   implicit def enrichComponent(component: Component) = new RichComponent(component)
   implicit def enrichJComponent(jComponent: JComponent) = new RichJComponent(jComponent)

@@ -1,6 +1,10 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
 package object util {
+
+  implicit def toRunnable[T](block: ⇒ T) =
+    new Runnable() { def run() { block } }
+
   // see: https://issues.scala-lang.org/browse/SI-5793
   implicit def eitherToRightBiased[A, B](e: Either[A, B]) =
     new RightBiasedEither(e)
