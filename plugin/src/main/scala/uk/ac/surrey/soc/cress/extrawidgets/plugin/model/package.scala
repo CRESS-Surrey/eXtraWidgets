@@ -23,19 +23,18 @@ package object model {
   type WidgetMap = Map[WidgetID, PropertyMap] //with ObservableMap[WidgetID, PropertyMap]
   type MutableWidgetMap = ConcurrentMap[WidgetID, MutablePropertyMap] //with ObservableMap[WidgetID, PropertyMap]
 
-  def getOrCreateModel(extensionManager: ExtensionManager): (Reader, Writer) =
+  def getOrCreateModel(extensionManager: ExtensionManager): (Reader, Writer) = {
     // TODO: if there is already some object stored in the extensionManager,
-    // we should raise catch the cast exception and explain the situation to the user...
-    Option(extensionManager.retrieveObject)
-      .map(_.asInstanceOf[(Reader, Writer)])
-      .getOrElse {
-        val publisher = new SimpleChangeEventPublisher
-        val widgetMap = newWidgetMap
-        extensionManager.storeObject((publisher, widgetMap))
-        val reader = new Reader(widgetMap, publisher)
-        val writer = new Writer(widgetMap, publisher, reader)
-        (reader, writer)
-      }
+    // we should catch the cast exception and explain the situation to the user...
+    val (publisher, widgetMap) =
+      Option(extensionManager.retrieveObject)
+        .map(_.asInstanceOf[(SimpleChangeEventPublisher, MutableWidgetMap)])
+        .getOrElse { (new SimpleChangeEventPublisher, newWidgetMap) }
+    extensionManager.storeObject((publisher, widgetMap))
+    val reader = new Reader(widgetMap, publisher)
+    val writer = new Writer(widgetMap, publisher, reader)
+    (reader, writer)
+  }
 
   /*  Parameters for the ConcurrentHashMaps. concurrencyLevel is 2 as only
    *  the job thread and the AWT event should ever write to the map.

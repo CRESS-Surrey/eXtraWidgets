@@ -16,11 +16,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   private var reader: Reader = null
 
   override def runOnce(em: ExtensionManager): Unit = {
-    getOrCreateModel(em) match {
-      case (r, w) ⇒
-        reader = r
-        writer = w
-    }
+    val tuple: (Reader, Writer) = getOrCreateModel(em)
+    reader = tuple._1
+    writer = tuple._2
   }
 
   def load(primitiveManager: PrimitiveManager): Unit = {
