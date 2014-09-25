@@ -3,12 +3,12 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.PrimitiveManager
-
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.getOrCreateModel
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -25,7 +25,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     println("load() " + this)
     val prims = Seq(
       new Version("0.0.0-wip"),
-      new Add(writer)
+      new Add(writer),
+      new Remove(writer)
     )
     for (p ← prims) primitiveManager.addPrimitive(p.primitiveName, p)
   }
