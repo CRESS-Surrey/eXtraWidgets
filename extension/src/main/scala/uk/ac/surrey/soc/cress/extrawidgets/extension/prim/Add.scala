@@ -14,7 +14,7 @@ class Add(writer: Writer) extends DefaultCommand with NamedPrimitive {
   override def getSyntax = commandSyntax(Array(StringType, StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
     val kind = args(0).getString
-    val name = args(1).getString
-    tryTo(writer.add(kind, name))
+    val id = args(1).getString
+    tryTo(writer.add(kind, id))
   }
 }
