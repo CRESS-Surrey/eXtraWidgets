@@ -1,22 +1,38 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.view
 
+import org.nlogo.awt.EventQueue.invokeLater
+
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.gui.GUI
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.toRunnable
 
 class View(reader: Reader, gui: GUI) {
 
-  def refresh(): Unit = {
+  reader.onChange {
+    // make sure we are on the AWT event thread, because the change could
+    // have been triggered from an extension running in the job thread:
+    invokeLater {
 
-    val guiWidgets = gui.makeWidgetsMap
+      println("*refresh*")
 
-    val (keysOfExistingWidgets, keysOfMissingWidgets) =
-      reader.widgetMap.keys.partition(guiWidgets.contains)
+      val guiWidgets = gui.makeWidgetsMap
 
-    keysOfMissingWidgets.flatMap(reader.widgetMap.get).foreach(gui.createWidget)
-    keysOfExistingWidgets.flatMap(reader.widgetMap.get).foreach(gui.updateWidget)
+      val (keysOfExistingWidgets, keysOfMissingWidgets) =
+        reader.widgetMap.keys.partition(guiWidgets.contains)
 
-    val deadWidgets = guiWidgets.filterKeys(reader.widgetMap.contains).values
-    deadWidgets.foreach(gui.removeWidget)
+      for {
+        id ← keysOfMissingWidgets
+        propertyMap ← reader.widgetMap.get(id)
+      } gui.createWidget(id, propertyMap)
+
+      for {
+        id ← keysOfExistingWidgets
+        propertyMap ← reader.widgetMap.get(id)
+      } gui.updateWidget(id, propertyMap)
+
+      val deadWidgets = guiWidgets.filterKeys(id ⇒ !reader.widgetMap.contains(id)).values
+      deadWidgets.foreach(gui.removeWidget)
+    }
   }
 
 }

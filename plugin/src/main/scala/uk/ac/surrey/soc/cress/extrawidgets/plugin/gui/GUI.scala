@@ -3,18 +3,22 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.gui
 import java.awt.Component
 import java.awt.Container
 
+import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
 
+import org.nlogo.api.I18N
 import org.nlogo.app.Tabs
 import org.nlogo.app.ToolsMenu
+import org.nlogo.swing.TabsMenu
 
 import Strings.CreateTab
 import Strings.DefaultTabName
 import Strings.InvalidTabName
-import Strings.TabNameQuestion
+import Strings.TabIDQuestion
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.Controller
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model._
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.WidgetID
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.inputDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
@@ -36,15 +40,24 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) 
     }
 
   def removeWidget(widget: ExtraWidget): Unit = {
-    println("Removing widget " + widget + " (not implemented)")
+    println("Removing widget " + widget.id + " (not implemented)")
   }
 
-  def createWidget(propertyMap: PropertyMap): Unit = {
-    println("Creating widget from " + propertyMap + " (not implemented)")
+  def createWidget(id: WidgetID, propertyMap: PropertyMap): Unit = {
+    println("Creating widget from " + (id, propertyMap))
+    propertyMap.get("kind") match {
+      case Some("tab") ⇒ {
+        val label = propertyMap.getOrElse("label", id).toString
+        val tab = new ExtraWidgetsTab(id, label)
+        tabs.addTab(label, tab)
+        tabs.tabsMenu = new TabsMenu(I18N.gui.get("menu.tabs"), tabs)
+      }
+      case _ ⇒ warningDialog("Error", "Unknown widget kind!")
+    }
   }
 
-  def updateWidget(propertyMap: PropertyMap): Unit = {
-    println("Updating widget from " + propertyMap + " (not implemented)")
+  def updateWidget(id: WidgetID, propertyMap: PropertyMap): Unit = {
+    println("Updating widget from " + (id, propertyMap) + " (not implemented)")
   }
 
   def removeTab(component: Component): Unit =
@@ -63,7 +76,7 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) 
   def createNewTab(): Unit = {
     def askName(default: String) = inputDialog(
       CreateTab,
-      TabNameQuestion, default)
+      TabIDQuestion, default)
     Iterator
       .iterate(askName(DefaultTabName))(_.flatMap(askName))
       .takeWhile(_.isDefined)

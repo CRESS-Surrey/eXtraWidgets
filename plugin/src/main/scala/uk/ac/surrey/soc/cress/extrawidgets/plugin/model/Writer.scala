@@ -1,8 +1,16 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.model
 
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util._
+import org.nlogo.api.SimpleChangeEventPublisher
 
-class Writer(widgetMap: MutableWidgetMap, reader: Reader) {
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.eitherToRightBiased
+
+/**
+ *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.
+ */
+class Writer(
+  widgetMap: MutableWidgetMap,
+  publisher: SimpleChangeEventPublisher,
+  reader: Reader) {
   def add(kind: WidgetKind, id: WidgetID): Either[String, Unit] =
     for {
       _ ← reader.validateNonEmpty("id", id)
@@ -11,5 +19,6 @@ class Writer(widgetMap: MutableWidgetMap, reader: Reader) {
       val w = newPropertyMap
       w += "kind" -> kind
       widgetMap += id -> w
+      publisher.publish()
     }
 }

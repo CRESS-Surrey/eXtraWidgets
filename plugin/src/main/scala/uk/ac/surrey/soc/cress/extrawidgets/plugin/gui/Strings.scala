@@ -2,7 +2,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.gui
 
 object Strings {
   val CreateTab = "Create Extra Widgets Tab..."
-  val TabNameQuestion = "How would you like to name your new tab?"
+  val TabIDQuestion = "What should be the ID for your new tab?"
   val DefaultTabName = "New Tab"
-  val InvalidTabName = "Invalid tab name"
+  val InvalidTabName = "Invalid tab ID"
 }

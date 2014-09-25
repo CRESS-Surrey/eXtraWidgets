@@ -1,9 +1,25 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.model
 
+import org.nlogo.api.SimpleChangeEvent
+import org.nlogo.api.SimpleChangeEventPublisher
+
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
 
-class Reader(val widgetMap: WidgetMap) {
+class Reader(
+  val widgetMap: WidgetMap,
+  publisher: SimpleChangeEventPublisher) {
+
+  def onChange[A](block: ⇒ A): Unit = {
+    val sub = new SimpleChangeEventPublisher#Sub {
+      publisher.subscribe(this)
+      override def notify(
+        pub: SimpleChangeEventPublisher#Pub,
+        event: SimpleChangeEvent.type) {
+        block
+      }
+    }
+  }
 
   def validateNonEmpty(property: PropertyName, value: String) =
     Either.cond(value.nonEmpty, value, propertyMustBeNonEmpty(property))
