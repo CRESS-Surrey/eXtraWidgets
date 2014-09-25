@@ -24,11 +24,11 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   def load(primitiveManager: PrimitiveManager): Unit = {
     println("load() " + this)
     val prims = Seq(
-      new Version("0.0.0-wip"),
-      new Add(writer),
-      new Remove(writer)
+      "version" -> new Version("0.0.0-wip"),
+      "add" -> new Add(writer),
+      "remove" -> new Remove(writer)
     )
-    for (p ← prims) primitiveManager.addPrimitive(p.primitiveName, p)
+    for ((name, prim) ← prims) primitiveManager.addPrimitive(name, prim)
   }
 
   override def unload(em: ExtensionManager): Unit = {
