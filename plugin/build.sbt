@@ -4,6 +4,8 @@ scalaVersion := "2.9.3"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "UTF8")
 
+fork := true
+
 resolvers ++= Seq(
     "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 )
