@@ -60,5 +60,18 @@ class ControllerTests extends FunSpec with ShouldMatchers {
       shouldBeThere("first tab")
       shouldBeThere("second tab")
     }
+
+    it("should be able to remove the first tab while keeping the second one") {
+      controller.removeTab("first tab")
+      shouldNotBeThere("first tab")
+      shouldBeThere("second tab")
+    }
+
+    it("should then be able to add a third tab") {
+      controller.addTab("third tab")
+      shouldNotBeThere("first tab")
+      shouldBeThere("second tab")
+      shouldBeThere("third tab")
+    }
   }
 }
