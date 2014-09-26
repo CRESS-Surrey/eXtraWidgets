@@ -1,6 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.view
 
-import org.nlogo.awt.EventQueue.invokeLater
+import org.nlogo.awt.EventQueue.invokeAndWait
 
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.gui.GUI
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
@@ -11,7 +11,7 @@ class View(reader: Reader, gui: GUI) {
   reader.onChange {
     // make sure we are on the AWT event thread, because the change could
     // have been triggered from an extension running in the job thread:
-    invokeLater {
+    invokeAndWait {
 
       println("*refresh*")
 
