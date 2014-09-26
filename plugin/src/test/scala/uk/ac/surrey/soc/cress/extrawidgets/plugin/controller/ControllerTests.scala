@@ -1,14 +1,16 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.controller
 
+import scala.Option.option2Iterable
+
+import org.nlogo.app.App
 import org.scalatest.FunSpec
-import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
+
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.NetLogoInitializer.extraWidgetsPlugin
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Strings.propertyMustBeNonEmpty
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Strings.propertyMustBeUnique
-import org.nlogo.app.App
 
-class ControllerTests extends FunSpec with ShouldMatchers with GivenWhenThen {
+class ControllerTests extends FunSpec with ShouldMatchers {
 
   describe("The Controller") {
 
