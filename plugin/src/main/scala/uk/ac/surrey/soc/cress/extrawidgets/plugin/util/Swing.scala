@@ -3,11 +3,11 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
 
 object Swing {
 
@@ -63,11 +63,11 @@ object Swing {
     }
   }
 
-  def inputDialog(title: String, question: String, default: String): Option[String] = {
+  def inputDialog(question: String, default: String): Option[String] = {
     Option(JOptionPane.showInputDialog(
       null, // parent frame
       question,
-      title,
+      ExtraWidgetsPlugin.name,
       JOptionPane.QUESTION_MESSAGE,
       null, // icon
       null, // options
@@ -76,12 +76,19 @@ object Swing {
       .map(_.trim)
   }
 
-  def warningDialog(title: String, message: String): Unit = {
+  def warningDialog(message: String): Unit = {
     JOptionPane.showMessageDialog(
       null, // parent frame
       message,
-      title,
+      ExtraWidgetsPlugin.name + " Plugin Warning!",
       JOptionPane.WARNING_MESSAGE)
   }
 
+  def errorDialog(message: String): Unit = {
+    JOptionPane.showMessageDialog(
+      null, // parent frame
+      message,
+      ExtraWidgetsPlugin.name + " Plugin Error!",
+      JOptionPane.ERROR_MESSAGE)
+  }
 }
