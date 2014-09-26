@@ -6,4 +6,7 @@ class Controller(writer: Writer) {
   def addTab(id: String): Either[String, Unit] = {
     writer.add("tab", id)
   }
+  def removeTab(id: String): Unit = {
+    writer.remove(id)
+  }
 }
