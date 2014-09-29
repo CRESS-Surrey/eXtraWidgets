@@ -18,7 +18,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.Controller
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.WidgetID
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.errorDialog
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.inputDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
 
@@ -56,7 +56,7 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) 
         tabs.tabsMenu.addMenuItem(label, ('1' + i).toChar,
           RichAction { _ ⇒ tabs.setSelectedIndex(i) })
       }
-      case _ ⇒ errorDialog("Unknown widget kind!")
+      case _ ⇒ warningDialog("Unknown widget kind!")
     }
   }
 
@@ -86,6 +86,6 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) 
       .map(controller.addTab)
       .takeWhile(_.isLeft)
       .flatMap(_.left.toSeq)
-      .foreach(errorDialog)
+      .foreach(warningDialog)
   }
 }

@@ -84,10 +84,12 @@ object Swing {
       JOptionPane.WARNING_MESSAGE)
   }
 
-  def errorDialog(message: String): Unit = {
+  def exceptionDialog(exception: Exception): Unit = {
+    // TODO: the stacktrace should go in the dialog box...
+    println(exception.getMessage + "\n\n" + exception.getStackTraceString)
     JOptionPane.showMessageDialog(
       null, // parent frame
-      message,
+      exception.getMessage,
       ExtraWidgetsPlugin.name + " Plugin Error!",
       JOptionPane.ERROR_MESSAGE)
   }

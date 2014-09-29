@@ -1,9 +1,11 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import org.nlogo.window.RuntimeErrorDialog
 import java.io.File
+import java.io.File.separator
+
 import scala.Array.canBuildFrom
-import File.separator
+
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.exceptionDialog
 
 object WidgetsLoader {
 
@@ -29,14 +31,10 @@ object WidgetsLoader {
           }
 
       println(result.right.map(_.toList))
+
     } catch {
       case e: Exception ⇒ {
-        println(e)
-        RuntimeErrorDialog.show("eXtraWidgets Plugin",
-          null, // context
-          null, // instruction
-          Thread.currentThread, // thread
-          e)
+        exceptionDialog(e)
       }
     }
 
