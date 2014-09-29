@@ -6,13 +6,18 @@ import uk.ac.surrey.soc.cress.extrawidgets.plugin.gui.GUI
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.toRunnable
 
+import java.awt.EventQueue.isDispatchThread
+
 class View(reader: Reader, gui: GUI) {
 
   reader.onChange {
+
     // make sure we are on the AWT event thread, because the change could
     // have been triggered from an extension running in the job thread:
-    invokeAndWait {
+    if (isDispatchThread()) refresh()
+    else invokeAndWait { refresh() }
 
+    def refresh() {
       println("*refresh*")
 
       val guiWidgets = gui.makeWidgetsMap
@@ -34,5 +39,4 @@ class View(reader: Reader, gui: GUI) {
       deadWidgets.foreach(gui.removeWidget)
     }
   }
-
 }
