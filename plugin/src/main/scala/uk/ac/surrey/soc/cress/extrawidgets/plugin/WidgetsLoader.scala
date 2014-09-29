@@ -26,7 +26,7 @@ object WidgetsLoader {
               if folder.isDirectory
               file ← folder.listFiles
               if file.getName.toUpperCase == (folder.getName + ".jar").toUpperCase
-              url = new java.net.URL(file.getCanonicalPath)
+              url = file.toURI.toURL
             } yield url
           }
 
