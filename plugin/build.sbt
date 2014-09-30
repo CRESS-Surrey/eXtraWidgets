@@ -1,4 +1,4 @@
-name := "eXtraWidgetsPlugin"
+name := "eXtraWidgets-Plugin"
 
 scalaVersion := "2.9.3"
 

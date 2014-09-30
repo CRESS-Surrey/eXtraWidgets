@@ -7,7 +7,7 @@ libraryDependencies ++= Seq(
     from "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
 )
 
-name := "xw"
+name := "eXtraWidgets-Extension"
 
 val jarName = "xw.jar"
 

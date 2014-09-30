@@ -1,4 +1,4 @@
-name := "eXtraWidgetsState"
+name := "eXtraWidgets-State"
 
 scalaVersion := "2.9.3"
 
