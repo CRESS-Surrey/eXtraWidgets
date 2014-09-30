@@ -14,7 +14,7 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
   describe("The GUI") {
 
-    val gui = extraWidgetsPlugin.gui
+    val gui = extraWidgetsPlugin.manager.gui
 
     it("should add '" + CreateTab + "' to Tools menu") {
       val items = gui.toolsMenu.getMenuComponents.collect {
