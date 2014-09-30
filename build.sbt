@@ -1,6 +1,8 @@
 lazy val root = (project in file(".")).
   aggregate(plugin, extension)
 
-lazy val plugin = project
+lazy val state = project
 
-lazy val extension = project.dependsOn(plugin)
+lazy val plugin = project.dependsOn(state)
+
+lazy val extension = project.dependsOn(state)

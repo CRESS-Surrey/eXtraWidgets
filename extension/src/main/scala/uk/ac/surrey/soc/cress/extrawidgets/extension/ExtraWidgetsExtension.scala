@@ -3,12 +3,13 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.PrimitiveManager
+
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.getOrCreateModel
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
+import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
+import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.getOrCreateModel
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 

@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin
+package uk.ac.surrey.soc.cress.extrawidgets
 
 import java.util.concurrent.ConcurrentHashMap
 
@@ -9,10 +9,10 @@ import scala.collection.mutable.ConcurrentMap
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.SimpleChangeEventPublisher
 
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
+import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
-package object model {
+package object state {
 
   type WidgetKind = String
   type WidgetID = String

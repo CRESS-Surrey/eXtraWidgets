@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.plugin.model
+package uk.ac.surrey.soc.cress.extrawidgets.state
 
 object Strings {
   def propertyMustBeNonEmpty(property: PropertyName) =

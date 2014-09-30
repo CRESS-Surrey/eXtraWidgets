@@ -7,8 +7,8 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.NetLogoInitializer.extraWidgetsPlugin
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Strings.propertyMustBeNonEmpty
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Strings.propertyMustBeUnique
+import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeNonEmpty
+import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeUnique
 
 class ControllerTests extends FunSpec with ShouldMatchers {
 

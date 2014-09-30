@@ -1,12 +1,12 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin.view
 
+import java.awt.EventQueue.isDispatchThread
+
 import org.nlogo.awt.EventQueue.invokeAndWait
 
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.gui.GUI
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.toRunnable
-
-import java.awt.EventQueue.isDispatchThread
+import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
 class View(reader: Reader, gui: GUI) {
 

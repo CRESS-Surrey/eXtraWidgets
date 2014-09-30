@@ -16,11 +16,11 @@ import Strings.DefaultTabName
 import Strings.TabIDQuestion
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.controller.Controller
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.WidgetID
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.inputDialog
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.view.ExtraWidgetsTab
+import uk.ac.surrey.soc.cress.extrawidgets.state.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetID
 
 class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val controller: Controller) {
 

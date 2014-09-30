@@ -7,7 +7,7 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.commandSyntax
 
 import uk.ac.surrey.soc.cress.extrawidgets.extension.util.tryTo
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.model.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
 class Add(writer: Writer) extends DefaultCommand {
   override def getSyntax = commandSyntax(Array(StringType, StringType))

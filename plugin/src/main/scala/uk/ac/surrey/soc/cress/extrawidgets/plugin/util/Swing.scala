@@ -3,6 +3,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.plugin.util
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
