@@ -13,7 +13,6 @@ import scala.Option.option2Iterable
 
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.exceptionDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.eitherToRightBiased
 
 object WidgetsLoader {
 
@@ -44,7 +43,7 @@ object WidgetsLoader {
               attributes ← getManifestAttributes(widgetJarURL).right
               widgetKind ← getAttributeValue(attributes, "Widget-Kind", widgetJarURL).right
               className ← getAttributeValue(attributes, "Class-Name", widgetJarURL).right
-              clazz ← loadClass(className, classLoader, widgetJarURL)
+              clazz ← loadClass(className, classLoader, widgetJarURL).right
             } yield (widgetKind, clazz)
           }
 
