@@ -86,7 +86,7 @@ object Swing {
 
   def exceptionDialog(exception: Exception): Unit = {
     // TODO: the stacktrace should go in the dialog box...
-    println(exception.getMessage + "\n\n" + exception.getStackTraceString)
+    System.err.println(exception.getMessage + "\n" + exception.getStackTraceString)
     JOptionPane.showMessageDialog(
       null, // parent frame
       exception.getMessage,
