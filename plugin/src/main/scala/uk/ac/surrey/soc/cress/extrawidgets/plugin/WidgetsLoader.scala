@@ -35,14 +35,16 @@ object WidgetsLoader {
 
         val entries: Seq[Either[XWException, (String, java.lang.Class[_])]] =
           widgetJarFiles.map { file ⇒
-            val fileURL = file.toURI.toURL
+            val widgetJarURL = file.toURI.toURL
+            val allJarURLs = getJarURLs(file)
+            println(allJarURLs.toList)
             val parentLoader = getClass.getClassLoader
-            val classLoader = URLClassLoader.newInstance(Array(fileURL), parentLoader)
+            val classLoader = URLClassLoader.newInstance(allJarURLs, parentLoader)
             for {
-              attributes ← getManifestAttributes(fileURL).right
-              widgetKind ← getAttributeValue(attributes, "Widget-Kind", fileURL).right
-              className ← getAttributeValue(attributes, "Class-Name", fileURL).right
-              clazz ← loadClass(className, classLoader, fileURL)
+              attributes ← getManifestAttributes(widgetJarURL).right
+              widgetKind ← getAttributeValue(attributes, "Widget-Kind", widgetJarURL).right
+              className ← getAttributeValue(attributes, "Class-Name", widgetJarURL).right
+              clazz ← loadClass(className, classLoader, widgetJarURL)
             } yield (widgetKind, clazz)
           }
 
@@ -51,6 +53,11 @@ object WidgetsLoader {
         }(collection.breakOut): Map[String, Class[_]]
     }.fold(e ⇒ { exceptionDialog(e); Map.empty }, identity)
   }
+
+  def getJarURLs(widgetJarFile: File): Array[URL] =
+    widgetJarFile.getAbsoluteFile.getParentFile.listFiles
+      .filter(_.getName.toUpperCase.endsWith(".JAR"))
+      .map(_.toURI.toURL)
 
   def getAttributeValue(attributes: Attributes, attributeName: String, fileURL: URL): Either[XWException, String] =
     Option(attributes.getValue(attributeName))
