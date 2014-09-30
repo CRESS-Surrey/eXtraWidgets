@@ -22,8 +22,6 @@ packageOptions += Package.ManifestAttributes(
 packageBin in Compile <<= (packageBin in Compile, baseDirectory) map {
   (jar, base) =>
     IO.copyFile(jar, base / jarName)
-    val pluginJar = "eXtraWidgets.jar"
-    IO.copyFile(base / "lib" / pluginJar, base / pluginJar)
     jar
 }
 

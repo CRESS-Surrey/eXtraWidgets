@@ -55,7 +55,6 @@ artifactName := { (_, _, _) => jarName }
 packageBin in Compile <<= (packageBin in Compile, baseDirectory) map {
   (jar, base) =>
     IO.copyFile(jar, base / jarName)
-    IO.copyFile(jar, base / "extension-lib" / jarName)
     jar
 }
 
