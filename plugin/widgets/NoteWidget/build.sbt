@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
 
 packageOptions += Package.ManifestAttributes(
   ("Widget-Kind", "Note"),
-  ("Class-Name", "uk.ac.surrey.soc.cress.extrawidgets.NoteWidget"),
+  ("Class-Name", "uk.ac.surrey.soc.cress.extrawidgets.note.Note"),
   ("eXtraWidgets-API-Version", "1.0")
 )
 
