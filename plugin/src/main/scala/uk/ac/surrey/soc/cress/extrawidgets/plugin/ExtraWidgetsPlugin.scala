@@ -23,6 +23,6 @@ case class ExtraWidgetsPlugin(val app: App, toolsMenu: ToolsMenu) extends JPanel
 
   app.frame.onComponentShown(_ ⇒ gui.removeTab(this))
 
-  WidgetsLoader.loadExtraWidgets()
+  val widgets: Map[String, Class[_]] = WidgetsLoader.loadExtraWidgets()
 
 }
