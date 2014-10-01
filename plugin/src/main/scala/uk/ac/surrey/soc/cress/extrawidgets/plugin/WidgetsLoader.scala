@@ -1,7 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
 import java.io.File
-import java.io.File.separator
 import java.net.JarURLConnection
 import java.net.URL
 import java.net.URLClassLoader
@@ -13,12 +12,9 @@ import scala.Option.option2Iterable
 
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.exceptionDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.getWidgetsFolder
 
 object WidgetsLoader {
-
-  val netLogoPluginsFolderName = "plugins"
-  val pluginFolderName = ExtraWidgetsPlugin.name
-  val widgetsFolderName = "widgets"
 
   def loadExtraWidgets(): Map[String, Class[_]] = {
 
@@ -83,13 +79,4 @@ object WidgetsLoader {
       .right.map(_.getMainAttributes)
   }
 
-  def getWidgetsFolder: Either[XWException, File] = {
-    val pathFromNetLogo =
-      netLogoPluginsFolderName + separator + pluginFolderName + separator + widgetsFolderName
-    Option(new File(pathFromNetLogo))
-      .filter(_.isDirectory())
-      .orElse(Some(new File(widgetsFolderName)))
-      .filter(_.isDirectory())
-      .toRight(XWException("Can't find extra widgets folder."))
-  }
 }
