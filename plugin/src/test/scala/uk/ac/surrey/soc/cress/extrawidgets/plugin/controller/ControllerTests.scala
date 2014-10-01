@@ -14,9 +14,9 @@ class ControllerTests extends FunSpec with ShouldMatchers {
 
   describe("The Controller") {
 
-    val controller = extraWidgetsPlugin.manager.controller
-    val reader = extraWidgetsPlugin.manager.reader
-    val gui = extraWidgetsPlugin.manager.gui
+    val controller = extraWidgetsPlugin.manager.right.get.controller
+    val reader = extraWidgetsPlugin.manager.right.get.reader
+    val gui = extraWidgetsPlugin.manager.right.get.gui
 
     def tabsMenuItemsText = {
       val menuBar = App.app.frame.getJMenuBar

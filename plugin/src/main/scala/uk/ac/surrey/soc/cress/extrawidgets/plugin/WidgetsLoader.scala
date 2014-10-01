@@ -1,9 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets.plugin
 
-import java.io.File
 import java.net.JarURLConnection
 import java.net.URL
-import java.net.URLClassLoader
 import java.util.jar.Attributes
 
 import scala.Array.canBuildFrom
@@ -13,6 +11,7 @@ import scala.Option.option2Iterable
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.Swing.exceptionDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.getWidgetsFolder
+import uk.ac.surrey.soc.cress.extrawidgets.plugin.util.newClassLoader
 
 object WidgetsLoader {
 
@@ -29,11 +28,9 @@ object WidgetsLoader {
         } yield file
 
         val entries: Seq[Either[XWException, (String, java.lang.Class[_])]] =
-          widgetJarFiles.map { file ⇒
-            val widgetJarURL = file.toURI.toURL
-            val allJarURLs = getJarURLs(file)
-            val parentLoader = getClass.getClassLoader
-            val classLoader = URLClassLoader.newInstance(allJarURLs, parentLoader)
+          widgetJarFiles.map { widgetJarFile ⇒
+            val widgetJarURL = widgetJarFile.toURI.toURL
+            val classLoader = newClassLoader(widgetJarFile)
             for {
               attributes ← getManifestAttributes(widgetJarURL).right
               widgetKind ← getAttributeValue(attributes, "Widget-Kind", widgetJarURL).right
@@ -47,11 +44,6 @@ object WidgetsLoader {
         }(collection.breakOut): Map[String, Class[_]]
     }.fold(e ⇒ { exceptionDialog(e); Map.empty }, identity)
   }
-
-  def getJarURLs(widgetJarFile: File): Array[URL] =
-    widgetJarFile.getAbsoluteFile.getParentFile.listFiles
-      .filter(_.getName.toUpperCase.endsWith(".JAR"))
-      .map(_.toURI.toURL)
 
   def getAttributeValue(attributes: Attributes, attributeName: String, fileURL: URL): Either[XWException, String] =
     Option(attributes.getValue(attributeName))
