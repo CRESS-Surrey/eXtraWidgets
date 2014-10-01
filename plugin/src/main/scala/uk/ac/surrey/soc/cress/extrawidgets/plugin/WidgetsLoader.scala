@@ -32,7 +32,6 @@ object WidgetsLoader {
           widgetJarFiles.map { file ⇒
             val widgetJarURL = file.toURI.toURL
             val allJarURLs = getJarURLs(file)
-            println(allJarURLs.toList)
             val parentLoader = getClass.getClassLoader
             val classLoader = URLClassLoader.newInstance(allJarURLs, parentLoader)
             for {
@@ -72,7 +71,6 @@ object WidgetsLoader {
 
   def getManifestAttributes(fileURL: URL): Either[XWException, Attributes] = {
     val url = new URL("jar", "", fileURL + "!/")
-    println(url)
     val connection = url.openConnection.asInstanceOf[JarURLConnection]
     Option(connection.getManifest())
       .toRight(XWException("Can't find Manifest file in widget jar: " + fileURL + "."))
