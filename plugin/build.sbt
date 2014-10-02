@@ -4,17 +4,13 @@ scalaVersion := "2.9.3"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "UTF8")
 
-fork := true
-
 resolvers ++= Seq(
     "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 )
 
 libraryDependencies ++= Seq(
   "org.nlogo" % "NetLogo" % "5.1.0" from
-    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar",
-  "org.scalatest" %% "scalatest" % "1.9.2" % "test",
-  "com.typesafe.akka" % "akka-actor" % "2.0.5" % "test"
+    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
 )
 
 // Dependencies for NetLogo controlling in tests
@@ -52,17 +48,10 @@ val jarName = "eXtraWidgets.jar"
 
 artifactName := { (_, _, _) => jarName }
 
-packageBin in Compile <<= (packageBin in Compile, baseDirectory, dependencyClasspath in Runtime) map {
-  (jar, base, classPath) =>
+packageBin in Compile <<= (packageBin in Compile, baseDirectory) map {
+  (jar, base) =>
     IO.copyFile(jar, base / jarName)
-    for {
-      file <- classPath.files
-      fileName = file.getName
-      if fileName.endsWith(".jar")
-      if !fileName.startsWith("scala-library")
-      if !fileName.startsWith("NetLogo")
-    } IO.copyFile(file, base / fileName)
-    jar
+  jar
 }
 
 cleanFiles <++= baseDirectory { base => Seq(base / jarName) }

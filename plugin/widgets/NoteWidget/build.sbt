@@ -15,11 +15,20 @@ packageOptions += Package.ManifestAttributes(
   ("eXtraWidgets-API-Version", "1.0")
 )
 
+exportJars := true
+
 val jarName = "NoteWidget.jar"
 
-packageBin in Compile <<= (packageBin in Compile, baseDirectory) map {
-  (jar, base) =>
+packageBin in Compile <<= (packageBin in Compile, baseDirectory, dependencyClasspath in Runtime) map {
+  (jar, base, classPath) =>
     IO.copyFile(jar, base / jarName)
+    for {
+      file <- classPath.files
+      fileName = file.getName
+      if fileName.endsWith(".jar")
+      if !fileName.startsWith("scala-library")
+      if !fileName.startsWith("NetLogo")
+    } IO.copyFile(file, base / fileName)
     jar
 }
 
