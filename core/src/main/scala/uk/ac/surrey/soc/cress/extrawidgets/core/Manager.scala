@@ -17,7 +17,6 @@ class Manager(val app: App, val toolsMenu: ToolsMenu) {
   app.frame.onComponentShown { _ ⇒
     (0 until app.tabs.getTabCount)
       .map(i ⇒ i -> app.tabs.getComponentAt(i))
-      .map { x ⇒ println(x); x }
       .find(_._2.isInstanceOf[ExtraWidgetsPlugin])
       .foreach {
         case (i, pluginTab) ⇒
