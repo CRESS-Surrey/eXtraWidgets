@@ -38,4 +38,12 @@ class Reader(
   def isUnique[A](value: A, existingValues: Iterable[A]) =
     !existingValues.exists(_ == value)
 
+  def get(propertyKey: PropertyKey, widgetKey: WidgetKey): Either[String, PropertyValue] =
+    for {
+      propertyMap ← widgetMap.get(widgetKey).toRight(
+        "Widget \"" + widgetKey + "\" does not exist.").right
+      propertyValue ← propertyMap.get(propertyKey).toRight(
+        "Property \"" + propertyKey + "\" " +
+          "does not exist for widget \"" + widgetKey + "\".").right
+    } yield propertyValue
 }

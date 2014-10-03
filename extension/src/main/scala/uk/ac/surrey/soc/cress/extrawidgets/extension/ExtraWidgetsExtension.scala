@@ -5,6 +5,7 @@ import org.nlogo.api.ExtensionManager
 import org.nlogo.api.PrimitiveManager
 
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
@@ -29,7 +30,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "version" -> new Version("0.0.0-wip"),
       "add" -> new Add(writer),
       "remove" -> new Remove(writer),
-      "set" -> new Set(writer)
+      "set" -> new Set(writer),
+      "get" -> new Get(reader)
     )
     for ((name, prim) ← prims) primitiveManager.addPrimitive(name, prim)
   }
