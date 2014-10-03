@@ -32,7 +32,7 @@ class Writer(
     propertyValue: PropertyValue): Either[String, Unit] =
     for {
       propertyMap ← widgetMap.get(widgetKey)
-        .toRight("Widget with key \"" + widgetKey + "\" does not exist.").right
+        .toRight("Widget \"" + widgetKey + "\" does not exist.").right
     } yield {
       propertyMap += propertyKey -> propertyValue
       publisher.publish()
