@@ -52,17 +52,4 @@ package object state {
     ).asScala
   }
 
-  implicit def enrichMutableWidgetMap(widgetMap: MutableWidgetMap) =
-    new RichMutableWidgetMap(widgetMap)
-
-  class RichMutableWidgetMap(widgetMap: MutableWidgetMap) {
-    def toImmutable: WidgetMap = Map(widgetMap.mapValues(_.toImmutable).toSeq: _*)
-  }
-
-  implicit def enrichMutablePropertyMap(propertyMap: MutablePropertyMap) =
-    new RichMutablePropertyMap(propertyMap)
-
-  class RichMutablePropertyMap(propertyMap: MutablePropertyMap) {
-    def toImmutable: PropertyMap = Map(propertyMap.toSeq: _*)
-  }
 }

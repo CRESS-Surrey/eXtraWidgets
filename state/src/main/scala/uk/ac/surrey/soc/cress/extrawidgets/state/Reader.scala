@@ -53,7 +53,7 @@ class Reader(
 
   def widgetKeys: Set[WidgetKey] = widgetMap.keys.toSet
 
-  def propertyMap(widgetKey: WidgetKey) = widgetMap.get(widgetKey).map(_.toImmutable)
+  def propertyMap(widgetKey: WidgetKey) = widgetMap.get(widgetKey).map(_.toMap)
 
   def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 
