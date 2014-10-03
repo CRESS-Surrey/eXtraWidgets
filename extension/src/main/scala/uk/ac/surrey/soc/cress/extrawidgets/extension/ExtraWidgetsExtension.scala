@@ -6,6 +6,7 @@ import org.nlogo.api.PrimitiveManager
 
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
@@ -27,7 +28,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val prims = Seq(
       "version" -> new Version("0.0.0-wip"),
       "add" -> new Add(writer),
-      "remove" -> new Remove(writer)
+      "remove" -> new Remove(writer),
+      "set" -> new Set(writer)
     )
     for ((name, prim) ← prims) primitiveManager.addPrimitive(name, prim)
   }
