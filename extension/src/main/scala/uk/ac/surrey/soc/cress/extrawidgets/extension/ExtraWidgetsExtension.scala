@@ -9,6 +9,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.getOrCreateModel
@@ -31,7 +32,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "add" -> new Add(writer),
       "remove" -> new Remove(writer),
       "set" -> new Set(writer),
-      "get" -> new Get(reader)
+      "get" -> new Get(reader),
+      "widget-keys" -> new WidgetKeys(reader)
     )
     for ((name, prim) ← prims) primitiveManager.addPrimitive(name, prim)
   }

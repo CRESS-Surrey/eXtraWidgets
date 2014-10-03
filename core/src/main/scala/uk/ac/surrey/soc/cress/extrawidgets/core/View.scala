@@ -22,7 +22,7 @@ class View(reader: Reader, gui: GUI) {
       val guiWidgets = gui.makeWidgetsMap
 
       val (keysOfExistingWidgets, keysOfMissingWidgets) =
-        reader.widgetKeys.partition(guiWidgets.contains)
+        reader.widgetKeySet.partition(guiWidgets.contains)
 
       for {
         key ← keysOfMissingWidgets

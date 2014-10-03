@@ -51,7 +51,9 @@ class Reader(
           "does not exist for widget \"" + widgetKey + "\".").right
     } yield propertyValue
 
-  def widgetKeys: Set[WidgetKey] = widgetMap.keys.toSet
+  def widgetKeySet: Set[WidgetKey] = widgetMap.keys.toSet
+
+  def widgetKeyVector: Vector[WidgetKey] = Vector() ++ widgetMap.keys
 
   def propertyMap(widgetKey: WidgetKey) = widgetMap.get(widgetKey).map(_.toMap)
 
