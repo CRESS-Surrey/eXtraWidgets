@@ -17,7 +17,7 @@ package object state {
   type WidgetKind = String
   type WidgetKey = String
   type PropertyKey = String
-  type PropertyValue = Any
+  type PropertyValue = AnyRef
   type PropertyMap = Map[PropertyKey, PropertyValue]
   type MutablePropertyMap = ConcurrentMap[PropertyKey, PropertyValue]
   type WidgetMap = Map[WidgetKey, PropertyMap]
