@@ -2,7 +2,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.core
 
 import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
-import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 
 class ExtraWidgetsTab(
   val key: WidgetKey,

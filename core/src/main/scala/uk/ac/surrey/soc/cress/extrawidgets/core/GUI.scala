@@ -2,20 +2,23 @@ package uk.ac.surrey.soc.cress.extrawidgets.core
 
 import java.awt.Component
 import java.awt.Container
+
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
+
 import org.nlogo.app.Tabs
 import org.nlogo.app.ToolsMenu
 import org.nlogo.swing.RichAction
+
 import Strings.CreateTab
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
 import Swing.inputDialog
 import Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
-import uk.ac.surrey.soc.cress.extrawidgets.state.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
 class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {

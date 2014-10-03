@@ -5,6 +5,10 @@ import org.nlogo.api.SimpleChangeEventPublisher
 
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetMap
 
 class Reader(
   val widgetMap: WidgetMap,

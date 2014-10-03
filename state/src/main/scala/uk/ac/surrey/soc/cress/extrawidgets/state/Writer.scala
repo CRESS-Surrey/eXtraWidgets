@@ -2,6 +2,10 @@ package uk.ac.surrey.soc.cress.extrawidgets.state
 
 import org.nlogo.api.SimpleChangeEventPublisher
 
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 /**
  *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.
  */

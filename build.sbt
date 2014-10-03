@@ -4,9 +4,9 @@ lazy val root = (project in file("."))
 
 lazy val plugin = project
 
-lazy val state = project
+lazy val api = project
 
-lazy val api = project.dependsOn(state)
+lazy val state = project.dependsOn(api)
 
 lazy val core = project.dependsOn(state, api, plugin)
 
