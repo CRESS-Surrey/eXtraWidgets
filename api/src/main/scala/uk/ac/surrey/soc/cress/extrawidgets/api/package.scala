@@ -1,6 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
 import scala.collection.Map
+import scala.collection.immutable
 
 package object api {
 
@@ -11,7 +12,7 @@ package object api {
   type PropertyKey = String
   type PropertyValue = AnyRef
 
-  type PropertyMap = Map[PropertyKey, PropertyValue]
-  type WidgetMap = Map[WidgetKey, PropertyMap]
+  type PropertyMap = immutable.Map[PropertyKey, PropertyValue]
+  type WidgetMap = immutable.Map[WidgetKey, PropertyMap]
 
 }

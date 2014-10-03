@@ -37,14 +37,14 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
     }
 
     def shouldBeThere(tabID: String) {
-      reader.widgetMap should contain key tabID
+      reader.contains(tabID) should be(true)
       gui.makeWidgetsMap should contain key tabID
       tabsMenuItemsText should contain(tabID)
     }
 
     def shouldNotBeThere(tabID: String) {
-      reader.widgetMap.get(tabID) should be('empty)
-      gui.makeWidgetsMap.get(tabID) should be('empty)
+      reader.contains(tabID) should be(false)
+      gui.makeWidgetsMap.contains(tabID) should be(false)
       tabsMenuItemsText should (not contain tabID)
     }
 

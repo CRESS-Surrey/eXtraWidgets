@@ -8,10 +8,10 @@ import Strings.propertyMustBeUnique
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetMap
+import collection.immutable
 
 class Reader(
-  val widgetMap: WidgetMap,
+  widgetMap: MutableWidgetMap, // reader should never expose any part of this
   publisher: SimpleChangeEventPublisher) {
 
   def onChange[A](block: ⇒ A): Unit = {
@@ -50,4 +50,11 @@ class Reader(
         "Property \"" + propertyKey + "\" " +
           "does not exist for widget \"" + widgetKey + "\".").right
     } yield propertyValue
+
+  def widgetKeys: Set[WidgetKey] = widgetMap.keys.toSet
+
+  def propertyMap(widgetKey: WidgetKey) = widgetMap.get(widgetKey).map(_.toImmutable)
+
+  def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
+
 }

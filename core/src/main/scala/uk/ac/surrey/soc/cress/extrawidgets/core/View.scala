@@ -22,19 +22,19 @@ class View(reader: Reader, gui: GUI) {
       val guiWidgets = gui.makeWidgetsMap
 
       val (keysOfExistingWidgets, keysOfMissingWidgets) =
-        reader.widgetMap.keys.partition(guiWidgets.contains)
+        reader.widgetKeys.partition(guiWidgets.contains)
 
       for {
-        id ← keysOfMissingWidgets
-        propertyMap ← reader.widgetMap.get(id)
-      } gui.createWidget(id, propertyMap)
+        key ← keysOfMissingWidgets
+        propertyMap ← reader.propertyMap(key)
+      } gui.createWidget(key, propertyMap)
 
       for {
-        id ← keysOfExistingWidgets
-        propertyMap ← reader.widgetMap.get(id)
-      } gui.updateWidget(id, propertyMap)
+        key ← keysOfExistingWidgets
+        propertyMap ← reader.propertyMap(key)
+      } gui.updateWidget(key, propertyMap)
 
-      val deadWidgets = guiWidgets.filterKeys(id ⇒ !reader.widgetMap.contains(id)).values
+      val deadWidgets = guiWidgets.filterKeys(key ⇒ !reader.contains(key)).values
       deadWidgets.foreach(gui.removeWidget)
     }
   }
