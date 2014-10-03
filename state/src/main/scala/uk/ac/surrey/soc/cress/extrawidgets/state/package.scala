@@ -1,6 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentSkipListMap
 
 import scala.collection.JavaConverters.asScalaConcurrentMapConverter
 import scala.collection.mutable.ConcurrentMap
@@ -32,24 +32,16 @@ package object state {
     (reader, writer)
   }
 
-  /*  Parameters for the ConcurrentHashMaps. concurrencyLevel is 2 as only
-   *  the job thread and the AWT event should ever write to the map.
-   *  initialCapacity and loadFactor are set at the regular Java defaults.
-   *  NP 2014-09-25 */
-  private val initialCapacity = 16
-  private val loadFactor = 0.75f
-  private val concurrencyLevel = 2
 
+  // Note: we use ConcurrentSkipListMap instead of ConcurrentHashMap
+  // to ensure reproducibility of runs across architectures. It's also
+  // nice to have ordered keys. NP 2014-10-03.
   private def newWidgetMap: MutableWidgetMap = {
-    new ConcurrentHashMap[WidgetKey, MutablePropertyMap](
-      initialCapacity, loadFactor, concurrencyLevel
-    ).asScala
+    new ConcurrentSkipListMap[WidgetKey, MutablePropertyMap]().asScala
   }
 
   def newPropertyMap: MutablePropertyMap = {
-    new ConcurrentHashMap[PropertyKey, PropertyValue](
-      initialCapacity, loadFactor, concurrencyLevel
-    ).asScala
+    new ConcurrentSkipListMap[PropertyKey, PropertyValue]().asScala
   }
 
 }
