@@ -59,4 +59,10 @@ class Reader(
 
   def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 
+  def propertyKeyVector(widgetKey: WidgetKey): Either[String, Vector[PropertyKey]] =
+    for {
+      propertyMap ← widgetMap.get(widgetKey).toRight(
+        "Widget \"" + widgetKey + "\" does not exist.").right
+    } yield Vector() ++ propertyMap.keys
+
 }
