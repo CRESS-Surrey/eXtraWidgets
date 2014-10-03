@@ -1,7 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets.api
 
-import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetID
+import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetKey
 
 trait ExtraWidget {
-  val id: WidgetID
+  val key: WidgetKey
 }

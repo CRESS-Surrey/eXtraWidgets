@@ -15,13 +15,13 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 package object state {
 
   type WidgetKind = String
-  type WidgetID = String
-  type PropertyName = String
+  type WidgetKey = String
+  type PropertyKey = String
   type PropertyValue = Any
-  type PropertyMap = Map[PropertyName, PropertyValue] //with ObservableMap[PropertyName, PropertyValue]
-  type MutablePropertyMap = ConcurrentMap[PropertyName, PropertyValue] //with ObservableMap[PropertyName, PropertyValue]
-  type WidgetMap = Map[WidgetID, PropertyMap] //with ObservableMap[WidgetID, PropertyMap]
-  type MutableWidgetMap = ConcurrentMap[WidgetID, MutablePropertyMap] //with ObservableMap[WidgetID, PropertyMap]
+  type PropertyMap = Map[PropertyKey, PropertyValue]
+  type MutablePropertyMap = ConcurrentMap[PropertyKey, PropertyValue]
+  type WidgetMap = Map[WidgetKey, PropertyMap]
+  type MutableWidgetMap = ConcurrentMap[WidgetKey, MutablePropertyMap]
 
   def getOrCreateModel(extensionManager: ExtensionManager): (Reader, Writer) = {
     // TODO: if there is already some object stored in the extensionManager,
@@ -45,13 +45,13 @@ package object state {
   private val concurrencyLevel = 2
 
   private def newWidgetMap: MutableWidgetMap = {
-    new ConcurrentHashMap[WidgetID, MutablePropertyMap](
+    new ConcurrentHashMap[WidgetKey, MutablePropertyMap](
       initialCapacity, loadFactor, concurrencyLevel
     ).asScala
   }
 
   def newPropertyMap: MutablePropertyMap = {
-    new ConcurrentHashMap[PropertyName, PropertyValue](
+    new ConcurrentHashMap[PropertyKey, PropertyValue](
       initialCapacity, loadFactor, concurrencyLevel
     ).asScala
   }

@@ -54,12 +54,12 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
     }
 
     it("should not able to create tabs with duplicate id") {
-      gui.addTab("first tab") shouldEqual Left(propertyMustBeUnique("id", "first tab"))
+      gui.addTab("first tab") shouldEqual Left(propertyMustBeUnique("widget key", "first tab"))
       shouldBeThere("first tab")
     }
 
     it("should not be able to create tabs with empty id") {
-      gui.addTab("") shouldEqual Left(propertyMustBeNonEmpty("id"))
+      gui.addTab("") shouldEqual Left(propertyMustBeNonEmpty("widget key"))
       shouldBeThere("first tab")
       shouldNotBeThere("")
     }

@@ -21,18 +21,18 @@ class Reader(
     }
   }
 
-  def validateNonEmpty(property: PropertyName, value: String) =
-    Either.cond(value.nonEmpty, value, propertyMustBeNonEmpty(property))
+  def validateNonEmpty(propertyKey: PropertyKey, value: String) =
+    Either.cond(value.nonEmpty, value, propertyMustBeNonEmpty(propertyKey))
 
   def validateUnique(
-    property: PropertyName,
+    propertyKey: PropertyKey,
     value: PropertyValue,
-    filter: collection.Map[PropertyName, PropertyValue] ⇒ Boolean = _ ⇒ true) = {
+    filter: collection.Map[PropertyKey, PropertyValue] ⇒ Boolean = _ ⇒ true) = {
     val otherValues = for {
       (v, w) ← widgetMap
       if filter(w)
     } yield v
-    Either.cond(isUnique(value, otherValues), value, propertyMustBeUnique(property, value))
+    Either.cond(isUnique(value, otherValues), value, propertyMustBeUnique(propertyKey, value))
   }
 
   def isUnique[A](value: A, existingValues: Iterable[A]) =

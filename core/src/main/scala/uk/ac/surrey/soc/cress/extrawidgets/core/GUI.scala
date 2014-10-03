@@ -15,7 +15,7 @@ import Swing.inputDialog
 import Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetID
+import uk.ac.surrey.soc.cress.extrawidgets.state.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
 class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
@@ -23,10 +23,10 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
 
-  def makeWidgetsMap: Map[WidgetID, ExtraWidget] = {
+  def makeWidgetsMap: Map[WidgetKey, ExtraWidget] = {
     val ts = getWidgetsIn(tabs)
     val ws = ts ++ ts.collect { case t: Container ⇒ t }.flatMap(getWidgetsIn)
-    ws.map(w ⇒ w.id -> w)(collection.breakOut)
+    ws.map(w ⇒ w.key -> w)(collection.breakOut)
   }
 
   private def getWidgetsIn(container: Container) =
@@ -35,18 +35,18 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
     }
 
   def removeWidget(widget: ExtraWidget): Unit = {
-    println("Removing widget " + widget.id)
+    println("Removing widget " + widget.key)
     widget match {
       case tab: ExtraWidgetsTab ⇒ removeTab(tab)
     }
   }
 
-  def createWidget(id: WidgetID, propertyMap: PropertyMap): Unit = {
-    println("Creating widget from " + (id, propertyMap))
+  def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
+    println("Creating widget from " + (widgetKey, propertyMap))
     propertyMap.get("kind") match {
       case Some("tab") ⇒ {
-        val label = propertyMap.getOrElse("label", id).toString
-        val tab = new ExtraWidgetsTab(id, label)
+        val label = propertyMap.getOrElse("label", widgetKey).toString
+        val tab = new ExtraWidgetsTab(widgetKey, label)
         tabs.addTab(label, tab)
         val i = tabs.tabsMenu.getItemCount
         tabs.tabsMenu.addMenuItem(label, ('1' + i).toChar,
@@ -56,8 +56,8 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
     }
   }
 
-  def updateWidget(id: WidgetID, propertyMap: PropertyMap): Unit = {
-    println("Updating widget from " + (id, propertyMap) + " (not implemented)")
+  def updateWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
+    println("Updating widget from " + (widgetKey, propertyMap) + " (not implemented)")
   }
 
   def removeTab(component: Component): Unit =

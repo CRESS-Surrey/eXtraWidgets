@@ -10,19 +10,19 @@ class Writer(
   publisher: SimpleChangeEventPublisher,
   reader: Reader) {
 
-  def add(kind: WidgetKind, id: WidgetID): Either[String, Unit] =
+  def add(kind: WidgetKind, widgetKey: WidgetKey): Either[String, Unit] =
     for {
-      _ ← reader.validateNonEmpty("id", id).right
-      _ ← reader.validateUnique("id", id).right
+      _ ← reader.validateNonEmpty("widget key", widgetKey).right
+      _ ← reader.validateUnique("widget key", widgetKey).right
     } yield {
       val w = newPropertyMap
       w += "kind" -> kind
-      widgetMap += id -> w
+      widgetMap += widgetKey -> w
       publisher.publish()
     }
 
-  def remove(id: WidgetID): Unit = {
-    widgetMap -= id
+  def remove(widgetKey: WidgetKey): Unit = {
+    widgetMap -= widgetKey
     publisher.publish()
   }
 
