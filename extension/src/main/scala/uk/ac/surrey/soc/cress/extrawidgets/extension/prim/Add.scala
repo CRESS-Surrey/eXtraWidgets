@@ -12,8 +12,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 class Add(writer: Writer) extends DefaultCommand {
   override def getSyntax = commandSyntax(Array(StringType, StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
-    val kind = args(0).getString
-    val id = args(1).getString
-    tryTo(writer.add(kind, id))
+    val widgetKind = args(0).getString
+    val widgetKey = args(1).getString
+    tryTo(writer.add(widgetKind, widgetKey))
   }
 }

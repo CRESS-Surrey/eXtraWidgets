@@ -11,7 +11,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 class Remove(writer: Writer) extends DefaultCommand {
   override def getSyntax = commandSyntax(Array(StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
-    val id = args(0).getString
-    writer.remove(id)
+    val widgetKey = args(0).getString
+    writer.remove(widgetKey)
   }
 }
