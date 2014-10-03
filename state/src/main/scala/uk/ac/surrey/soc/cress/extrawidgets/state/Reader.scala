@@ -57,6 +57,8 @@ class Reader(
   private def mutablePropertyMap(widgetKey: WidgetKey): Either[String, MutablePropertyMap] =
     widgetMap.get(widgetKey).toRight("Widget \"" + widgetKey + "\" does not exist.")
 
+  def propertyMap(widgetKey: WidgetKey): Either[String, PropertyMap] =
+    mutablePropertyMap(widgetKey).right.map(_.toMap)
 
   def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 

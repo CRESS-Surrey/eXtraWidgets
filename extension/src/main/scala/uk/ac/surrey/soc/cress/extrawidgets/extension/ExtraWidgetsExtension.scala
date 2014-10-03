@@ -6,6 +6,7 @@ import org.nlogo.api.PrimitiveManager
 
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Properties
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.PropertyKeys
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
@@ -35,7 +36,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "set" -> new Set(writer),
       "get" -> new Get(reader),
       "widget-keys" -> new WidgetKeys(reader),
-      "property-keys" -> new PropertyKeys(reader)
+      "property-keys" -> new PropertyKeys(reader),
+      "properties" -> new Properties(reader)
     )
     for ((name, prim) ← prims) primitiveManager.addPrimitive(name, prim)
   }
