@@ -26,12 +26,12 @@ class View(reader: Reader, gui: GUI) {
 
       for {
         key ← keysOfMissingWidgets
-        propertyMap ← reader.propertyMap(key)
+        propertyMap ← reader.propertyMap(key).right
       } gui.createWidget(key, propertyMap)
 
       for {
         key ← keysOfExistingWidgets
-        propertyMap ← reader.propertyMap(key)
+        propertyMap ← reader.propertyMap(key).right
       } gui.updateWidget(key, propertyMap)
 
       val deadWidgets = guiWidgets.filterKeys(key ⇒ !reader.contains(key)).values

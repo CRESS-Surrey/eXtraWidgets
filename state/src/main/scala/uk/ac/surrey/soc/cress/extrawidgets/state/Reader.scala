@@ -6,9 +6,9 @@ import org.nlogo.api.SimpleChangeEventPublisher
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
-import collection.immutable
 
 class Reader(
   widgetMap: MutableWidgetMap, // reader should never expose any part of this
@@ -44,8 +44,7 @@ class Reader(
 
   def get(propertyKey: PropertyKey, widgetKey: WidgetKey): Either[String, PropertyValue] =
     for {
-      propertyMap ← widgetMap.get(widgetKey).toRight(
-        "Widget \"" + widgetKey + "\" does not exist.").right
+      propertyMap ← mutablePropertyMap(widgetKey).right
       propertyValue ← propertyMap.get(propertyKey).toRight(
         "Property \"" + propertyKey + "\" " +
           "does not exist for widget \"" + widgetKey + "\".").right
@@ -55,14 +54,15 @@ class Reader(
 
   def widgetKeyVector: Vector[WidgetKey] = Vector() ++ widgetMap.keys
 
-  def propertyMap(widgetKey: WidgetKey) = widgetMap.get(widgetKey).map(_.toMap)
+  private def mutablePropertyMap(widgetKey: WidgetKey): Either[String, MutablePropertyMap] =
+    widgetMap.get(widgetKey).toRight("Widget \"" + widgetKey + "\" does not exist.")
+
 
   def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 
   def propertyKeyVector(widgetKey: WidgetKey): Either[String, Vector[PropertyKey]] =
-    for {
-      propertyMap ← widgetMap.get(widgetKey).toRight(
-        "Widget \"" + widgetKey + "\" does not exist.").right
-    } yield Vector() ++ propertyMap.keys
+    mutablePropertyMap(widgetKey).right.map(Vector() ++ _.keysIterator)
 
+  def properties(widgetKey: WidgetKey): Either[String, Vector[(PropertyKey, PropertyValue)]] =
+    mutablePropertyMap(widgetKey).right.map(Vector() ++ _.iterator)
 }
