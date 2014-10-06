@@ -23,9 +23,8 @@ package object util {
             Dump.logoObject(obj) + " is not a list.", e)
         }
         val keyObj: AnyRef = try list.get(0) catch {
-          case e: IndexOutOfBoundsException ⇒
-            throw new ExtensionException(
-              Dump.list(list) + " does not contain two elements.", e)
+          case e: IndexOutOfBoundsException ⇒ throw new ExtensionException(
+            Dump.list(list) + " does not contain two elements.", e)
         }
         val key: String = try keyObj.asInstanceOf[String] catch {
           case e: ClassCastException ⇒ throw throw new ExtensionException(
