@@ -15,30 +15,33 @@ class Writer(
   publisher: SimpleChangeEventPublisher,
   reader: Reader) {
 
-  def add(widgetKey: WidgetKey, properties: PropertyMap): Either[String, Unit] =
+  def add(widgetKey: WidgetKey, properties: PropertyMap): Either[String, Unit] = {
+    val wKey = normalizeKey(widgetKey)
     for {
-      _ ← reader.validateNonEmpty("widget key", widgetKey).right
-      _ ← reader.validateUnique("widget key", widgetKey).right
+      _ ← reader.validateNonEmpty("widget key", wKey).right
+      _ ← reader.validateUnique("widget key", wKey).right
     } yield {
-      widgetMap += widgetKey -> properties.asMutablePropertyMap
+      widgetMap += wKey -> properties.asMutablePropertyMap
       publisher.publish()
     }
+  }
 
   def remove(widgetKey: WidgetKey): Unit = {
-    widgetMap -= widgetKey
+    widgetMap -= normalizeKey(widgetKey)
     publisher.publish()
   }
 
   def set(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
-    propertyValue: PropertyValue): Either[String, Unit] =
+    propertyValue: PropertyValue): Either[String, Unit] = {
+    val wKey = normalizeKey(widgetKey)
     for {
-      propertyMap ← widgetMap.get(widgetKey)
-        .toRight("Widget \"" + widgetKey + "\" does not exist.").right
+      propertyMap ← widgetMap.get(wKey)
+        .toRight("Widget " + wKey + " does not exist.").right
     } yield {
-      propertyMap += propertyKey -> propertyValue
+      propertyMap += normalizeKey(propertyKey) -> propertyValue
       publisher.publish()
     }
-
+  }
 }

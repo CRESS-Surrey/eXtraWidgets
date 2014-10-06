@@ -1,5 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
+import java.util.Locale.ENGLISH
 import java.util.concurrent.ConcurrentSkipListMap
 
 import scala.collection.JavaConverters.asScalaConcurrentMapConverter
@@ -34,6 +35,8 @@ package object state {
     (reader, writer)
   }
 
+  def normalizeKey(key: String) = key.toUpperCase(ENGLISH)
+
   // Note: we use ConcurrentSkipListMap instead of ConcurrentHashMap
   // to ensure reproducibility of runs across architectures. It's also
   // nice to have ordered keys. NP 2014-10-03.
@@ -47,8 +50,11 @@ package object state {
 
   implicit def enrichPropertyMap(m: PropertyMap) = new RichPropertyMap(m)
   class RichPropertyMap(m: PropertyMap) {
-    def asMutablePropertyMap: MutablePropertyMap =
-      new ConcurrentSkipListMap[PropertyKey, PropertyValue](m.asJava).asScala
+    def asMutablePropertyMap: MutablePropertyMap = {
+      val mm = new ConcurrentSkipListMap[PropertyKey, PropertyValue].asScala
+      for ((k, v) ← m) mm += normalizeKey(k) -> v
+      mm
+    }
   }
 
 }

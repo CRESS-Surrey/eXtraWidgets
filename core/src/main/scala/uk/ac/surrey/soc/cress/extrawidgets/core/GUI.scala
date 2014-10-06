@@ -46,7 +46,7 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
 
   def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     println("Creating widget from " + (widgetKey, propertyMap))
-    propertyMap.get("kind") match {
+    propertyMap.get("KIND") match {
       case Some("tab") ⇒ {
         val label = propertyMap.getOrElse("label", widgetKey).toString
         val tab = new ExtraWidgetsTab(widgetKey, label)
