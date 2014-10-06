@@ -14,13 +14,13 @@ class Reader(
   widgetMap: MutableWidgetMap, // reader should never expose any part of this
   publisher: SimpleChangeEventPublisher) {
 
-  def onChange[A](block: ⇒ A): Unit = {
+  def onChange[A](f: ⇒ A): Unit = {
     val sub = new SimpleChangeEventPublisher#Sub {
       publisher.subscribe(this)
       override def notify(
         pub: SimpleChangeEventPublisher#Pub,
         event: SimpleChangeEvent.type) {
-        block
+        f
       }
     }
   }
