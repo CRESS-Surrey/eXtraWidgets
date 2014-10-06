@@ -90,7 +90,7 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
   }
 
   def addTab(id: String): Either[String, Unit] = {
-    writer.add("tab", id)
+    writer.add(id, Map("kind" -> "tab"))
   }
 
   def removeTab(id: String): Unit = {
