@@ -46,8 +46,7 @@ class Reader(
     for {
       propertyMap ← mutablePropertyMap(widgetKey).right
       propertyValue ← propertyMap.get(propertyKey).toRight(
-        "Property \"" + propertyKey + "\" " +
-          "does not exist for widget \"" + widgetKey + "\".").right
+        "Property " + propertyKey + " does not exist for widget " + widgetKey + ".").right
     } yield propertyValue
 
   def widgetKeySet: Set[WidgetKey] = widgetMap.keys.toSet
