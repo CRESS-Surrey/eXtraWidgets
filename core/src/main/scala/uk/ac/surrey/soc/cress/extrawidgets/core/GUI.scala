@@ -55,7 +55,8 @@ class GUI(val tabs: Tabs, val toolsMenu: ToolsMenu, val writer: Writer) {
         tabs.tabsMenu.addMenuItem(label, ('1' + i).toChar,
           RichAction { _ ⇒ tabs.setSelectedIndex(i) })
       }
-      case _ ⇒ warningDialog("Unknown widget kind!")
+      case Some(kind) ⇒ warningDialog("Unknown widget kind for " + widgetKey + ":" + kind + "!")
+      case None ⇒ warningDialog("No widget kind specified for " + widgetKey + "!")
     }
   }
 
