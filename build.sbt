@@ -1,5 +1,5 @@
 lazy val root = (project in file("."))
-  .aggregate(plugin, extension, core, state, api)
+  .aggregate(plugin, extension, core, state, api, note)
   .dependsOn(core) // dummy dependency, for jar copying to work
 
 lazy val plugin = project
