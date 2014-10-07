@@ -92,7 +92,7 @@ class GUI(
       .foreach(warningDialog)
   }
 
-  def addTab(id: String): Either[String, Unit] = {
+  def addTab(id: String): Either[XWException, Unit] = {
     writer.add(id, Map("kind" -> "tab"))
   }
 

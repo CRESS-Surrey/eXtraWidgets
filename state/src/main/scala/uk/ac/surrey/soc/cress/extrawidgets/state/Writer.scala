@@ -5,6 +5,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 /**
  *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.
@@ -14,7 +15,7 @@ class Writer(
   publisher: SimpleChangeEventPublisher,
   reader: Reader) {
 
-  def add(widgetKey: WidgetKey, properties: PropertyMap): Either[String, Unit] = {
+  def add(widgetKey: WidgetKey, properties: PropertyMap): Either[XWException, Unit] = {
     val wKey = normalizeKey(widgetKey)
     for {
       _ ← reader.validateNonEmpty("widget key", wKey).right
@@ -33,11 +34,11 @@ class Writer(
   def set(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
-    propertyValue: PropertyValue): Either[String, Unit] = {
+    propertyValue: PropertyValue): Either[XWException, Unit] = {
     val wKey = normalizeKey(widgetKey)
     for {
-      propertyMap ← widgetMap.get(wKey)
-        .toRight("Widget " + wKey + " does not exist.").right
+      propertyMap ← widgetMap.get(wKey).orException(
+        "Widget " + wKey + " does not exist.").right
     } yield {
       propertyMap += normalizeKey(propertyKey) -> propertyValue
       publisher.publish()

@@ -3,15 +3,15 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 import org.nlogo.api.Dump
 import org.nlogo.api.ExtensionException
 import org.nlogo.api.LogoList
-
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 package object util {
 
-  def tryTo[A](f: ⇒ Either[String, A]): A =
+  def tryTo[A](f: ⇒ Either[XWException, A]): A =
     f match {
       case Right(a) ⇒ a
-      case Left(msg) ⇒ throw new ExtensionException(msg)
+      case Left(e) ⇒ throw new ExtensionException(e)
     }
 
   implicit def enrichLogoList(l: LogoList): RichLogoList = new RichLogoList(l)

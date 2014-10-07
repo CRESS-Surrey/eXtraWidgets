@@ -3,12 +3,12 @@ package uk.ac.surrey.soc.cress.extrawidgets.core
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
 import uk.ac.surrey.soc.cress.extrawidgets.api.pluginName
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 object Swing {
 
@@ -77,12 +77,11 @@ object Swing {
       .map(_.trim)
   }
 
-  def warningDialog(message: String): Unit = {
+  def warningDialog(exception: XWException): Unit = {
     JOptionPane.showMessageDialog(
       null, // parent frame
-      message,
+      exception.message,
       pluginName + " Plugin Warning!",
       JOptionPane.WARNING_MESSAGE)
   }
-
 }

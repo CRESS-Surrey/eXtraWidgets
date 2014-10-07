@@ -2,20 +2,18 @@ package uk.ac.surrey.soc.cress.extrawidgets
 
 import java.util.Locale.ENGLISH
 import java.util.concurrent.ConcurrentSkipListMap
-
 import scala.collection.JavaConverters.asScalaConcurrentMapConverter
 import scala.collection.JavaConverters.mapAsJavaMapConverter
 import scala.collection.mutable.ConcurrentMap
-
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.SimpleChangeEventPublisher
-
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 package object state {
 
@@ -55,6 +53,12 @@ package object state {
       for ((k, v) ← m) mm += normalizeKey(k) -> v
       mm
     }
+  }
+
+  implicit def enrichOption[A](o: Option[A]) = new RichOption(o)
+  class RichOption[A](o: Option[A]) {
+    def orException(msg: String): Either[XWException, A] =
+      o.toRight(new XWException(msg, null))
   }
 
 }
