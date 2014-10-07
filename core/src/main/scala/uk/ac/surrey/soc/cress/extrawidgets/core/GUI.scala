@@ -16,18 +16,25 @@ import Strings.TabIDQuestion
 import Swing.inputDialog
 import Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
+import uk.ac.surrey.soc.cress.extrawidgets.api.Kind
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.normalizeKey
 
-class GUI(val app: App, val toolsMenu: ToolsMenu, val writer: Writer) {
+class GUI(
+  val app: App,
+  val toolsMenu: ToolsMenu,
+  val writer: Writer,
+  val widgetKinds: Map[String, Kind]) {
 
   val tabs = app.tabs
 
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
 
-  def makeWidgetsMap: Map[WidgetKey, ExtraWidget[_]] = {
+  def makeWidgetsMap: Map[WidgetKey, ExtraWidget] = {
     val ts = getWidgetsIn(tabs)
     val ws = ts ++ ts.collect { case t: Container ⇒ t }.flatMap(getWidgetsIn)
     ws.map(w ⇒ w.key -> w).toMap
@@ -35,27 +42,27 @@ class GUI(val app: App, val toolsMenu: ToolsMenu, val writer: Writer) {
 
   private def getWidgetsIn(container: Container) =
     container.getComponents.collect {
-      case w: ExtraWidget[_] ⇒ w
+      case w: ExtraWidget ⇒ w
     }
 
-  def removeWidget(widget: ExtraWidget[_]): Unit = {
+  def removeWidget(widget: ExtraWidget): Unit = {
     println("Removing widget " + widget.key)
     widget match {
       case tab: Tab ⇒ removeTab(tab)
     }
   }
 
-  val tabKind = new TabKind // should this be loaded with other widgets?
   def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     println("Creating widget from " + (widgetKey, propertyMap))
-    propertyMap.get("KIND") match {
-      case Some("tab") ⇒ tabKind.newInstance(widgetKey, propertyMap, app.workspace)
-      case Some(kind) ⇒ warningDialog("Unknown widget kind for " + widgetKey + ":" + kind + "!")
-      case None ⇒ warningDialog("No widget kind specified for " + widgetKey + "!")
-    }
+    for {
+      kindName ← propertyMap.get("KIND").map(_.toString).toRight(new XWException(
+        "Can't find KIND for " + widgetKey + " in " + propertyMap)).right
+      kind ← widgetKinds.get(normalizeKey(kindName)).toRight(new XWException(
+        "Kind " + kindName + " not loaded.")).right
+    } kind.newInstance(widgetKey, propertyMap, app.workspace)
   }
 
-  def updateWidget(widget: ExtraWidget[_], propertyMap: PropertyMap): Unit = {
+  def updateWidget(widget: ExtraWidget, propertyMap: PropertyMap): Unit = {
     println("Updating widget from " + propertyMap)
     widget.update(propertyMap)
   }

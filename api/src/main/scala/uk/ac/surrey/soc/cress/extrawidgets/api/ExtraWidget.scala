@@ -1,29 +1,28 @@
 package uk.ac.surrey.soc.cress.extrawidgets.api
 
-trait ExtraWidget[W <: ExtraWidget[W]] {
-  self: W ⇒
+trait ExtraWidget {
 
-  val kind: Kind[W]
   val key: WidgetKey
 
   private var currentPropertyMap: PropertyMap = Map.empty
+
+  def propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget]]
 
   def update(newPropertyMap: PropertyMap): Unit = {
 
     for {
       propertyKey ← currentPropertyMap.keys
       if !newPropertyMap.contains(key)
-      prop ← kind.propertyDefs.get(propertyKey)
-    } prop.unset(this)
+      prop ← propertyDefs.get(propertyKey)
+    } prop.unset
 
     for {
       (propertyKey, newValue) ← newPropertyMap
-      prop ← kind.propertyDefs.get(propertyKey)
+      prop ← propertyDefs.get(propertyKey)
     } {
       val oldValue = currentPropertyMap.get(propertyKey)
       if (oldValue != Some(newValue))
-        prop.set(this, newValue, oldValue)
+        prop.set(newValue, oldValue)
     }
   }
-
 }

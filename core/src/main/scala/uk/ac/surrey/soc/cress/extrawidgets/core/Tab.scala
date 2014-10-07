@@ -1,50 +1,50 @@
 package uk.ac.surrey.soc.cress.extrawidgets.core
 
-import org.nlogo.api.Syntax.StringType
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.app.Tabs
 import org.nlogo.swing.RichAction
 import org.nlogo.window.GUIWorkspace
+
 import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.Kind
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
-class TabKind extends Kind[Tab] {
+class TabKind extends Kind {
+
+  type W = Tab
 
   val name = "TAB"
 
-  object Title extends PropertyDef[Tab] {
-    val valueType = StringType
-    def set(w: Tab, newValue: PropertyValue, oldValue: Option[PropertyValue]): Unit =
-      w.setTitle(newValue.toString)
-    def unset(w: Tab) = w.setTitle(w.key)
-  }
-
-  override val propertyDefs = Map(
-    "TITLE" -> Title
-  )
-
   def newInstance(key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace) = {
     ws.getFrame.asInstanceOf[AppFrame].getLinkChildren.collectFirst {
-      case app: App ⇒ new Tab(this, key, properties, app.tabs)
+      case app: App ⇒ new Tab(key, properties, app.tabs)
     }.getOrElse(throw new XWException("Tab widget can't access application tabs."))
   }
 
 }
 
 class Tab(
-  val kind: Kind[Tab],
   val key: WidgetKey,
   properties: PropertyMap,
   tabs: Tabs)
   extends JPanel
-  with ExtraWidget[Tab] {
+  with ExtraWidget {
+
+  object TitleProperty extends PropertyDef(this) {
+    def set(newValue: PropertyValue, oldValue: Option[PropertyValue]): Unit =
+      setTitle(newValue.toString)
+    def unset = setTitle(w.key)
+  }
+
+  override def propertyDefs: Map[PropertyKey, PropertyDef[Tab]] =
+    Map("TITLE" -> TitleProperty)
 
   for (title ← properties.get("TITLE").orElse(Some(key))) {
     tabs.addTab(title.toString, this)
