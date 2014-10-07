@@ -32,7 +32,8 @@ class View(reader: Reader, gui: GUI) {
       for {
         key ← keysOfExistingWidgets
         propertyMap ← reader.propertyMap(key).right
-      } gui.updateWidget(key, propertyMap)
+        guiWidget <- guiWidgets.get(key)
+      } gui.updateWidget(guiWidget, propertyMap)
 
       val deadWidgets = guiWidgets.filterKeys(key ⇒ !reader.contains(key)).values
       deadWidgets.foreach(gui.removeWidget)

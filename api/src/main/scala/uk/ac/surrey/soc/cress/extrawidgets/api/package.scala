@@ -7,7 +7,6 @@ package object api {
 
   val pluginName = "eXtraWidgets"
 
-  type WidgetKind = String
   type WidgetKey = String
   type PropertyKey = String
   type PropertyValue = AnyRef

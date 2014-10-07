@@ -11,7 +11,7 @@ class Manager(val app: App, val toolsMenu: ToolsMenu) {
 
   val (reader, writer) = getOrCreateModel(app.workspace.getExtensionManager)
 
-  val gui = new GUI(app.tabs, toolsMenu, writer)
+  val gui = new GUI(app, toolsMenu, writer)
   val view = new View(reader, gui)
 
   app.frame.onComponentShown { _ ⇒
