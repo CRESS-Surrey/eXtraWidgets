@@ -46,6 +46,7 @@ class Tab(
   override def propertyDefs: Map[PropertyKey, PropertyDef[Tab]] =
     Map("TITLE" -> TitleProperty)
 
+  setLayout(null) // use absolute layout
   setBackground(white)
 
   for (title ← properties.get("TITLE").orElse(Some(key))) {
