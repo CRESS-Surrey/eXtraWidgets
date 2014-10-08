@@ -61,4 +61,9 @@ package object state {
       o.toRight(new XWException(msg, null))
   }
 
+  def tryTo[A](f: ⇒ A, failureMessage: String = ""): Either[XWException, A] =
+    try Right(f) catch {
+      case e: Exception ⇒ Left(new XWException(
+        Option(failureMessage).filter(_.nonEmpty).getOrElse(e.getMessage), e))
+    }
 }
