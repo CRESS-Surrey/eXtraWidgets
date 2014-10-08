@@ -1,5 +1,7 @@
 package uk.ac.surrey.soc.cress.extrawidgets.core
 
+import java.awt.Color.white
+
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.app.Tabs
@@ -45,6 +47,8 @@ class Tab(
 
   override def propertyDefs: Map[PropertyKey, PropertyDef[Tab]] =
     Map("TITLE" -> TitleProperty)
+
+  setBackground(white)
 
   for (title ← properties.get("TITLE").orElse(Some(key))) {
     tabs.addTab(title.toString, this)
