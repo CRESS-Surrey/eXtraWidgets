@@ -86,18 +86,9 @@ class GUI(
       .iterate(askName(DefaultTabName))(_.flatMap(askName))
       .takeWhile(_.isDefined)
       .flatten
-      .map(addTab)
+      .map(writer.add(_, Map("kind" -> "tab")))
       .takeWhile(_.isLeft)
       .flatMap(_.left.toSeq)
       .foreach(warningDialog)
   }
-
-  def addTab(id: String): Either[XWException, Unit] = {
-    writer.add(id, Map("kind" -> "tab"))
-  }
-
-  def removeTab(id: String): Unit = {
-    writer.remove(id)
-  }
-
 }
