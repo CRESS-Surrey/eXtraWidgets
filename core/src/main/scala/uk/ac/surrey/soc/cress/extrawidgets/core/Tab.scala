@@ -60,6 +60,6 @@ class Tab(
   def setTitle(title: String) =
     for (i ← tabIndex) {
       tabs.setTitleAt(i, title)
-      // TODO: modify title in menu
+      tabs.tabsMenu.getItem(i).setText(title)
     }
 }
