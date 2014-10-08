@@ -1,4 +1,4 @@
-name := "eXtraWidgets-Core"
+name := "eXtraWidgets-GUI"
 
 scalaVersion := "2.9.3"
 
