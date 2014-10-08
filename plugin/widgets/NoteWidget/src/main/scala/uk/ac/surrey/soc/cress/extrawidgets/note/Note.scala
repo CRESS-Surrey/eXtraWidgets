@@ -12,7 +12,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 
 class NoteKind extends Kind {
-  type W = Note
   val name = "NOTE"
   override def newInstance(key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace) = {
     new Note(key, properties)

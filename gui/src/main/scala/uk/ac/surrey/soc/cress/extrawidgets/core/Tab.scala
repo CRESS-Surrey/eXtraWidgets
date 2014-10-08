@@ -20,8 +20,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 class TabKind extends Kind {
 
-  type W = Tab
-
   val name = "TAB"
 
   def newInstance(key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace) = {
