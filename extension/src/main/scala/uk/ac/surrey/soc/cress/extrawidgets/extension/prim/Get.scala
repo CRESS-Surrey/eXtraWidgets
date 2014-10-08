@@ -7,7 +7,7 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 import org.nlogo.api.Syntax.reporterSyntax
 
-import uk.ac.surrey.soc.cress.extrawidgets.extension.util.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.extension.util.enrichEither
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
 class Get(reader: Reader) extends DefaultReporter {
@@ -15,6 +15,6 @@ class Get(reader: Reader) extends DefaultReporter {
   def report(args: Array[Argument], context: Context): AnyRef = {
     val propertyKey = args(0).getString
     val widgetKey = args(1).getString
-    tryTo(reader.get(propertyKey, widgetKey))
+    reader.get(propertyKey, widgetKey).rightOrThrow
   }
 }

@@ -8,11 +8,17 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 package object util {
 
-  def tryTo[A](f: ⇒ Either[XWException, A]): A =
-    f match {
-      case Right(a) ⇒ a
-      case Left(e) ⇒ throw new ExtensionException(e)
+  implicit def enrichEither[L, R](either: Either[L, R]) = new RichEither(either)
+  class RichEither[L, R](either: Either[L, R]) {
+    def rightOrThrow: R = either match {
+      case Right(r) ⇒ r
+      case Left(l) ⇒ throw l match {
+        case e: Exception ⇒ new ExtensionException(e)
+        case s: String ⇒ new ExtensionException(s)
+        case x ⇒ new ExtensionException("Unexpected result: " + x.toString)
+      }
     }
+  }
 
   implicit def enrichLogoList(l: LogoList): RichLogoList = new RichLogoList(l)
   class RichLogoList(logoList: LogoList) {
