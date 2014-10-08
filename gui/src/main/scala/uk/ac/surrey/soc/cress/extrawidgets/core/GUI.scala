@@ -21,7 +21,9 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.state.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
 
 class GUI(
   val app: App,
@@ -49,17 +51,48 @@ class GUI(
     println("Removing widget " + widget.key)
     widget match {
       case tab: Tab ⇒ removeTab(tab)
+      case w ⇒ for (tab ← getTabFor(widget.key, widget.propertyMap).right) {
+        tab.remove(widget)
+        tab.validate()
+      }
     }
   }
 
-  def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
+  def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
     println("Creating widget from " + (widgetKey, propertyMap))
     for {
-      kindName ← propertyMap.get("KIND").map(_.toString).toRight(new XWException(
-        "Can't find KIND for " + widgetKey + " in " + propertyMap)).right
-      kind ← widgetKinds.get(normalizeKey(kindName)).toRight(new XWException(
-        "Kind " + kindName + " not loaded.")).right
-    } kind.newInstance(widgetKey, propertyMap, app.workspace)
+      kindName ← propertyMap.get("KIND").map(_.toString).orException(
+        "Can't find KIND for " + widgetKey + " in " + propertyMap).right
+      kind ← widgetKinds.get(normalizeKey(kindName)).orException(
+        "Kind " + kindName + " not loaded.").right
+    } yield {
+      def createWidget = kind.newInstance(widgetKey, propertyMap, app.workspace)
+      if (kind.name == "TAB")
+        tryTo(createWidget)
+      else
+        for {
+          tab ← getTabFor(widgetKey, propertyMap).right
+          widget ← tryTo(createWidget).right
+        } yield {
+          tab.add(widget)
+          tab.validate()
+        }
+    }
+  }
+
+  def getTabFor(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Tab] = {
+    val tabs = extraWidgetTabs
+    for {
+      tabKey ← propertyMap
+        .get("TAB")
+        .map(key => normalizeKey(key.toString))
+        .orElse(tabs.headOption.map(_.key))
+        .orException("There exists no tab for widget " + widgetKey + ".").right
+      tab ← tabs
+        .find(_.key == tabKey)
+        .map { x ⇒ println(x); x }
+        .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
+    } yield tab
   }
 
   def updateWidget(widget: ExtraWidget, propertyMap: PropertyMap): Unit = {
