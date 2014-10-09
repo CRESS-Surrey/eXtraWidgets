@@ -2,8 +2,6 @@ package uk.ac.surrey.soc.cress.extrawidgets.api
 
 import java.awt.Component
 
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.makeKey
-
 trait ExtraWidget extends Component {
 
   val key: WidgetKey

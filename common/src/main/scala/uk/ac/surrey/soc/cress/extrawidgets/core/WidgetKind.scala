@@ -1,11 +1,11 @@
-package uk.ac.surrey.soc.cress.extrawidgets.gui
+package uk.ac.surrey.soc.cress.extrawidgets.core
 
 import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.makeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 
 class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
 

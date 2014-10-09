@@ -12,10 +12,9 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
 
 package object state {
 
@@ -54,16 +53,4 @@ package object state {
       mm
     }
   }
-
-  implicit def enrichOption[A](o: Option[A]) = new RichOption(o)
-  class RichOption[A](o: Option[A]) {
-    def orException(msg: String): Either[XWException, A] =
-      o.toRight(new XWException(msg, null))
-  }
-
-  def tryTo[A](f: ⇒ A, failureMessage: String = ""): Either[XWException, A] =
-    try Right(f) catch {
-      case e: Exception ⇒ Left(new XWException(
-        Option(failureMessage).filter(_.nonEmpty).getOrElse(e.getMessage), e))
-    }
 }

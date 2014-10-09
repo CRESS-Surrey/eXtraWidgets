@@ -2,14 +2,11 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.Container
-
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
-
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
-
 import Strings.CreateTab
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
@@ -19,11 +16,12 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.makeKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.state.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.util.enrichOption
+import uk.ac.surrey.soc.cress.extrawidgets.util.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.core.WidgetKind
 
 class GUI(
   val app: App,

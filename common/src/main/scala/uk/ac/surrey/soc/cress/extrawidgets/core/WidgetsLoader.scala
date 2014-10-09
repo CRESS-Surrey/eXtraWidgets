@@ -1,6 +1,5 @@
-package uk.ac.surrey.soc.cress.extrawidgets.gui
+package uk.ac.surrey.soc.cress.extrawidgets.core
 
-import java.io.File
 import java.net.JarURLConnection
 import java.net.URL
 import java.util.jar.Attributes
@@ -8,16 +7,16 @@ import java.util.jar.Attributes
 import scala.Array.canBuildFrom
 import scala.Array.fallbackCanBuildFrom
 
+import LoaderUtil.getWidgetsFolder
+import LoaderUtil.newClassLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.exceptionDialog
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.getPluginFolder
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.newClassLoader
-import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.gui.Tab
+import uk.ac.surrey.soc.cress.extrawidgets.util.tryTo
 
 object WidgetsLoader {
 
-  def loadWidgetKinds(): Map[String, WidgetKind] = {
+  def loadWidgetKinds(): Either[Seq[Exception], Map[String, WidgetKind]] = {
 
     getWidgetsFolder.right.map {
       case widgetsFolder ⇒
@@ -41,15 +40,16 @@ object WidgetsLoader {
             } yield kind
           }
 
-        entries.collect {
-          case Left(e) ⇒ exceptionDialog(e)
-        }
+        val exceptions = entries.collect { case Left(e) ⇒ e }
 
-        entries.collect {
-          case Right(kind) ⇒ kind.name -> kind
-        }(collection.breakOut): Map[String, WidgetKind]
+        if (exceptions.nonEmpty)
+          Left(exceptions)
+        else
+          Right(entries.collect {
+            case Right(kind) ⇒ kind.name -> kind
+          }(collection.breakOut): Map[String, WidgetKind])
 
-    }.fold(e ⇒ { exceptionDialog(e); Map.empty }, identity)
+    }.left.map(Seq(_)).joinRight
   }
 
   def getKind(clazz: Class[_ <: ExtraWidget]): Either[XWException, WidgetKind] =
@@ -87,13 +87,4 @@ object WidgetsLoader {
       .toRight(XWException("Can't find Manifest file in widget jar: " + fileURL + "."))
       .right.map(_.getMainAttributes)
   }
-
-  def getWidgetsFolder: Either[IllegalStateException, File] =
-    getPluginFolder.right.flatMap { pluginFolder ⇒
-      pluginFolder.listFiles
-        .filter(_.isDirectory)
-        .find(_.getName == "widgets")
-        .toRight(new IllegalStateException("Can't find extra widgets folder below plugin folder."))
-    }
-
 }

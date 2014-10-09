@@ -4,7 +4,7 @@ import java.awt.EventQueue.isDispatchThread
 
 import org.nlogo.awt.EventQueue.invokeLater
 
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.toRunnable
+import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
 class View(reader: Reader, gui: GUI) {

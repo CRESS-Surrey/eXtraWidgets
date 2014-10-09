@@ -10,7 +10,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.util.enrichOption
 
 class Reader(
   widgetMap: MutableWidgetMap, // reader should never expose any part of this
