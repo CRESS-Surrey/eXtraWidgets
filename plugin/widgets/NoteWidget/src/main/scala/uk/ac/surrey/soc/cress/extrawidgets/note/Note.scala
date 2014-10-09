@@ -9,7 +9,6 @@ import org.nlogo.window.GUIWorkspace
 
 class TextProperty(note: Note) extends PropertyDef(note) {
   type ValueType = String
-  val key = "TEXT"
   override def setValue(newValue: String, oldValue: Option[String]): Unit =
     note.setText(newValue)
   override def getValue = note.getText

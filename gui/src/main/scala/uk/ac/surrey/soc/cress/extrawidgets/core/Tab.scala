@@ -15,7 +15,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 class TitleProperty(tab: Tab) extends PropertyDef(tab) {
-  val key = "TITLE"
   type ValueType = String
   def setValue(newValue: String, oldValue: Option[String]): Unit =
     tab.setTitle(newValue.toString)

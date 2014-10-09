@@ -7,8 +7,9 @@ package object api {
 
   val pluginName = "eXtraWidgets"
 
-  type WidgetKey = String
-  type PropertyKey = String
+  type Key = String
+  type WidgetKey = Key
+  type PropertyKey = Key
   type PropertyValue = AnyRef
 
   type PropertyMap = immutable.Map[PropertyKey, PropertyValue]

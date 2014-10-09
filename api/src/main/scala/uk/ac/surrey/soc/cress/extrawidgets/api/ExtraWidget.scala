@@ -2,6 +2,8 @@ package uk.ac.surrey.soc.cress.extrawidgets.api
 
 import java.awt.Component
 
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.makeKey
+
 trait ExtraWidget extends Component {
 
   val key: WidgetKey
@@ -10,12 +12,14 @@ trait ExtraWidget extends Component {
 
   def propertyMap = _propertyMap
 
-  lazy val propertyDefs =
+  lazy val propertyDefs: Map[PropertyKey, PropertyDef[ExtraWidget]] =
     this.getClass.getFields
-      .filter { field ⇒ classOf[PropertyDef[_]].isAssignableFrom(field.getType) }
-      .map { field ⇒ field.get(this).asInstanceOf[PropertyDef[ExtraWidget]] }
-      .map { propertyDef ⇒ propertyDef.key -> propertyDef }
-      .toMap
+      .filter { field ⇒ classOf[PropertyDef[ExtraWidget]].isAssignableFrom(field.getType) }
+      .map { field ⇒
+        val propertyKey = makeKey(field.getType.getSimpleName)
+        val propertyDef = field.get(this).asInstanceOf[PropertyDef[ExtraWidget]]
+        propertyKey -> propertyDef
+      }(collection.breakOut)
 
   def update(newPropertyMap: PropertyMap): Unit = {
     val oldPropertyMap = _propertyMap

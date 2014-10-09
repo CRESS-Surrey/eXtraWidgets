@@ -21,7 +21,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.util._
 import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
 
 class GUI(
@@ -31,6 +31,7 @@ class GUI(
   val widgetKinds: Map[String, WidgetKind]) {
 
   val tabs = app.tabs
+  val tabKindName = makeKey(classOf[Tab].getSimpleName)
 
   toolsMenu.addSeparator()
   toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
@@ -66,7 +67,7 @@ class GUI(
         "Kind " + kindName + " not loaded.").right
     } yield {
       def createWidget = kind.newInstance(widgetKey, propertyMap, app.workspace)
-      if (kind.name == "TAB")
+      if (kind.name == tabKindName)
         tryTo(createWidget)
       else
         for {
@@ -83,8 +84,8 @@ class GUI(
     val tabs = extraWidgetTabs
     for {
       tabKey ← propertyMap
-        .get("TAB")
-        .map(key => normalizeKey(key.toString))
+        .get(tabKindName)
+        .map(key ⇒ normalizeKey(key.toString))
         .orElse(tabs.headOption.map(_.key))
         .orException("There exists no tab for widget " + widgetKey + ".").right
       tab ← tabs
@@ -118,7 +119,7 @@ class GUI(
       .iterate(askName(DefaultTabName))(_.flatMap(askName))
       .takeWhile(_.isDefined)
       .flatten
-      .map(writer.add(_, Map("kind" -> "tab")))
+      .map(writer.add(_, Map("kind" -> tabKindName)))
       .takeWhile(_.isLeft)
       .flatMap(_.left.toSeq)
       .foreach(warningDialog)
