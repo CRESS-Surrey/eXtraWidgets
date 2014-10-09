@@ -1,19 +1,21 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
-import java.util.Locale.ENGLISH
 import java.util.concurrent.ConcurrentSkipListMap
+
 import scala.collection.JavaConverters.asScalaConcurrentMapConverter
-import scala.collection.JavaConverters.mapAsJavaMapConverter
 import scala.collection.mutable.ConcurrentMap
+
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.SimpleChangeEventPublisher
+
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
 
 package object state {
 
@@ -32,8 +34,6 @@ package object state {
     val writer = new Writer(widgetMap, publisher, reader)
     (reader, writer)
   }
-
-  def normalizeKey(key: String) = key.toUpperCase(ENGLISH)
 
   // Note: we use ConcurrentSkipListMap instead of ConcurrentHashMap
   // to ensure reproducibility of runs across architectures. It's also

@@ -5,12 +5,12 @@ import java.awt.Component
 trait ExtraWidget extends Component {
 
   val key: WidgetKey
+  val kind: Kind
+  val self: kind.W
 
   private var _propertyMap: PropertyMap = Map.empty
 
   def propertyMap = _propertyMap
-
-  def propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget]]
 
   def update(newPropertyMap: PropertyMap): Unit = {
     val oldPropertyMap = _propertyMap
@@ -18,16 +18,16 @@ trait ExtraWidget extends Component {
     for {
       propertyKey ← oldPropertyMap.keys
       if !newPropertyMap.contains(key)
-      prop ← propertyDefs.get(propertyKey)
-    } prop.unset
+      prop ← kind.propertyDefMap.get(propertyKey)
+    } prop.unsetValueFor(self)
 
     for {
       (propertyKey, newValue) ← newPropertyMap
-      prop ← propertyDefs.get(propertyKey)
+      prop ← kind.propertyDefMap.get(propertyKey)
     } {
       val oldValue = oldPropertyMap.get(propertyKey)
       if (oldValue != Some(newValue))
-        prop.set(newValue, oldValue)
+        prop.setValueFor(self, newValue, oldValue)
     }
   }
 }

@@ -22,7 +22,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.state.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
 
 class GUI(

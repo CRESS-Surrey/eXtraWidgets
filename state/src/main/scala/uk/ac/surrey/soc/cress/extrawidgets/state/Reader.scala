@@ -2,6 +2,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.state
 
 import org.nlogo.api.SimpleChangeEvent
 import org.nlogo.api.SimpleChangeEventPublisher
+
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
@@ -9,6 +10,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
 
 class Reader(
   widgetMap: MutableWidgetMap, // reader should never expose any part of this
