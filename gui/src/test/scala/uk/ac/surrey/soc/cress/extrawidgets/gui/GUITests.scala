@@ -1,18 +1,20 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
+
 import org.nlogo.app.App
 import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
+
 import NetLogoInitializer.extraWidgetsManager
 import Strings.CreateTab
 import javax.swing.JMenuItem
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeNonEmpty
 import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeUnique
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 
 class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 

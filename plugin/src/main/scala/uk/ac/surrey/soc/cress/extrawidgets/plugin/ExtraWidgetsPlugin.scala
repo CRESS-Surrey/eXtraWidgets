@@ -10,7 +10,7 @@ class ExtraWidgetsPlugin(val app: App, val toolsMenu: ToolsMenu) extends JPanel 
   val manager = getPluginJarFile.right.map { jarFile ⇒
     val classLoader = newClassLoader(jarFile, getClass.getClassLoader)
     classLoader
-      .loadClass("uk.ac.surrey.soc.cress.extrawidgets.core.Manager")
+      .loadClass("uk.ac.surrey.soc.cress.extrawidgets.gui.Manager")
       .getConstructor(classOf[App], classOf[ToolsMenu])
       .newInstance(app, toolsMenu)
   }

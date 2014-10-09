@@ -1,6 +1,7 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.util.concurrent.Executor
+
 import akka.dispatch.ExecutionContext
 import javax.swing.SwingUtilities
 

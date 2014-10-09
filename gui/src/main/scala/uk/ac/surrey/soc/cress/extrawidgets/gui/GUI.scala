@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.Container
@@ -19,9 +19,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.makeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.util.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.api.util._
 import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
 
 class GUI(

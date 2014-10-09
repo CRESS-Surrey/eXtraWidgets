@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Color.white
 
@@ -9,10 +9,10 @@ import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyDef
 
 class TitleProperty(tab: Tab) extends PropertyDef(tab) {
   type ValueType = String

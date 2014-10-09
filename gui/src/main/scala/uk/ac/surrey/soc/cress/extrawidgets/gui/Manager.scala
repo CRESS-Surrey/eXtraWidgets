@@ -1,9 +1,9 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
 
-import uk.ac.surrey.soc.cress.extrawidgets.core.Swing.enrichComponent
+import uk.ac.surrey.soc.cress.extrawidgets.gui.Swing.enrichComponent
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
 import uk.ac.surrey.soc.cress.extrawidgets.state.getOrCreateModel
 

@@ -1,4 +1,4 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 object Strings {
   val CreateTab = "Create Extra Widgets Tab..."

@@ -1,6 +1,4 @@
-
-
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.io.File
 import java.net.JarURLConnection

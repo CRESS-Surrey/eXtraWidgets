@@ -1,14 +1,15 @@
-package uk.ac.surrey.soc.cress.extrawidgets.core
+package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
-import uk.ac.surrey.soc.cress.extrawidgets.api.pluginName
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.pluginName
 
 object Swing {
 
