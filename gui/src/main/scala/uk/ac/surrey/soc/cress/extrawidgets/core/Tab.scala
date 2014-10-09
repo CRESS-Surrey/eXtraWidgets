@@ -4,50 +4,39 @@ import java.awt.Color.white
 
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
-import org.nlogo.app.Tabs
 import org.nlogo.swing.RichAction
 import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
-import uk.ac.surrey.soc.cress.extrawidgets.api.Kind
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
-object TitleProperty extends PropertyDef[Tab] {
-  val name = "TITLE"
-  def setValueFor(t: Tab, newValue: PropertyValue, oldValue: Option[PropertyValue]): Unit =
-    t.setTitle(newValue.toString)
-  def unsetValueFor(t: Tab) = t.setTitle(t.key)
-}
-
-class TabKind extends Kind {
-
-  type W = Tab
-  val name = "TAB"
-  override def propertyDefs = Seq(TitleProperty)
-
-  def newInstance(key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace) = {
-    ws.getFrame.asInstanceOf[AppFrame].getLinkChildren.collectFirst {
-      case app: App ⇒ new Tab(this, key, properties, app.tabs)
-    }.getOrElse(throw new XWException("Tab widget can't access application tabs."))
-  }
-
+class TitleProperty(tab: Tab) extends PropertyDef(tab) {
+  val key = "TITLE"
+  type ValueType = String
+  def setValue(newValue: String, oldValue: Option[String]): Unit =
+    tab.setTitle(newValue.toString)
+  def defaultValue = tab.key
+  override def getValue = tab.getTitle
 }
 
 class Tab(
-  val kind: TabKind,
   val key: WidgetKey,
   properties: PropertyMap,
-  tabs: Tabs)
+  ws: GUIWorkspace)
   extends JPanel
   with ExtraWidget {
+
+  val title = new TitleProperty(this)
+
   println("Contructing Tab " + key + ": " + this.toString)
 
-  val self = this
+  val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
+    .collectFirst { case app: App ⇒ app.tabs }
+    .getOrElse(throw new XWException("Tab widget can't access application tabs."))
 
   setLayout(null) // use absolute layout
   setBackground(white)
@@ -68,4 +57,7 @@ class Tab(
       tabs.setTitleAt(i, title)
       tabs.tabsMenu.getItem(i).setText(title)
     }
+
+  def getTitle: String = tabIndex.map(tabs.getTitleAt(_)).getOrElse(title.defaultValue)
+
 }

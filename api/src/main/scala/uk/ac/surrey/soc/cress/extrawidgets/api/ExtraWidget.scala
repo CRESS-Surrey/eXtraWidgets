@@ -5,12 +5,17 @@ import java.awt.Component
 trait ExtraWidget extends Component {
 
   val key: WidgetKey
-  val kind: Kind
-  val self: kind.W
 
   private var _propertyMap: PropertyMap = Map.empty
 
   def propertyMap = _propertyMap
+
+  lazy val propertyDefs =
+    this.getClass.getFields
+      .filter { field ⇒ classOf[PropertyDef[_]].isAssignableFrom(field.getType) }
+      .map { field ⇒ field.get(this).asInstanceOf[PropertyDef[ExtraWidget]] }
+      .map { propertyDef ⇒ propertyDef.key -> propertyDef }
+      .toMap
 
   def update(newPropertyMap: PropertyMap): Unit = {
     val oldPropertyMap = _propertyMap
@@ -18,16 +23,17 @@ trait ExtraWidget extends Component {
     for {
       propertyKey ← oldPropertyMap.keys
       if !newPropertyMap.contains(key)
-      prop ← kind.propertyDefMap.get(propertyKey)
-    } prop.unsetValueFor(self)
+      prop ← propertyDefs.get(propertyKey)
+    } prop.unsetValue
 
     for {
-      (propertyKey, newValue) ← newPropertyMap
-      prop ← kind.propertyDefMap.get(propertyKey)
+      (propertyKey, newValueObj) ← newPropertyMap
+      prop ← propertyDefs.get(propertyKey)
     } {
-      val oldValue = oldPropertyMap.get(propertyKey)
+      val oldValue = oldPropertyMap.get(propertyKey).map(_.asInstanceOf[prop.ValueType])
+      val newValue = newValueObj.asInstanceOf[prop.ValueType]
       if (oldValue != Some(newValue))
-        prop.setValueFor(self, newValue, oldValue)
+        prop.setValue(newValue, oldValue)
     }
   }
 }

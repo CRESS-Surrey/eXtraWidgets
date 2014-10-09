@@ -16,7 +16,6 @@ import Strings.TabIDQuestion
 import Swing.inputDialog
 import Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
-import uk.ac.surrey.soc.cress.extrawidgets.api.Kind
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
@@ -29,7 +28,7 @@ class GUI(
   val app: App,
   val toolsMenu: ToolsMenu,
   val writer: Writer,
-  val widgetKinds: Map[String, Kind]) {
+  val widgetKinds: Map[String, WidgetKind]) {
 
   val tabs = app.tabs
 

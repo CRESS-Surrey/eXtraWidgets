@@ -10,15 +10,16 @@ import java.util.jar.Attributes
 import scala.Array.canBuildFrom
 import scala.Array.fallbackCanBuildFrom
 
-import uk.ac.surrey.soc.cress.extrawidgets.api.Kind
+import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.exceptionDialog
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.getPluginFolder
 import uk.ac.surrey.soc.cress.extrawidgets.plugin.newClassLoader
+import uk.ac.surrey.soc.cress.extrawidgets.state.tryTo
 
 object WidgetsLoader {
 
-  def loadWidgetKinds(): Map[String, Kind] = {
+  def loadWidgetKinds(): Map[String, WidgetKind] = {
 
     getWidgetsFolder.right.map {
       case widgetsFolder ⇒
@@ -30,8 +31,8 @@ object WidgetsLoader {
           if file.getName.toUpperCase == (folder.getName + ".jar").toUpperCase
         } yield file
 
-        val entries: Seq[Either[XWException, Kind]] =
-          widgetJarFiles.map { widgetJarFile ⇒
+        val entries: Seq[Either[XWException, WidgetKind]] =
+          getKind(classOf[Tab]) +: widgetJarFiles.map { widgetJarFile ⇒
             val widgetJarURL = widgetJarFile.toURI.toURL
             val classLoader = newClassLoader(widgetJarFile, getClass.getClassLoader)
             for {
@@ -46,31 +47,33 @@ object WidgetsLoader {
           case Left(e) ⇒ exceptionDialog(e)
         }
 
-        val kindMap = entries.collect {
+        entries.collect {
           case Right(kind) ⇒ kind.name -> kind
-        }(collection.breakOut): Map[String, Kind]
-
-        kindMap + ("TAB" -> new TabKind)
+        }(collection.breakOut): Map[String, WidgetKind]
 
     }.fold(e ⇒ { exceptionDialog(e); Map.empty }, identity)
   }
 
-  def getKind(clazz: Class[_]): Either[XWException, Kind] = {
-    try Right(clazz.newInstance.asInstanceOf[Kind])
-    catch {
-      case e: ClassCastException ⇒ Left(XWException(
-        clazz.getName + " does not implement WidgetKind trait."))
-    }
-  }
+  def getKind(clazz: Class[_ <: ExtraWidget]): Either[XWException, WidgetKind] =
+    tryTo(
+      new WidgetKind(clazz),
+      "Unable to instantiate Kind object for " + clazz.getName + ".")
 
   def getAttributeValue(attributes: Attributes, attributeName: String, fileURL: URL): Either[XWException, String] =
     Option(attributes.getValue(attributeName))
       .toRight(XWException("Bad widget: Can't find attribute " +
         attributeName + " class name in Manifest for " + fileURL + "."))
 
-  def loadClass(className: String, classLoader: ClassLoader, fileURL: URL): Either[XWException, Class[_]] =
-    try Right(classLoader.loadClass(className))
+  def loadClass(
+    className: String,
+    classLoader: ClassLoader,
+    fileURL: URL): Either[XWException, Class[_ <: ExtraWidget]] =
+    try Right(classLoader.loadClass(className).asSubclass(classOf[ExtraWidget]))
     catch {
+      case e: ClassCastException ⇒
+        Left(XWException("Class " + className +
+          "\n in widget jar: " + fileURL +
+          " is not an implementation of ExtraWidget.", e))
       case e: ClassNotFoundException ⇒
         Left(XWException("Can't find class " + className +
           "\n in widget jar: " + fileURL + ".", e))
