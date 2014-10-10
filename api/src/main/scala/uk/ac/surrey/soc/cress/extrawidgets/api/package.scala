@@ -31,4 +31,6 @@ package object api {
 
   implicit def toRunnable[T](block: ⇒ T) =
     new Runnable() { def run() { block } }
+
+  def const[T](v: T): () ⇒ T = () ⇒ v
 }

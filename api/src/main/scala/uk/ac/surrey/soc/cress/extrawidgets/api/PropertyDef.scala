@@ -18,7 +18,7 @@ class StringPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: String ⇒ Unit,
   getter: () ⇒ String,
-  default: () ⇒ String = () ⇒ "")
+  default: () ⇒ String)
   extends PropertyDef(w, setter, getter, default) {
   val inputTypeConstant = StringType
   val outputTypeConstant = StringType
@@ -29,7 +29,7 @@ class BooleanPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.lang.Boolean ⇒ Unit,
   getter: () ⇒ java.lang.Boolean,
-  default: () ⇒ java.lang.Boolean = () ⇒ Boolean.box(false))
+  default: () ⇒ java.lang.Boolean)
   extends PropertyDef(w, setter, getter, default) {
   val inputTypeConstant = BooleanType
   val outputTypeConstant = BooleanType
@@ -39,7 +39,7 @@ class IntegerPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.lang.Integer ⇒ Unit,
   getter: () ⇒ java.lang.Integer,
-  default: () ⇒ java.lang.Integer = () ⇒ Int.box(0))
+  default: () ⇒ java.lang.Integer)
   extends PropertyDef(w, setter, getter, default) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
