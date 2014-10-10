@@ -1,25 +1,23 @@
 package uk.ac.surrey.soc.cress.extrawidgets.gui
 
-import java.awt.Color.white
-
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.swing.RichAction
 import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
-import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
+import uk.ac.surrey.soc.cress.extrawidgets.api.JComponentWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 
 class Tab(
   val key: WidgetKey,
   properties: PropertyMap,
   ws: GUIWorkspace)
   extends JPanel
-  with ExtraWidget {
+  with JComponentWidget {
 
   val title = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
 
@@ -28,7 +26,6 @@ class Tab(
     .getOrElse(throw new XWException("Tab widget can't access application tabs."))
 
   setLayout(null) // use absolute layout
-  setBackground(white)
 
   addToAppTabs(properties.get("TITLE").map(_.toString).getOrElse(title.default()))
 
