@@ -18,17 +18,16 @@ trait ExtraWidget extends Component {
   lazy val propertyDefs = kind.propertyDefs(this)
 
   def update(newPropertyMap: PropertyMap): Unit = {
-    val oldPropertyMap = _propertyMap
     _propertyMap = newPropertyMap
     for {
-      propertyKey ← oldPropertyMap.keys
-      if !newPropertyMap.contains(key)
+      propertyKey ← kind.propertyKeys
+      if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
-    } prop.unsetValue
+    } prop.setToDefault
 
     for {
       (propertyKey, value) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
-    } prop.setValueObj(value)
+    } prop.setValue(value)
   }
 }
