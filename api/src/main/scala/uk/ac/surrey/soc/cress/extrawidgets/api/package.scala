@@ -20,8 +20,8 @@ package object api {
 
   def makeKey(s: String): Key =
     normalizeKey((" " + s).toCharArray.sliding(2)
-      .map { case Array(a, b) ⇒ if (a.isLower && b.isUpper) "-" + b else b.toString }
-      .mkString)
+      .map { case Array(a, b) ⇒ (if (a.isLower && b.isUpper) "-" else "") + b }
+      .mkString).stripPrefix("XW-")
 
   implicit def toRunnable[T](block: ⇒ T) =
     new Runnable() { def run() { block } }
