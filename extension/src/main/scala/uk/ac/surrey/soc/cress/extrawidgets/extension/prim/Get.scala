@@ -18,3 +18,11 @@ class Get(reader: Reader) extends DefaultReporter {
     reader.get(propertyKey, widgetKey).rightOrThrow
   }
 }
+
+class GetProperty(reader: Reader, propertyKey: String) extends DefaultReporter {
+  override def getSyntax = reporterSyntax(Array(StringType), WildcardType)
+  def report(args: Array[Argument], context: Context): AnyRef = {
+    val widgetKey = args(0).getString
+    reader.get(propertyKey, widgetKey).rightOrThrow
+  }
+}

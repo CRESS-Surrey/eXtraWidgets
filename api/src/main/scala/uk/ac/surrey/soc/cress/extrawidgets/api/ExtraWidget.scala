@@ -8,16 +8,14 @@ trait ExtraWidget extends Component {
 
   private var _propertyMap: PropertyMap = Map.empty
 
-  def propertyMap = _propertyMap
+  final def propertyMap = _propertyMap
 
-  lazy val propertyDefs: Map[PropertyKey, PropertyDef[ExtraWidget]] =
-    this.getClass.getFields
-      .filter { field ⇒ classOf[PropertyDef[ExtraWidget]].isAssignableFrom(field.getType) }
-      .map { field ⇒
-        val propertyKey = makeKey(field.getType.getSimpleName)
-        val propertyDef = field.get(this).asInstanceOf[PropertyDef[ExtraWidget]]
-        propertyKey -> propertyDef
-      }(collection.breakOut)
+  /* Let's be careful not to access the following lazy vals
+   * in this trait's constructor because the property fields
+   * in `this` won't be initialised yet. NP 2014-10-10.
+   */
+  lazy val kind = new WidgetKind(this.getClass)
+  lazy val propertyDefs = kind.propertyDefs(this)
 
   def update(newPropertyMap: PropertyMap): Unit = {
     val oldPropertyMap = _propertyMap

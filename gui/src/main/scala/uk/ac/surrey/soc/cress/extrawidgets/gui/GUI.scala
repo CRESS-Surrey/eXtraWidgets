@@ -2,11 +2,14 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.Container
+
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
+
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
+
 import Strings.CreateTab
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
@@ -15,13 +18,13 @@ import Swing.warningDialog
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.util.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.util.tryTo
-import uk.ac.surrey.soc.cress.extrawidgets.core.WidgetKind
 
 class GUI(
   val app: App,
@@ -89,7 +92,6 @@ class GUI(
         .orException("There exists no tab for widget " + widgetKey + ".").right
       tab ← tabs
         .find(_.key == tabKey)
-        .map { x ⇒ println(x); x }
         .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
     } yield tab
   }

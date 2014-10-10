@@ -13,9 +13,16 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
 class Add(writer: Writer) extends DefaultCommand {
   override def getSyntax = commandSyntax(Array(StringType, ListType))
+  def properties(args: Array[Argument]) =
+    args(1).getList.toPropertyMap
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey = args(0).getString
-    val properties = args(1).getList.toPropertyMap
-    writer.add(widgetKey, properties).rightOrThrow
+    writer.add(widgetKey, properties(args)).rightOrThrow
   }
 }
+
+class AddWidget(writer: Writer, kindName: String) extends Add(writer) {
+  override def properties(args: Array[Argument]) =
+    super.properties(args) + ("KIND" -> kindName)
+}
+

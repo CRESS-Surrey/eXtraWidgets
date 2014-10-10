@@ -31,8 +31,6 @@ class Tab(
 
   val title = new TitleProperty(this)
 
-  println("Contructing Tab " + key + ": " + this.toString)
-
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }
     .getOrElse(throw new XWException("Tab widget can't access application tabs."))

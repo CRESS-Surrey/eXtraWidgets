@@ -20,3 +20,12 @@ class Set(writer: Writer) extends DefaultCommand {
     writer.set(propertyKey, widgetKey, propertyValue).rightOrThrow
   }
 }
+
+class SetProperty(writer: Writer, propertyKey: String) extends DefaultCommand {
+  override def getSyntax = commandSyntax(Array(StringType, WildcardType))
+  def perform(args: Array[Argument], context: Context): Unit = {
+    val widgetKey = args(0).getString
+    val propertyValue = args(1).get
+    writer.set(propertyKey, widgetKey, propertyValue).rightOrThrow
+  }
+}
