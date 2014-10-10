@@ -20,10 +20,10 @@ package object util {
     }
   }
 
-  implicit def enrichLogoList(l: LogoList): RichLogoList = new RichLogoList(l)
-  class RichLogoList(logoList: LogoList) {
+  implicit def enrichVector[T <: AnyRef](v: Vector[T]): RichVector[T] = new RichVector(v)
+  class RichVector[T <: AnyRef](v: Vector[T]) {
     def toPropertyMap: PropertyMap = {
-      logoList.toVector.map { obj ⇒
+      v.map { obj ⇒
         val list: LogoList = try obj.asInstanceOf[LogoList] catch {
           case e: ClassCastException ⇒ throw new ExtensionException(
             Dump.logoObject(obj) + " is not a list.", e)
