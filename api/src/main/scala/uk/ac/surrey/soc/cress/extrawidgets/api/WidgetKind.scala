@@ -7,6 +7,8 @@ import java.lang.reflect.Method
 
 class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
 
+  type PD = PropertyDef[_ <: ExtraWidget, _]
+
   val name = makeKey(clazz.getSimpleName)
 
   val constructor = clazz.getConstructor(classOf[WidgetKey], classOf[PropertyMap], classOf[GUIWorkspace])
@@ -15,14 +17,14 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
 
   val propertyMethods: Seq[Method] =
     clazz.getMethods.filter { method ⇒
-      classOf[PropertyDef[_ <: ExtraWidget]].isAssignableFrom(method.getReturnType)
+      classOf[PD].isAssignableFrom(method.getReturnType)
     }
 
   val propertyKeys: Seq[PropertyKey] =
     propertyMethods.map { method ⇒ makeKey(method.getName) }
 
-  def propertyDefs(w: ExtraWidget): Map[PropertyKey, PropertyDef[_ <: ExtraWidget]] =
+  def propertyDefs(w: ExtraWidget): Map[PropertyKey, PD] =
     (propertyKeys zip propertyMethods.map { method ⇒
-      method.invoke(w).asInstanceOf[PropertyDef[_ <: ExtraWidget]]
+      method.invoke(w).asInstanceOf[PD]
     })(collection.breakOut)
 }

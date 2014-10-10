@@ -27,13 +27,8 @@ trait ExtraWidget extends Component {
     } prop.unsetValue
 
     for {
-      (propertyKey, newValueObj) ← newPropertyMap
+      (propertyKey, value) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
-    } {
-      val oldValue = oldPropertyMap.get(propertyKey).map(_.asInstanceOf[prop.ValueType])
-      val newValue = newValueObj.asInstanceOf[prop.ValueType]
-      if (oldValue != Some(newValue))
-        prop.setValue(newValue, oldValue)
-    }
+    } prop.setValueObj(value)
   }
 }

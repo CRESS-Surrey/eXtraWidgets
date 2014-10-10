@@ -12,15 +12,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyDef
-
-class TitleProperty(tab: Tab) extends PropertyDef(tab) {
-  type ValueType = String
-  def setValue(newValue: String, oldValue: Option[String]): Unit =
-    tab.setTitle(newValue.toString)
-  def defaultValue = tab.key
-  override def getValue = tab.getTitle
-}
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 
 class Tab(
   val key: WidgetKey,
@@ -29,7 +21,7 @@ class Tab(
   extends JPanel
   with ExtraWidget {
 
-  val title = new TitleProperty(this)
+  val title = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }
@@ -38,7 +30,9 @@ class Tab(
   setLayout(null) // use absolute layout
   setBackground(white)
 
-  for (title ← properties.get("TITLE").orElse(Some(key))) {
+  addToAppTabs(properties.get("TITLE").map(_.toString).getOrElse(title.default()))
+
+  def addToAppTabs(title: String): Unit = {
     tabs.addTab(title.toString, this)
     val i = tabs.tabsMenu.getItemCount
     tabs.tabsMenu.addMenuItem(
@@ -55,6 +49,6 @@ class Tab(
       tabs.tabsMenu.getItem(i).setText(title)
     }
 
-  def getTitle: String = tabIndex.map(tabs.getTitleAt(_)).getOrElse(title.defaultValue)
+  def getTitle: String = tabIndex.map(tabs.getTitleAt(_)).getOrElse(title.default())
 
 }
