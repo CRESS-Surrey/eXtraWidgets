@@ -10,6 +10,7 @@ trait ComponentWidget extends ExtraWidget {
   val xwY = new IntegerPropertyDef(this, y ⇒ setY(y), getY)
   val xwWidth = new IntegerPropertyDef(this, w ⇒ setWidth(w), getWidth)
   val xwHeight = new IntegerPropertyDef(this, h ⇒ setHeight(h), getHeight)
+  val xwHidden = new BooleanPropertyDef(this, b ⇒ setVisible(!b), () ⇒ !isVisible)
 
   def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
   def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)
