@@ -21,7 +21,7 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
     }
 
   val propertyKeys: Seq[PropertyKey] =
-    propertyMethods.map { method ⇒ makeKey(method.getName) }
+    propertyMethods.map { method ⇒ makePropertyKey(method) }
 
   def propertyDefs(w: ExtraWidget): Map[PropertyKey, PD] =
     (propertyKeys zip propertyMethods.map { method ⇒

@@ -1,8 +1,8 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
 import java.util.Locale.ENGLISH
-
 import scala.collection.immutable
+import java.lang.reflect.Method
 
 package object api {
 
@@ -17,6 +17,12 @@ package object api {
   type WidgetMap = immutable.Map[WidgetKey, PropertyMap]
 
   def normalizeKey(key: Key): Key = key.toUpperCase(ENGLISH)
+
+  def makePropertyKey(method: Method) =
+    makeKey(method.getName) +
+      (if (classOf[BooleanPropertyDef[_]]
+        .isAssignableFrom(method.getReturnType))
+        "?" else "")
 
   def makeKey(s: String): Key =
     normalizeKey((" " + s).toCharArray.sliding(2)

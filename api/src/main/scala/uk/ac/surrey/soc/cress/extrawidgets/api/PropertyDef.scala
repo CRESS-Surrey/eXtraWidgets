@@ -25,6 +25,16 @@ class StringPropertyDef[+W <: ExtraWidget](
   override def asInputType(obj: AnyRef): String = obj.toString
 }
 
+class BooleanPropertyDef[+W <: ExtraWidget](
+  w: W,
+  setter: java.lang.Boolean ⇒ Unit,
+  getter: () ⇒ java.lang.Boolean,
+  default: () ⇒ java.lang.Boolean = () ⇒ Boolean.box(false))
+  extends PropertyDef(w, setter, getter, default) {
+  val inputTypeConstant = BooleanType
+  val outputTypeConstant = BooleanType
+}
+
 class IntegerPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.lang.Integer ⇒ Unit,
