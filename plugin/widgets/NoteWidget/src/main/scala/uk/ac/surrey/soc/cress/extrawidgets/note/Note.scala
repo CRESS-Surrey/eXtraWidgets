@@ -13,8 +13,4 @@ class Note(val key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace)
 
   val text = new StringPropertyDef(this, setText, getText, java.lang.Math.random().toString)
 
-  // temporary stuff, just to see that it's there
-  setOpaque(true)
-  setBackground(java.awt.Color.red)
-
 }
