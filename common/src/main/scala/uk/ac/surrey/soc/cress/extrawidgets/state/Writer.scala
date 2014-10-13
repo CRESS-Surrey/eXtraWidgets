@@ -7,8 +7,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
-import uk.ac.surrey.soc.cress.extrawidgets.util.enrichOption
 
 /**
  *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.

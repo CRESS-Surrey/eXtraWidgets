@@ -23,8 +23,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.util.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.util.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
+import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 
 class GUI(
   val app: App,

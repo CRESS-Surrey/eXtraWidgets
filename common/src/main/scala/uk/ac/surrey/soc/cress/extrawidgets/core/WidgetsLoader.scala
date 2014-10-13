@@ -12,8 +12,8 @@ import LoaderUtil.newClassLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Tab
-import uk.ac.surrey.soc.cress.extrawidgets.util.tryTo
 
 object WidgetsLoader {
 
