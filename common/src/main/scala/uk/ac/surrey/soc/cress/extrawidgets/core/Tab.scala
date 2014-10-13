@@ -19,7 +19,7 @@ class Tab(
   extends JPanel
   with JComponentWidget {
 
-  val title = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
+  val xwTitle = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }
@@ -27,7 +27,7 @@ class Tab(
 
   setLayout(null) // use absolute layout
 
-  addToAppTabs(properties.get("TITLE").map(_.toString).getOrElse(title.default()))
+  addToAppTabs(properties.get("TITLE").map(_.toString).getOrElse(xwTitle.default()))
 
   def addToAppTabs(title: String): Unit = {
     tabs.addTab(title.toString, this)
@@ -46,6 +46,6 @@ class Tab(
       tabs.tabsMenu.getItem(i).setText(title)
     }
 
-  def getTitle: String = tabIndex.map(tabs.getTitleAt(_)).getOrElse(title.default())
+  def getTitle: String = tabIndex.map(tabs.getTitleAt(_)).getOrElse(xwTitle.default())
 
 }

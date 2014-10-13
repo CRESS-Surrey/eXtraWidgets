@@ -11,6 +11,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 class Note(val key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace)
   extends JLabel with JComponentWidget {
 
-  val text = new StringPropertyDef(this, setText, getText, java.lang.Math.random().toString)
+  val xwText = new StringPropertyDef(this, setText, getText, java.lang.Math.random().toString)
 
 }
