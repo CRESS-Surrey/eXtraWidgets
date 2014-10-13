@@ -3,6 +3,7 @@ package uk.ac.surrey.soc.cress.extrawidgets
 import java.util.Locale.ENGLISH
 import scala.collection.immutable
 import java.lang.reflect.Method
+import org.nlogo.api.LogoList
 
 package object api {
 
@@ -45,4 +46,12 @@ package object api {
       case e: Exception ⇒ Left(new XWException(
         Option(failureMessage).filter(_.nonEmpty).getOrElse(e.getMessage), e))
     }
+
+  def colorToLogoList(c: java.awt.Color): LogoList = {
+    val a =
+      if (c.getAlpha != 0) c.getRGBComponents(null)
+      else c.getRGBColorComponents(null)
+    LogoList.fromIterator(a.map(Float.box).iterator)
+  }
+
 }
