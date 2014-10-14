@@ -20,7 +20,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
-import uk.ac.surrey.soc.cress.extrawidgets.core._
+import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.state._
 import uk.ac.surrey.soc.cress.extrawidgets.gui._
 

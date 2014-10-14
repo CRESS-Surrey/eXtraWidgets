@@ -1,12 +1,12 @@
 lazy val root = (project in file("."))
-  .aggregate(extension, common, api, note, checkbox, slider)
-  .dependsOn(common) // dummy dependency, for jar copying to work
+  .aggregate(extension, core, api, note, checkbox, slider)
+  .dependsOn(core) // dummy dependency, for jar copying to work
 
 lazy val api = project
 
-lazy val common = project.dependsOn(api)
+lazy val core = project.dependsOn(api)
 
-lazy val extension = project.dependsOn(common)
+lazy val extension = project.dependsOn(core)
 
 lazy val note = (project in file("./extension/widgets/NoteWidget/"))
   .dependsOn(api)
@@ -26,6 +26,6 @@ packageBin in Compile <<= (packageBin in Compile, baseDirectory, dependencyClass
       if fileName.endsWith(".jar")
       if !fileName.startsWith("scala-library")
       if !fileName.startsWith("NetLogo")
-    } IO.copyFile(file, base / "plugin" / fileName)
+    } IO.copyFile(file, base / "extension" / fileName)
     jar
 }
