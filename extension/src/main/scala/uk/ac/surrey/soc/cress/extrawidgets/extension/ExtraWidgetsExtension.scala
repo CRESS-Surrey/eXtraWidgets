@@ -3,10 +3,12 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionException
 import org.nlogo.api.ExtensionManager
+import org.nlogo.api.Primitive
 import org.nlogo.api.PrimitiveManager
-
+import org.nlogo.app.App
+import org.nlogo.app.AppFrame
+import org.nlogo.window.GUIWorkspace
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
-import uk.ac.surrey.soc.cress.extrawidgets.core.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.AddWidget
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
@@ -18,23 +20,20 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
-import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
-import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.state.getOrCreateModel
+import uk.ac.surrey.soc.cress.extrawidgets.core._
+import uk.ac.surrey.soc.cress.extrawidgets.state._
+import uk.ac.surrey.soc.cress.extrawidgets.gui._
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
   private var writer: Writer = null
   private var reader: Reader = null
+  private var primitives: Seq[(String, Primitive)] = null
 
-  override def runOnce(em: ExtensionManager): Unit = {
-    val tuple: (Reader, Writer) = getOrCreateModel(em)
+  override def runOnce(extensionManager: ExtensionManager): Unit = {
+    val tuple: (Reader, Writer) = getOrCreateModel(extensionManager)
     reader = tuple._1
     writer = tuple._2
-  }
-
-  def load(primitiveManager: PrimitiveManager): Unit = {
-    println("load() " + this)
 
     val widgetKinds: Map[String, WidgetKind] =
       WidgetsLoader.loadWidgetKinds().fold(
@@ -65,7 +64,26 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       }
     }
 
-    val primitives = staticPrimitives ++ widgetPrimitives ++ propertyPrimitives
+    primitives = staticPrimitives ++ widgetPrimitives ++ propertyPrimitives
+
+    Seq(extensionManager)
+      .collect { case em: org.nlogo.workspace.ExtensionManager ⇒ em }
+      .map(_.workspace)
+      .collect { case ws: GUIWorkspace ⇒ ws }
+      .map(_.getFrame)
+      .collect { case af: AppFrame ⇒ af }
+      .flatMap(_.getLinkChildren)
+      .collect { case app: App ⇒ app }
+      .foreach { app ⇒
+        val gui = new GUI(app, writer, widgetKinds)
+        new View(reader, gui)
+      }
+
+  }
+
+  def load(primitiveManager: PrimitiveManager): Unit = {
+    println("load() " + this)
+
     println("Loaded primitives: " + primitives.unzip._1.toList)
     for ((name, prim) ← primitives)
       primitiveManager.addPrimitive(name, prim)

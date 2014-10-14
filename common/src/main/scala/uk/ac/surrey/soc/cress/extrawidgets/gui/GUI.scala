@@ -28,15 +28,22 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 
 class GUI(
   val app: App,
-  val toolsMenu: ToolsMenu,
   val writer: Writer,
   val widgetKinds: Map[String, WidgetKind]) {
 
   val tabs = app.tabs
   val tabKindName = makeKey(classOf[Tab].getSimpleName)
 
-  toolsMenu.addSeparator()
-  toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
+  locally {
+    val menuBar = app.frame.getJMenuBar
+    (0 until menuBar.getMenuCount)
+      .map(menuBar.getMenu)
+      .collectFirst {
+        case toolsMenu: ToolsMenu ⇒
+          toolsMenu.addSeparator()
+          toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
+      }
+  }
 
   def makeWidgetsMap: Map[WidgetKey, ExtraWidget] = {
     val ts = getWidgetsIn(tabs)

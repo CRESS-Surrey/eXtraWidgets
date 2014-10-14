@@ -1,24 +1,20 @@
 lazy val root = (project in file("."))
-  .aggregate(plugin, extension, gui, common, api, note, checkbox, slider)
-  .dependsOn(gui) // dummy dependency, for jar copying to work
-
-lazy val plugin = project
+  .aggregate(extension, common, api, note, checkbox, slider)
+  .dependsOn(common) // dummy dependency, for jar copying to work
 
 lazy val api = project
 
 lazy val common = project.dependsOn(api)
 
-lazy val gui = project.dependsOn(common, api, plugin)
-
 lazy val extension = project.dependsOn(common)
 
-lazy val note = (project in file("./plugin/widgets/NoteWidget/"))
+lazy val note = (project in file("./extension/widgets/NoteWidget/"))
   .dependsOn(api)
 
-lazy val checkbox = (project in file("./plugin/widgets/CheckboxWidget/"))
+lazy val checkbox = (project in file("./extension/widgets/CheckboxWidget/"))
   .dependsOn(api)
 
-lazy val slider = (project in file("./plugin/widgets/SliderWidget/"))
+lazy val slider = (project in file("./extension/widgets/SliderWidget/"))
   .dependsOn(api)
 
 // copy the dependencies of core in plugin dir:
