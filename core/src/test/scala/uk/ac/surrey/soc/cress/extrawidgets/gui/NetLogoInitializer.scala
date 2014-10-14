@@ -2,36 +2,38 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
-
 import akka.dispatch.Await
 import akka.dispatch.Promise
 import akka.util.duration.intToDurationInt
 import javax.swing.JFrame
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Swing.enrichComponent
-import uk.ac.surrey.soc.cress.extrawidgets.plugin.ExtraWidgetsPlugin
+import collection.JavaConverters._
+import org.nlogo.api.ModelType._
+import org.nlogo.window.GUIWorkspace
 
 object NetLogoInitializer {
 
-import SwingExecutionContext.swingExecutionContext
+  import SwingExecutionContext.swingExecutionContext
 
-  private val ewpPromise = Promise[ExtraWidgetsPlugin]()
   App.main(Array[String]())
-  App.app.frame.onComponentShown { e ⇒
-    ewpPromise.success(
-      new ExtraWidgetsPlugin(App.app, getToolsMenu(App.app.frame))
-    )
+  val wsPromise = Promise[GUIWorkspace]()
+  App.app.frame.onComponentShown { _ ⇒
+    println(App.app.workspace)
+    wsPromise.success(App.app.workspace)
   }
-
-  def extraWidgetsManager =
-    Await.result(ewpPromise, 30 seconds)
-      .manager.right.get.asInstanceOf[Manager]
-
-  def getToolsMenu(frame: JFrame) = {
+  lazy val gui: GUI = {
+    val ws = Await.result(wsPromise, 10 seconds)
+    val frame = App.app.frame
+    ws.open("test.nlogo")
     val jMenuBar = frame.getJMenuBar
-    (0 until jMenuBar.getMenuCount)
+    val toolsMenu = (0 until jMenuBar.getMenuCount)
       .map(jMenuBar.getMenu)
-      .collect { case m: ToolsMenu ⇒ m }
-      .headOption
+      .collectFirst { case m: ToolsMenu ⇒ m }
       .getOrElse(throw new Exception("Can't find tools menu."))
+    val createTabMenuItem = (0 until toolsMenu.getItemCount)
+      .map(toolsMenu.getItem)
+      .collectFirst { case m: CreateTabMenuItem ⇒ m }
+      .getOrElse(throw new Exception("Can't find CreateTab menu item."))
+    createTabMenuItem.gui
   }
 }

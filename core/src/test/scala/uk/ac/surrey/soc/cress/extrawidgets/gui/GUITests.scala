@@ -8,7 +8,7 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import NetLogoInitializer.extraWidgetsManager
+import NetLogoInitializer.gui
 import Strings.CreateTab
 import javax.swing.JMenuItem
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
@@ -20,9 +20,8 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
   describe("The GUI") {
 
-    val gui = extraWidgetsManager.gui
-    val reader = extraWidgetsManager.reader
-    val writer = extraWidgetsManager.writer
+    val reader = gui.reader
+    val writer = gui.writer
 
     def addTab(key: PropertyKey) = writer.add(key, Map("kind" -> "tab"))
 

@@ -8,6 +8,7 @@ import org.nlogo.api.PrimitiveManager
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
+import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.AddWidget
@@ -20,9 +21,12 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
-import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
-import uk.ac.surrey.soc.cress.extrawidgets.state._
-import uk.ac.surrey.soc.cress.extrawidgets.gui._
+import uk.ac.surrey.soc.cress.extrawidgets.gui.GUI
+import uk.ac.surrey.soc.cress.extrawidgets.gui.View
+import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
+import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
+import org.nlogo.api.SimpleChangeEventPublisher
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -31,9 +35,13 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   private var primitives: Seq[(String, Primitive)] = null
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
-    val tuple: (Reader, Writer) = getOrCreateModel(extensionManager)
-    reader = tuple._1
-    writer = tuple._2
+
+    locally {
+      val publisher = new SimpleChangeEventPublisher
+      val widgetMap = newMutableWidgetMap
+      reader = new Reader(widgetMap, publisher)
+      writer = new Writer(widgetMap, publisher, reader)
+    }
 
     val widgetKinds: Map[String, WidgetKind] =
       WidgetsLoader.loadWidgetKinds().fold(
@@ -75,8 +83,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       .flatMap(_.getLinkChildren)
       .collect { case app: App ⇒ app }
       .foreach { app ⇒
-        val gui = new GUI(app, writer, widgetKinds)
-        new View(reader, gui)
+        val gui = new GUI(app, reader, writer, widgetKinds)
+        new View(gui)
       }
 
   }

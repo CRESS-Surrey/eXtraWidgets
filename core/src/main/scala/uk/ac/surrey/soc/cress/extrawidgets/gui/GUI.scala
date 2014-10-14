@@ -2,48 +2,60 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.Container
-
+import java.awt.Toolkit.getDefaultToolkit
+import java.awt.event.InputEvent.SHIFT_MASK
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
-
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
-
-import Strings.CreateTab
+import org.nlogo.swing.RichAction
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
 import Swing.inputDialog
 import Swing.warningDialog
+import javax.swing.JMenuItem
+import javax.swing.KeyStroke.getKeyStroke
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
-import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
+
+class CreateTabMenuItem(val gui: GUI)
+  extends JMenuItem(RichAction(Strings.CreateTab)(_ ⇒ gui.createNewTab())) {
+  setIcon(null)
+  setAccelerator(getKeyStroke(
+    'X', SHIFT_MASK | getDefaultToolkit.getMenuShortcutKeyMask))
+}
 
 class GUI(
   val app: App,
+  val reader: Reader, // needed for tests
   val writer: Writer,
   val widgetKinds: Map[String, WidgetKind]) {
 
   val tabs = app.tabs
   val tabKindName = makeKey(classOf[Tab].getSimpleName)
 
-  locally {
+  val toolsMenu = {
     val menuBar = app.frame.getJMenuBar
     (0 until menuBar.getMenuCount)
       .map(menuBar.getMenu)
       .collectFirst {
-        case toolsMenu: ToolsMenu ⇒
-          toolsMenu.addSeparator()
-          toolsMenu.addMenuItem(CreateTab, 'X', true, () ⇒ createNewTab())
+        case toolsMenu: ToolsMenu ⇒ toolsMenu
       }
+      .getOrElse(throw new XWException("Can't find Tools menu."))
   }
+
+  toolsMenu.addSeparator()
+  toolsMenu.add(new CreateTabMenuItem(this))
 
   def makeWidgetsMap: Map[WidgetKey, ExtraWidget] = {
     val ts = getWidgetsIn(tabs)
