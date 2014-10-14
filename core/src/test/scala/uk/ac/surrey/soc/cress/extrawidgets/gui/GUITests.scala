@@ -4,6 +4,7 @@ import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 
 import org.nlogo.app.App
+import org.nlogo.awt.EventQueue.invokeAndWait
 import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
@@ -13,6 +14,7 @@ import Strings.CreateTab
 import javax.swing.JMenuItem
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
 import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeNonEmpty
 import uk.ac.surrey.soc.cress.extrawidgets.state.Strings.propertyMustBeUnique
 
@@ -43,45 +45,57 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
     }
 
     def shouldBeThere(tabID: String) {
-      reader.contains(tabID) should be(true)
-      manager.gui.getWidget(tabID) should be('defined)
-      tabsMenuItemsText should contain(tabID)
+      invokeAndWait {
+        reader.contains(tabID) should be(true)
+        manager.gui.getWidget(tabID) should be('defined)
+        tabsMenuItemsText should contain(tabID)
+      }
     }
 
     def shouldNotBeThere(tabID: String) {
-      reader.contains(tabID) should be(false)
-      manager.gui.getWidget(tabID) should be('empty)
-      tabsMenuItemsText should (not contain tabID)
+      invokeAndWait {
+        reader.contains(tabID) should be(false)
+        manager.gui.getWidget(tabID) should be('empty)
+        tabsMenuItemsText should (not contain tabID)
+      }
     }
 
     it("should be able to create extra widgets tabs") {
-      addTab("first tab") should be('right)
+      val res = addTab("first tab")
+      invokeAndWait { res should be('right) }
       shouldBeThere("FIRST TAB")
     }
 
     it("should not able to create tabs with duplicate id") {
-      addTab("first tab") shouldEqual
-        Left(XWException(propertyMustBeUnique("widget key", "FIRST TAB")))
+      val res = addTab("first tab")
+      invokeAndWait {
+        res shouldEqual
+          Left(XWException(propertyMustBeUnique("widget key", "FIRST TAB")))
+      }
       shouldBeThere("FIRST TAB")
     }
 
     it("should not be able to create tabs with empty id") {
-      addTab("") shouldEqual
-        Left(XWException(propertyMustBeNonEmpty("widget key")))
+      val res = addTab("")
+      invokeAndWait {
+        res shouldEqual
+          Left(XWException(propertyMustBeNonEmpty("widget key")))
+      }
       shouldBeThere("FIRST TAB")
       shouldNotBeThere("")
     }
 
     it("should be able to create a second tab with a different id") {
-      addTab("second tab") should be('right)
+      val res = addTab("second tab")
+      invokeAndWait { res should be('right) }
       shouldBeThere("FIRST TAB")
       shouldBeThere("SECOND TAB")
     }
 
     it("should be able to remove the first tab while keeping the second one") {
       writer.remove("first tab")
-      shouldNotBeThere("FIRST TAB")
       shouldBeThere("SECOND TAB")
+      shouldNotBeThere("FIRST TAB")
     }
 
     it("should then be able to add a third tab") {
