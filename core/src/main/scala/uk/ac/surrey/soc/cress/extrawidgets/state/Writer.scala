@@ -1,6 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets.state
 
-import org.nlogo.api.SimpleChangeEventPublisher
+import scala.collection.mutable.Publisher
 
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
@@ -15,23 +15,27 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
  */
 class Writer(
   widgetMap: MutableWidgetMap,
-  publisher: SimpleChangeEventPublisher,
-  reader: Reader) {
+  reader: Reader)
+  extends Publisher[StateEvent] {
 
-  def add(widgetKey: WidgetKey, properties: PropertyMap): Either[XWException, Unit] = {
+  override type Pub = Publisher[StateEvent]
+
+  def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
     val wKey = normalizeKey(widgetKey)
+    val properties = propertyMap.normalizeKeys
     for {
       _ ← reader.validateNonEmpty("widget key", wKey).right
       _ ← reader.validateUnique("widget key", wKey).right
     } yield {
       widgetMap += wKey -> properties.asMutablePropertyMap
-      publisher.publish()
+      publish(AddWidget(wKey, properties))
     }
   }
 
   def remove(widgetKey: WidgetKey): Unit = {
-    widgetMap -= normalizeKey(widgetKey)
-    publisher.publish()
+    val wKey = normalizeKey(widgetKey)
+    widgetMap -= wKey
+    publish(RemoveWidget(wKey))
   }
 
   def set(
@@ -43,8 +47,9 @@ class Writer(
       propertyMap ← widgetMap.get(wKey).orException(
         "Widget " + wKey + " does not exist.").right
     } yield {
-      propertyMap += normalizeKey(propertyKey) -> propertyValue
-      publisher.publish()
+      val pKey = normalizeKey(propertyKey)
+      propertyMap += pKey -> propertyValue
+      publish(SetProperty(wKey, pKey, propertyValue))
     }
   }
 }

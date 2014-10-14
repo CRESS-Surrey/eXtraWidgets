@@ -17,19 +17,26 @@ trait ExtraWidget extends Component {
   lazy val kind = new WidgetKind(this.getClass)
   lazy val propertyDefs = kind.propertyDefs(this)
 
-  def update(newPropertyMap: PropertyMap): Unit = {
+  def init(newPropertyMap: PropertyMap): Unit = {
     _propertyMap = newPropertyMap
     for {
       propertyKey ← kind.propertyKeys
       if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
       if prop.getter() != prop.default()
-    } prop.setToDefault
+    } prop.setToDefault()
 
     for {
       (propertyKey, value) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
-      if prop.getter() != value
     } prop.setValue(value)
+  }
+
+  def setProperty(
+    propertyKey: PropertyKey,
+    propertyValue: PropertyValue): Unit = {
+    for {
+      prop ← propertyDefs.get(propertyKey)
+    } prop.setValue(propertyValue)
   }
 }

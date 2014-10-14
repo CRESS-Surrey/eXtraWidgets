@@ -2,22 +2,24 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Component
 import java.awt.Container
-import java.awt.Toolkit.getDefaultToolkit
-import java.awt.event.InputEvent.SHIFT_MASK
+
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
+import scala.collection.mutable.Publisher
+import scala.collection.mutable.Subscriber
+
 import org.nlogo.app.App
-import org.nlogo.app.ToolsMenu
-import org.nlogo.swing.RichAction
+
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
 import Swing.inputDialog
 import Swing.warningDialog
-import javax.swing.JMenuItem
-import javax.swing.KeyStroke.getKeyStroke
+import javax.swing.SwingUtilities.getAncestorOfClass
 import uk.ac.surrey.soc.cress.extrawidgets.api.ExtraWidget
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
@@ -25,61 +27,50 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
+import uk.ac.surrey.soc.cress.extrawidgets.state.AddWidget
+import uk.ac.surrey.soc.cress.extrawidgets.state.RemoveWidget
+import uk.ac.surrey.soc.cress.extrawidgets.state.SetProperty
+import uk.ac.surrey.soc.cress.extrawidgets.state.StateEvent
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
-import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
-
-class CreateTabMenuItem(val gui: GUI)
-  extends JMenuItem(RichAction(Strings.CreateTab)(_ ⇒ gui.createNewTab())) {
-  setIcon(null)
-  setAccelerator(getKeyStroke(
-    'X', SHIFT_MASK | getDefaultToolkit.getMenuShortcutKeyMask))
-}
 
 class GUI(
   val app: App,
-  val reader: Reader, // needed for tests
   val writer: Writer,
-  val widgetKinds: Map[String, WidgetKind]) {
+  val widgetKinds: Map[String, WidgetKind])
+  extends Subscriber[StateEvent, Publisher[StateEvent]] {
+
+  writer.subscribe(this)
 
   val tabs = app.tabs
   val tabKindName = makeKey(classOf[Tab].getSimpleName)
 
-  val toolsMenu = {
-    val menuBar = app.frame.getJMenuBar
-    (0 until menuBar.getMenuCount)
-      .map(menuBar.getMenu)
-      .collectFirst {
-        case toolsMenu: ToolsMenu ⇒ toolsMenu
-      }
-      .getOrElse(throw new XWException("Can't find Tools menu."))
-  }
-
-  toolsMenu.addSeparator()
-  toolsMenu.add(new CreateTabMenuItem(this))
-
-  def makeWidgetsMap: Map[WidgetKey, ExtraWidget] = {
-    val ts = getWidgetsIn(tabs)
-    val ws = ts ++ ts.collect { case t: Container ⇒ t }.flatMap(getWidgetsIn)
-    ws.map(w ⇒ w.key -> w).toMap
-  }
-
-  private def getWidgetsIn(container: Container) =
-    container.getComponents.collect {
-      case w: ExtraWidget ⇒ w
+  override def notify(pub: Publisher[StateEvent], event: StateEvent): Unit =
+    event match {
+      case AddWidget(widgetKey, propertyMap) ⇒
+        addWidget(widgetKey, propertyMap)
+      case SetProperty(widgetKey, propertyKey, propertyValue) ⇒
+        setProperty(widgetKey, propertyKey, propertyValue)
+      case RemoveWidget(widgetKey) ⇒
+        removeWidget(widgetKey)
     }
 
-  def removeWidget(widget: ExtraWidget): Unit = {
-    println("Removing widget " + widget.key)
-    widget match {
-      case tab: Tab ⇒ removeTab(tab)
-      case w ⇒ for (tab ← getTabFor(widget.key, widget.propertyMap).right) {
-        tab.remove(widget)
-        tab.validate()
+  def getWidget(widgetKey: WidgetKey): Option[ExtraWidget] = {
+    def getWidgetsIn(container: Container) =
+      container.getComponents.collect {
+        case w: ExtraWidget ⇒ w
       }
-    }
+    val extraTabs = getWidgetsIn(tabs)
+    extraTabs
+      .find(_.key == widgetKey)
+      .orElse {
+        extraTabs
+          .collect { case t: Container ⇒ t }
+          .flatMap(getWidgetsIn)
+          .find(_.key == widgetKey)
+      }
   }
 
-  def createWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
+  def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
     println("Creating widget from " + (widgetKey, propertyMap))
     for {
       kindName ← propertyMap.get("KIND").map(_.toString).orException(
@@ -87,7 +78,11 @@ class GUI(
       kind ← widgetKinds.get(normalizeKey(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
     } yield {
-      def createWidget = kind.newInstance(widgetKey, propertyMap, app.workspace)
+      def createWidget = {
+        val w = kind.newInstance(widgetKey, propertyMap, app.workspace)
+        w.init(propertyMap)
+        w
+      }
       if (kind.name == tabKindName)
         tryTo(createWidget)
       else
@@ -97,6 +92,25 @@ class GUI(
         } yield {
           tab.add(widget)
           tab.validate()
+        }
+    }
+  }
+
+  def setProperty(
+    widgetKey: WidgetKey,
+    propertyKey: PropertyKey,
+    propertyValue: PropertyValue): Unit = {
+    getWidget(widgetKey).foreach(_.setProperty(propertyKey, propertyValue))
+  }
+
+  def removeWidget(widgetKey: WidgetKey): Unit = {
+    println("Removing widget " + widgetKey)
+    for (w ← getWidget(widgetKey)) w match {
+      case tab: Tab ⇒ removeTab(tab)
+      case _ ⇒
+        for (container ← Option(getAncestorOfClass(classOf[Tab], w))) {
+          container.remove(w)
+          container.validate()
         }
     }
   }
@@ -113,11 +127,6 @@ class GUI(
         .find(_.key == tabKey)
         .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
     } yield tab
-  }
-
-  def updateWidget(widget: ExtraWidget, propertyMap: PropertyMap): Unit = {
-    println("Updating widget from " + propertyMap)
-    widget.update(propertyMap)
   }
 
   def removeTab(component: Component): Unit =

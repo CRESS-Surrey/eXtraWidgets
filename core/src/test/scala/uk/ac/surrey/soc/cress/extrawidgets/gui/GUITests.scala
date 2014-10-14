@@ -8,7 +8,7 @@ import org.scalatest.FunSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.ShouldMatchers
 
-import NetLogoInitializer.gui
+import NetLogoInitializer.manager
 import Strings.CreateTab
 import javax.swing.JMenuItem
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
@@ -20,13 +20,13 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
   describe("The GUI") {
 
-    val reader = gui.reader
-    val writer = gui.writer
+    val reader = manager.reader
+    val writer = manager.writer
 
     def addTab(key: PropertyKey) = writer.add(key, Map("kind" -> "tab"))
 
     it("should add '" + CreateTab + "' to Tools menu") {
-      val items = gui.toolsMenu.getMenuComponents.collect {
+      val items = manager.toolsMenu.getMenuComponents.collect {
         case item: JMenuItem if item.getText == CreateTab ⇒
           item
       }
@@ -44,13 +44,13 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
 
     def shouldBeThere(tabID: String) {
       reader.contains(tabID) should be(true)
-      gui.makeWidgetsMap should contain key tabID
+      manager.gui.getWidget(tabID) should be('defined)
       tabsMenuItemsText should contain(tabID)
     }
 
     def shouldNotBeThere(tabID: String) {
       reader.contains(tabID) should be(false)
-      gui.makeWidgetsMap.contains(tabID) should be(false)
+      manager.gui.getWidget(tabID) should be('empty)
       tabsMenuItemsText should (not contain tabID)
     }
 

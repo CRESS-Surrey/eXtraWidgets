@@ -2,14 +2,12 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
+import org.nlogo.window.GUIWorkspace
+
 import akka.dispatch.Await
 import akka.dispatch.Promise
 import akka.util.duration.intToDurationInt
-import javax.swing.JFrame
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Swing.enrichComponent
-import collection.JavaConverters._
-import org.nlogo.api.ModelType._
-import org.nlogo.window.GUIWorkspace
 
 object NetLogoInitializer {
 
@@ -21,7 +19,7 @@ object NetLogoInitializer {
     println(App.app.workspace)
     wsPromise.success(App.app.workspace)
   }
-  lazy val gui: GUI = {
+  lazy val manager: Manager = {
     val ws = Await.result(wsPromise, 10 seconds)
     val frame = App.app.frame
     ws.open("test.nlogo")
@@ -34,6 +32,6 @@ object NetLogoInitializer {
       .map(toolsMenu.getItem)
       .collectFirst { case m: CreateTabMenuItem ⇒ m }
       .getOrElse(throw new Exception("Can't find CreateTab menu item."))
-    createTabMenuItem.gui
+    createTabMenuItem.manager
   }
 }

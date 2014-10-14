@@ -14,8 +14,9 @@ abstract class PropertyDef[+W <: ExtraWidget, T](
   val inputTypeConstant: Int
   val outputTypeConstant: Int
   def asInputType(obj: AnyRef): T = obj.asInstanceOf[T] // TODO: handle this
-  def setValue(obj: AnyRef): Unit = setter(asInputType(obj))
-  def setToDefault(): Unit = setter(default())
+  private def set(v: T): Unit = if (getter() != v) setter(v)
+  def setValue(obj: AnyRef): Unit = set(asInputType(obj))
+  def setToDefault(): Unit = set(default())
 }
 
 class StringPropertyDef[+W <: ExtraWidget](

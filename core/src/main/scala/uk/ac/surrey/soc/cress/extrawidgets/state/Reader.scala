@@ -14,19 +14,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
 
 class Reader(
-  widgetMap: MutableWidgetMap, // reader should never expose any part of this
-  publisher: SimpleChangeEventPublisher) {
-
-  def onChange[A](f: ⇒ A): Unit = {
-    val sub = new SimpleChangeEventPublisher#Sub {
-      publisher.subscribe(this)
-      override def notify(
-        pub: SimpleChangeEventPublisher#Pub,
-        event: SimpleChangeEvent.type) {
-        f
-      }
-    }
-  }
+  widgetMap: MutableWidgetMap) { // reader should never expose any part of this
 
   def validateNonEmpty(propertyKey: PropertyKey, value: String) =
     Option(value).filter(_.nonEmpty)

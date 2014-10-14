@@ -8,6 +8,7 @@ import org.nlogo.api.PrimitiveManager
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
@@ -21,12 +22,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
-import uk.ac.surrey.soc.cress.extrawidgets.gui.GUI
-import uk.ac.surrey.soc.cress.extrawidgets.gui.View
+import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
-import org.nlogo.api.SimpleChangeEventPublisher
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -37,10 +36,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   override def runOnce(extensionManager: ExtensionManager): Unit = {
 
     locally {
-      val publisher = new SimpleChangeEventPublisher
       val widgetMap = newMutableWidgetMap
-      reader = new Reader(widgetMap, publisher)
-      writer = new Writer(widgetMap, publisher, reader)
+      reader = new Reader(widgetMap)
+      writer = new Writer(widgetMap, reader)
     }
 
     val widgetKinds: Map[String, WidgetKind] =
@@ -83,8 +81,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       .flatMap(_.getLinkChildren)
       .collect { case app: App ⇒ app }
       .foreach { app ⇒
-        val gui = new GUI(app, reader, writer, widgetKinds)
-        new View(gui)
+        new Manager(app, reader, writer, widgetKinds)
       }
 
   }
