@@ -98,7 +98,7 @@ object WidgetsLoader {
   def getXWFolder: Either[XWException, File] = {
     val possibleLocations = Seq(
       "extensions" + separator + "xw", // path from NetLogo
-      "xw" // path if we're running from the tests
+      "../xw" // path if we're running from the core tests
     )
     possibleLocations
       .map(new File(_).getCanonicalFile)

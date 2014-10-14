@@ -3,11 +3,11 @@ package uk.ac.surrey.soc.cress.extrawidgets.gui
 import org.nlogo.app.App
 import org.nlogo.app.ToolsMenu
 import org.nlogo.window.GUIWorkspace
-
 import akka.dispatch.Await
 import akka.dispatch.Promise
 import akka.util.duration.intToDurationInt
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Swing.enrichComponent
+import java.io.File
 
 object NetLogoInitializer {
 
@@ -22,7 +22,8 @@ object NetLogoInitializer {
   lazy val manager: Manager = {
     val ws = Await.result(wsPromise, 10 seconds)
     val frame = App.app.frame
-    ws.open("test.nlogo")
+    val xwPath = new File("../xw/xw.jar").getCanonicalPath
+    ws.getExtensionManager.importExtension(xwPath, null)
     val jMenuBar = frame.getJMenuBar
     val toolsMenu = (0 until jMenuBar.getMenuCount)
       .map(jMenuBar.getMenu)
