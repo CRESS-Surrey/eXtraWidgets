@@ -10,6 +10,7 @@ import scala.collection.mutable.Publisher
 import scala.collection.mutable.Subscriber
 
 import org.nlogo.app.App
+import org.nlogo.awt.EventQueue.invokeLater
 
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
@@ -26,6 +27,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
 import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 import uk.ac.surrey.soc.cress.extrawidgets.state.AddWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.RemoveWidget
@@ -45,13 +47,15 @@ class GUI(
   val tabKindName = makeKey(classOf[Tab].getSimpleName)
 
   override def notify(pub: Publisher[StateEvent], event: StateEvent): Unit =
-    event match {
-      case AddWidget(widgetKey, propertyMap) ⇒
-        addWidget(widgetKey, propertyMap)
-      case SetProperty(widgetKey, propertyKey, propertyValue) ⇒
-        setProperty(widgetKey, propertyKey, propertyValue)
-      case RemoveWidget(widgetKey) ⇒
-        removeWidget(widgetKey)
+    invokeLater {
+      event match {
+        case AddWidget(widgetKey, propertyMap) ⇒
+          addWidget(widgetKey, propertyMap)
+        case SetProperty(widgetKey, propertyKey, propertyValue) ⇒
+          setProperty(widgetKey, propertyKey, propertyValue)
+        case RemoveWidget(widgetKey) ⇒
+          removeWidget(widgetKey)
+      }
     }
 
   def getWidget(widgetKey: WidgetKey): Option[ExtraWidget] = {
@@ -70,7 +74,7 @@ class GUI(
       }
   }
 
-  def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
+  private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
     println("Creating widget from " + (widgetKey, propertyMap))
     for {
       kindName ← propertyMap.get("KIND").map(_.toString).orException(
@@ -96,14 +100,14 @@ class GUI(
     }
   }
 
-  def setProperty(
+  private def setProperty(
     widgetKey: WidgetKey,
     propertyKey: PropertyKey,
     propertyValue: PropertyValue): Unit = {
     getWidget(widgetKey).foreach(_.setProperty(propertyKey, propertyValue))
   }
 
-  def removeWidget(widgetKey: WidgetKey): Unit = {
+  private def removeWidget(widgetKey: WidgetKey): Unit = {
     println("Removing widget " + widgetKey)
     for (w ← getWidget(widgetKey)) w match {
       case tab: Tab ⇒ removeTab(tab)
@@ -115,7 +119,7 @@ class GUI(
     }
   }
 
-  def getTabFor(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Tab] = {
+  private def getTabFor(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Tab] = {
     val tabs = extraWidgetTabs
     for {
       tabKey ← propertyMap
@@ -129,7 +133,7 @@ class GUI(
     } yield tab
   }
 
-  def removeTab(component: Component): Unit =
+  private def removeTab(component: Component): Unit =
     (0 until tabs.getTabCount)
       .find(i ⇒ tabs.getComponentAt(i) == component)
       .foreach { i ⇒
@@ -137,7 +141,7 @@ class GUI(
         tabs.removeMenuItem(i)
       }
 
-  def extraWidgetTabs: Vector[Tab] =
+  private def extraWidgetTabs: Vector[Tab] =
     tabs.getComponents.collect {
       case t: Tab ⇒ t
     }(collection.breakOut)
