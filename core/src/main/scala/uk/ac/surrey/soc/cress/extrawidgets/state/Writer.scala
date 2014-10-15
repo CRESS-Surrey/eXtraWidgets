@@ -52,4 +52,12 @@ class Writer(
       publish(SetProperty(wKey, pKey, propertyValue))
     }
   }
+
+  def clearAll() {
+    reader.widgetKeyVector.sortBy { k ⇒ // tabs last
+      reader.propertyMap(k).right.toOption
+        .flatMap(_.get("KIND"))
+        .map(_.toString).map(normalizeString) == Some("TAB")
+    }.foreach(remove)
+  }
 }

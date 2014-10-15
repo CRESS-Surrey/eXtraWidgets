@@ -1,7 +1,6 @@
 package uk.ac.surrey.soc.cress.extrawidgets.extension
 
 import org.nlogo.api.DefaultClassManager
-import org.nlogo.api.ExtensionException
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.Primitive
 import org.nlogo.api.PrimitiveManager
@@ -93,10 +92,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
   override def unload(em: ExtensionManager): Unit = {
     println("unload() " + this)
+    clearAll()
   }
 
-  override def clearAll(): Unit = {
-    println("unload clearAll() " + this)
-  }
-
+  override def clearAll(): Unit = writer.clearAll()
 }
