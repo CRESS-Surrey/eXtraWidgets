@@ -42,10 +42,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     }
 
     val widgetKinds: Map[String, WidgetKind] =
-      WidgetsLoader.loadWidgetKinds().fold(
-        exceptions ⇒ { exceptions.foreach(e ⇒ throw new ExtensionException(e)); Map.empty },
-        identity
-      )
+      WidgetsLoader.loadWidgetKinds
 
     val staticPrimitives = Seq(
       "VERSION" -> new Version("0.0.0-wip"),
