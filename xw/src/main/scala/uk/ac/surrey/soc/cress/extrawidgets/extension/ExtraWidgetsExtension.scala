@@ -7,7 +7,6 @@ import org.nlogo.api.PrimitiveManager
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
-
 import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
@@ -25,6 +24,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -51,7 +51,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "REMOVE" -> new Remove(writer),
       "WIDGET-KEYS" -> new WidgetKeys(reader),
       "PROPERTY-KEYS" -> new PropertyKeys(reader),
-      "PROPERTIES" -> new Properties(reader)
+      "PROPERTIES" -> new Properties(reader),
+      "CLEAR-ALL" -> new ClearAll(writer)
     )
 
     val widgetPrimitives = widgetKinds.keys.map { kindName ⇒
