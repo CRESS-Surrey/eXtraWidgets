@@ -8,11 +8,6 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-encoding", "UTF8")
 
-packageOptions += Package.ManifestAttributes(
-  ("Class-Name", "uk.ac.surrey.soc.cress.extrawidgets.slider.Slider"),
-  ("eXtraWidgets-API-Version", "1.0")
-)
-
 exportJars := true
 
 val jarName = "SliderWidget.jar"
