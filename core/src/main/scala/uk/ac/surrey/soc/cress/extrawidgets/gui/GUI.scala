@@ -26,7 +26,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
 import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 import uk.ac.surrey.soc.cress.extrawidgets.state.AddWidget
@@ -79,7 +79,7 @@ class GUI(
     for {
       kindName ← propertyMap.get("KIND").map(_.toString).orException(
         "Can't find KIND for " + widgetKey + " in " + propertyMap).right
-      kind ← widgetKinds.get(normalizeKey(kindName)).orException(
+      kind ← widgetKinds.get(normalizeString(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
     } yield {
       def createWidget = {
@@ -124,7 +124,7 @@ class GUI(
     for {
       tabKey ← propertyMap
         .get(tabKindName)
-        .map(key ⇒ normalizeKey(key.toString))
+        .map(key ⇒ normalizeString(key.toString))
         .orElse(tabs.headOption.map(_.key))
         .orException("There exists no tab for widget " + widgetKey + ".").right
       tab ← tabs

@@ -12,7 +12,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
@@ -34,7 +34,7 @@ package object state {
 
   implicit def enrichPropertyMap(m: PropertyMap) = new RichPropertyMap(m)
   class RichPropertyMap(m: PropertyMap) {
-    def normalizeKeys = m.map { case (k, v) ⇒ normalizeKey(k) -> v }
+    def normalizeKeys = m.map { case (k, v) ⇒ normalizeString(k) -> v }
     def asMutablePropertyMap: MutablePropertyMap = {
       val mm = new ConcurrentSkipListMap[PropertyKey, PropertyValue].asScala
       for ((k, v) ← m) mm += k -> v

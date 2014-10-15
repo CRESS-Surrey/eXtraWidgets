@@ -17,7 +17,7 @@ package object api {
   type PropertyMap = immutable.Map[PropertyKey, PropertyValue]
   type WidgetMap = immutable.Map[WidgetKey, PropertyMap]
 
-  def normalizeKey(key: Key): Key = key.toUpperCase(ENGLISH)
+  def normalizeString(s: String): String = s.toUpperCase(ENGLISH)
 
   def makePropertyKey(method: Method) =
     makeKey(method.getName) +
@@ -26,7 +26,7 @@ package object api {
         "?" else "")
 
   def makeKey(s: String): Key =
-    normalizeKey((" " + s).toCharArray.sliding(2)
+    normalizeString((" " + s).toCharArray.sliding(2)
       .map { case Array(a, b) ⇒ (if (a.isLower && b.isUpper) "-" else "") + b }
       .mkString).stripPrefix("XW-")
 

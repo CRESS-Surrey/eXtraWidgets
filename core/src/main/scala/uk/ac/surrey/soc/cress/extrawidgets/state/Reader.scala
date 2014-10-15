@@ -11,7 +11,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
-import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 
 class Reader(
   widgetMap: MutableWidgetMap) { // reader should never expose any part of this
@@ -38,7 +38,7 @@ class Reader(
   def get(propertyKey: PropertyKey, widgetKey: WidgetKey): Either[XWException, PropertyValue] =
     for {
       propertyMap ← mutablePropertyMap(widgetKey).right
-      propertyValue ← propertyMap.get(normalizeKey(propertyKey)).orException(
+      propertyValue ← propertyMap.get(normalizeString(propertyKey)).orException(
         "Property " + propertyKey + " does not exist for widget " + widgetKey + ".").right
     } yield propertyValue
 
@@ -47,13 +47,13 @@ class Reader(
   def widgetKeyVector: Vector[WidgetKey] = Vector() ++ widgetMap.keys
 
   private def mutablePropertyMap(widgetKey: WidgetKey): Either[XWException, MutablePropertyMap] =
-    widgetMap.get(normalizeKey(widgetKey)).orException(
+    widgetMap.get(normalizeString(widgetKey)).orException(
       "Widget " + widgetKey + " does not exist in " + widgetMap)
 
   def propertyMap(widgetKey: WidgetKey): Either[XWException, PropertyMap] =
     mutablePropertyMap(widgetKey).right.map(_.toMap)
 
-  def contains(widgetKey: WidgetKey) = widgetMap.contains(normalizeKey(widgetKey))
+  def contains(widgetKey: WidgetKey) = widgetMap.contains(normalizeString(widgetKey))
 
   def propertyKeyVector(widgetKey: WidgetKey): Either[XWException, Vector[PropertyKey]] =
     mutablePropertyMap(widgetKey).right.map(Vector() ++ _.keysIterator)
