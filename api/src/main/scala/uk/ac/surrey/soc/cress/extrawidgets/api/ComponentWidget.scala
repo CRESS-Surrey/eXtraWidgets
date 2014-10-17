@@ -2,9 +2,13 @@ package uk.ac.surrey.soc.cress.extrawidgets.api
 
 import java.awt.Component
 
+import org.nlogo.awt.Fonts.adjustDefaultFont
+
 trait ComponentWidget extends ExtraWidget {
 
   self: Component ⇒
+
+  adjustDefaultFont(this)
 
   val xwX = new IntegerPropertyDef(this, x ⇒ setX(x), getX, const(getX))
   val xwY = new IntegerPropertyDef(this, y ⇒ setY(y), getY, const(getY))
