@@ -26,9 +26,9 @@ trait ExtraWidget extends Component {
     } prop.setToDefault()
 
     for {
-      (propertyKey, value) ← newPropertyMap
+      (propertyKey, propertyValue) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
-    } prop.setValue(value)
+    } prop.setValue(propertyValue)
   }
 
   def setProperty(
