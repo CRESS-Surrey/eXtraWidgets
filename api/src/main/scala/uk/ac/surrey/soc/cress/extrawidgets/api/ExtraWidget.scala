@@ -23,7 +23,6 @@ trait ExtraWidget extends Component {
       propertyKey ← kind.propertyKeys
       if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
-      if prop.getter() != prop.default()
     } prop.setToDefault()
 
     for {
