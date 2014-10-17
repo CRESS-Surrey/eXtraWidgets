@@ -8,18 +8,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 package object util {
 
-  implicit def enrichEither[L, R](either: Either[L, R]) = new RichEither(either)
-  class RichEither[L, R](either: Either[L, R]) {
-    def rightOrThrow: R = either match {
-      case Right(r) ⇒ r
-      case Left(l) ⇒ throw l match {
-        case e: Exception ⇒ new ExtensionException(e)
-        case s: String ⇒ new ExtensionException(s)
-        case x ⇒ new ExtensionException("Unexpected result: " + x.toString)
-      }
-    }
-  }
-
   implicit def enrichVector[T <: AnyRef](v: Vector[T]): RichVector[T] = new RichVector(v)
   class RichVector[T <: AnyRef](v: Vector[T]) {
     def toPropertyMap: PropertyMap = {

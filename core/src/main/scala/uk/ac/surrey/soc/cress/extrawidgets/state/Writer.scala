@@ -7,7 +7,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichEither
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 
 /**
@@ -15,21 +15,18 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
  */
 class Writer(
   widgetMap: MutableWidgetMap,
-  reader: Reader)
+  val reader: Reader)
   extends Publisher[StateEvent] {
 
   override type Pub = Publisher[StateEvent]
 
-  def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
+  def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val wKey = normalizeString(widgetKey)
     val properties = propertyMap.normalizeKeys
-    for {
-      _ ← reader.validateNonEmpty("widget key", wKey).right
-      _ ← reader.validateUnique("widget key", wKey).right
-    } yield {
-      widgetMap += wKey -> properties.asMutablePropertyMap
-      publish(AddWidget(wKey, properties))
-    }
+    reader.validateNonEmpty("widget key", wKey).rightOrThrow
+    reader.validateUnique("widget key", wKey).rightOrThrow
+    widgetMap += wKey -> properties.asMutablePropertyMap
+    publish(AddWidget(wKey, properties))
   }
 
   def remove(widgetKey: WidgetKey): Unit = {
@@ -41,16 +38,14 @@ class Writer(
   def set(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
-    propertyValue: PropertyValue): Either[XWException, Unit] = {
+    propertyValue: PropertyValue): Unit = {
+
     val wKey = normalizeString(widgetKey)
-    for {
-      propertyMap ← widgetMap.get(wKey).orException(
-        "Widget " + wKey + " does not exist.").right
-    } yield {
-      val pKey = normalizeString(propertyKey)
-      propertyMap += pKey -> propertyValue
-      publish(SetProperty(wKey, pKey, propertyValue))
-    }
+    val propertyMap = widgetMap.getOrElse(wKey,
+      throw XWException("Widget " + wKey + " does not exist."))
+    val pKey = normalizeString(propertyKey)
+    propertyMap += pKey -> propertyValue
+    publish(SetProperty(wKey, pKey, propertyValue))
   }
 
   def clearAll() {

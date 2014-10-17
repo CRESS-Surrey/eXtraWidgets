@@ -28,6 +28,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
+import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 import uk.ac.surrey.soc.cress.extrawidgets.state.AddWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.RemoveWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.SetProperty
@@ -140,7 +141,7 @@ class GUI(
       .iterate(askName(DefaultTabName))(_.flatMap(askName))
       .takeWhile(_.isDefined)
       .flatten
-      .map(writer.add(_, Map("kind" -> tabKindName)))
+      .map(key ⇒ tryTo(writer.add(key, Map("kind" -> tabKindName))))
       .takeWhile(_.isLeft)
       .flatMap(_.left.toSeq)
       .foreach(warningDialog)

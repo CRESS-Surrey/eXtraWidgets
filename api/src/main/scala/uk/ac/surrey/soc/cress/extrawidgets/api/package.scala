@@ -43,10 +43,24 @@ package object api {
       o.toRight(new XWException(msg, null))
   }
 
-  def tryTo[A](f: ⇒ A, failureMessage: String = ""): Either[XWException, A] =
+  implicit def enrichEither[L, R](either: Either[L, R]) = new RichEither(either)
+  class RichEither[L, R](either: Either[L, R]) {
+    def rightOrThrow: R = either match {
+      case Right(r) ⇒ r
+      case Left(l) ⇒ throw l match {
+        case e: XWException ⇒ e
+        case e: Exception ⇒ XWException(e.getMessage, e)
+        case s: String ⇒ XWException(s)
+        case x ⇒ XWException("Unexpected result: " + x.toString)
+      }
+    }
+  }
+
+  def tryTo[A](f: ⇒ A, failureMessage: String = null): Either[XWException, A] =
     try Right(f) catch {
-      case e: Exception ⇒ Left(new XWException(
-        Option(failureMessage).filter(_.nonEmpty).getOrElse(e.getMessage), e))
+      case e: XWException ⇒ Left(e)
+      case e: Exception ⇒ Left(XWException(
+        Option(failureMessage).getOrElse(e.getMessage), e))
     }
 
   def colorToLogoList(c: java.awt.Color): LogoList = {

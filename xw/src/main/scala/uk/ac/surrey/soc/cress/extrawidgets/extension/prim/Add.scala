@@ -9,7 +9,6 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.commandSyntax
 
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.extension.util.enrichEither
 import uk.ac.surrey.soc.cress.extrawidgets.extension.util.enrichVector
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 
@@ -19,7 +18,7 @@ class Add(writer: Writer) extends DefaultCommand {
     Vector(args: _*).tail.flatMap(_.getList.toVector).toPropertyMap
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey = args(0).getString
-    writer.add(widgetKey, properties(args)).rightOrThrow
+    writer.add(widgetKey, properties(args))
   }
 }
 

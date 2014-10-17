@@ -8,7 +8,7 @@ import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.reporterSyntax
 
-import uk.ac.surrey.soc.cress.extrawidgets.extension.util.enrichEither
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichEither
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
 class Properties(reader: Reader) extends DefaultReporter {
