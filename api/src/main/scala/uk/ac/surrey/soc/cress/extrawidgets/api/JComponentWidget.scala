@@ -9,12 +9,14 @@ import javax.swing.JComponent
 trait JComponentWidget extends ComponentWidget {
   self: JComponent ⇒
 
-  private val padding = createEmptyBorder(1, 1, 1, 1)
+  private val _borderPadding = createEmptyBorder(1, 1, 1, 1)
+  def borderPadding = _borderPadding
+
   private val _borderWhenOpaque =
-    createCompoundBorder(createWidgetBorder, padding)
+    createCompoundBorder(createWidgetBorder, borderPadding)
   def borderWhenOpaque = _borderWhenOpaque
   private val _borderWhenTransparent =
-    createCompoundBorder(createEmptyBorder(3, 3, 2, 2), padding)
+    createCompoundBorder(createEmptyBorder(3, 3, 2, 2), borderPadding)
   def borderWhenTransparent = _borderWhenTransparent
 
   def updateBorder() =
