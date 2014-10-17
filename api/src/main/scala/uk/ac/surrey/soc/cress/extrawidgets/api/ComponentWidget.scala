@@ -15,7 +15,9 @@ trait ComponentWidget extends ExtraWidget {
   val xwWidth = new IntegerPropertyDef(this, w ⇒ setWidth(w), getWidth, const(getWidth))
   val xwHeight = new IntegerPropertyDef(this, h ⇒ setHeight(h), getHeight, const(getHeight))
   val xwHidden = new BooleanPropertyDef(this, b ⇒ setVisible(!b), () ⇒ !isVisible, const(!isVisible))
-  val xwBackground = new ColorPropertyDef(this, setBackground, getBackground, const(getBackground))
+  private val _defaultBackground = getBackground
+  def defaultBackground = _defaultBackground
+  val xwBackground = new ColorPropertyDef(this, setBackground, getBackground, () ⇒ defaultBackground)
   val xwForeground = new ColorPropertyDef(this, setForeground, getForeground, const(getForeground))
 
   def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
