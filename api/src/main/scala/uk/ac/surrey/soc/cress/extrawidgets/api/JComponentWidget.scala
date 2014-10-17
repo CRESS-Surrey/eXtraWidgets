@@ -5,19 +5,20 @@ import org.nlogo.swing.Utils.createWidgetBorder
 import javax.swing.BorderFactory.createCompoundBorder
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JComponent
+import javax.swing.border.Border
 
 trait JComponentWidget extends ComponentWidget {
   self: JComponent ⇒
 
   private val _borderPadding = createEmptyBorder(1, 1, 1, 1)
-  def borderPadding = _borderPadding
+  def borderPadding: Border = _borderPadding
 
   private val _borderWhenOpaque =
     createCompoundBorder(createWidgetBorder, borderPadding)
-  def borderWhenOpaque = _borderWhenOpaque
+  def borderWhenOpaque: Border = _borderWhenOpaque
   private val _borderWhenTransparent =
     createCompoundBorder(createEmptyBorder(3, 3, 2, 2), borderPadding)
-  def borderWhenTransparent = _borderWhenTransparent
+  def borderWhenTransparent: Border = _borderWhenTransparent
 
   def updateBorder() =
     if (isOpaque) setBorder(borderWhenOpaque)
