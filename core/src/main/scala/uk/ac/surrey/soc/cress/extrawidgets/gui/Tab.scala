@@ -1,17 +1,19 @@
 package uk.ac.surrey.soc.cress.extrawidgets.gui
 
 import java.awt.Color.white
+
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.swing.RichAction
 import org.nlogo.window.GUIWorkspace
+
 import javax.swing.JPanel
+import uk.ac.surrey.soc.cress.extrawidgets.api.ColorPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.JComponentWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
-import uk.ac.surrey.soc.cress.extrawidgets.api.ColorPropertyDef
 
 class Tab(
   val key: WidgetKey,
