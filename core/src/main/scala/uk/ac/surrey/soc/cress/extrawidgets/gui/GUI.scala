@@ -28,7 +28,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.makeKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
-import uk.ac.surrey.soc.cress.extrawidgets.api.tryTo
 import uk.ac.surrey.soc.cress.extrawidgets.state.AddWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.RemoveWidget
 import uk.ac.surrey.soc.cress.extrawidgets.state.SetProperty
@@ -74,48 +73,37 @@ class GUI(
       }
   }
 
-  private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Unit] = {
-    println("Creating widget from " + (widgetKey, propertyMap))
+  private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     for {
       kindName ← propertyMap.get("KIND").map(_.toString).orException(
         "Can't find KIND for " + widgetKey + " in " + propertyMap).right
       kind ← widgetKinds.get(normalizeString(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
-    } yield {
-      def createWidget = {
-        val w = kind.newInstance(widgetKey, propertyMap, app.workspace)
-        w.init(propertyMap)
-        w
-      }
-      if (kind.name == tabKindName)
-        tryTo(createWidget)
-      else
-        for {
-          tab ← getTabFor(widgetKey, propertyMap).right
-          widget ← tryTo(createWidget).right
-        } yield {
-          tab.add(widget)
-          tab.validate()
-        }
+    } {
+      val w = kind.newInstance(widgetKey, propertyMap, app.workspace)
+      w.init(propertyMap)
+      if (kind.name != tabKindName)
+        for (tab ← getTabFor(widgetKey, propertyMap).right)
+          tab.add(w)
     }
   }
 
   private def setProperty(
     widgetKey: WidgetKey,
     propertyKey: PropertyKey,
-    propertyValue: PropertyValue): Unit = {
-    getWidget(widgetKey).foreach(_.setProperty(propertyKey, propertyValue))
-  }
+    propertyValue: PropertyValue): Unit =
+    for {
+      w ← getWidget(widgetKey)
+    } w.setProperty(propertyKey, propertyValue)
+
+  def getTabOf(w: ExtraWidget): Option[Tab] =
+    Option(getAncestorOfClass(classOf[Tab], w))
+      .collect { case t: Tab ⇒ t }
 
   private def removeWidget(widgetKey: WidgetKey): Unit = {
-    println("Removing widget " + widgetKey)
     for (w ← getWidget(widgetKey)) w match {
       case tab: Tab ⇒ removeTab(tab)
-      case _ ⇒
-        for (container ← Option(getAncestorOfClass(classOf[Tab], w))) {
-          container.remove(w)
-          container.validate()
-        }
+      case _ ⇒ for (tab ← getTabOf(w)) tab.remove(w)
     }
   }
 
