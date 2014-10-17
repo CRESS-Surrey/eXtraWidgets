@@ -1,8 +1,10 @@
 package uk.ac.surrey.soc.cress.extrawidgets
 
-import java.util.Locale.ENGLISH
-import scala.collection.immutable
 import java.lang.reflect.Method
+import java.util.Locale.ENGLISH
+
+import scala.collection.immutable
+
 import org.nlogo.api.LogoList
 
 package object api {
