@@ -22,6 +22,8 @@ class Tab(
   extends JPanel
   with JComponentWidget {
 
+  override def isOptimizedDrawingEnabled = false
+
   val xwTitle = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
   override val xwBackground = new ColorPropertyDef(this, setBackground, getBackground, () ⇒ white)
 
