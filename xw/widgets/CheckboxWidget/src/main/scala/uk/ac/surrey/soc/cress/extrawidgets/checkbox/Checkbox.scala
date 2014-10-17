@@ -14,6 +14,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.AbstractButtonWidget
 class Checkbox(val key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace)
   extends JCheckBox with AbstractButtonWidget {
 
+  setBorderPainted(true)
   override def defaultBackground = SWITCH_BACKGROUND
 
 }
