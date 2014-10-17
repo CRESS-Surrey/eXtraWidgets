@@ -23,11 +23,13 @@ trait ExtraWidget extends Component {
       propertyKey ← kind.propertyKeys
       if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
+      _ = println(key + " " + propertyKey + " (default) -> " + prop.default())
     } prop.setToDefault()
 
     for {
       (propertyKey, propertyValue) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
+      _ = println(key + " " + propertyKey + " -> " + propertyValue)
     } prop.setValue(propertyValue)
   }
 
@@ -36,6 +38,7 @@ trait ExtraWidget extends Component {
     propertyValue: PropertyValue): Unit = {
     for {
       prop ← propertyDefs.get(propertyKey)
+      _ = println(key + " " + propertyKey + " -> " + propertyValue)
     } prop.setValue(propertyValue)
   }
 }
