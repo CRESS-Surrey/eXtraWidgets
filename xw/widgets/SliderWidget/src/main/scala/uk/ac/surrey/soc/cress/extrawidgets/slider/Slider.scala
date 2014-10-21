@@ -30,8 +30,7 @@ class Slider(
 
   setLayout(new BorderLayout())
 
-  private val _borderPadding = createEmptyBorder(0, 4, 0, 4)
-  override def borderWhenOpaque = _borderPadding
+  override def borderPadding = createEmptyBorder(0, 4, 0, 4)
 
   private var text = key
   val slider = new JSlider()
