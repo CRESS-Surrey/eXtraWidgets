@@ -5,6 +5,7 @@ import java.awt.Component
 trait ExtraWidget extends Component {
 
   val key: WidgetKey
+  val stateUpdater: StateUpdater
 
   private var _propertyMap: PropertyMap = Map.empty
 
@@ -15,7 +16,10 @@ trait ExtraWidget extends Component {
    * in `this` won't be initialised yet. NP 2014-10-10.
    */
   lazy val kind = new WidgetKind(this.getClass)
-  lazy val propertyDefs = kind.propertyDefs(this)
+  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget, _]] =
+    kind.propertyDefs(this)
+  lazy val propertyKeys: Map[PropertyDef[_ <: ExtraWidget, _], PropertyKey] =
+    propertyDefs.map(_.swap)
 
   def init(newPropertyMap: PropertyMap): Unit = {
     _propertyMap = newPropertyMap
@@ -23,13 +27,11 @@ trait ExtraWidget extends Component {
       propertyKey ← kind.propertyKeys
       if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
-      _ = println(key + " " + propertyKey + " (default) -> " + prop.default())
     } prop.setToDefault()
 
     for {
       (propertyKey, propertyValue) ← newPropertyMap
       prop ← propertyDefs.get(propertyKey)
-      _ = println(key + " " + propertyKey + " -> " + propertyValue)
     } prop.setValue(propertyValue)
   }
 
@@ -38,7 +40,11 @@ trait ExtraWidget extends Component {
     propertyValue: PropertyValue): Unit = {
     for {
       prop ← propertyDefs.get(propertyKey)
-      _ = println(key + " " + propertyKey + " -> " + propertyValue)
     } prop.setValue(propertyValue)
   }
+
+  def updatePropertyInState(propertyDef: PropertyDef[_ <: ExtraWidget, _]): Unit =
+    stateUpdater.set(
+      propertyKeys(propertyDef), key,
+      propertyDef.getter().asInstanceOf[AnyRef])
 }
