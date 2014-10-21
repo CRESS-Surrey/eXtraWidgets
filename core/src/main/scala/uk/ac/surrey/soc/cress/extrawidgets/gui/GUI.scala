@@ -93,20 +93,18 @@ class GUI(
     widgetKey: WidgetKey,
     propertyKey: PropertyKey,
     propertyValue: PropertyValue): Unit =
-    for {
-      w ← getWidget(widgetKey)
-    } w.setProperty(propertyKey, propertyValue)
+    for (w ← getWidget(widgetKey))
+      w.setProperty(propertyKey, propertyValue)
 
   def getTabOf(w: ExtraWidget): Option[Tab] =
     Option(getAncestorOfClass(classOf[Tab], w))
       .collect { case t: Tab ⇒ t }
 
-  private def removeWidget(widgetKey: WidgetKey): Unit = {
+  private def removeWidget(widgetKey: WidgetKey): Unit =
     for (w ← getWidget(widgetKey)) w match {
       case tab: Tab ⇒ removeTab(tab)
       case _ ⇒ for (tab ← getTabOf(w)) tab.remove(w)
     }
-  }
 
   private def getTabFor(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Tab] = {
     val tabs = extraWidgetTabs
