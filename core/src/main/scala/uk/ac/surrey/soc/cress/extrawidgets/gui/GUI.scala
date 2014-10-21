@@ -81,7 +81,7 @@ class GUI(
       kind ← widgetKinds.get(normalizeString(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
     } {
-      val w = kind.newInstance(widgetKey, propertyMap, app.workspace)
+      val w = kind.newInstance(widgetKey, writer, app.workspace)
       w.init(propertyMap)
       if (kind.name != tabKindName)
         for (tab ← getTabFor(widgetKey, propertyMap).right)

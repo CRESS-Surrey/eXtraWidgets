@@ -15,14 +15,18 @@ import javax.swing.JSlider
 import javax.swing.SwingConstants
 import uk.ac.surrey.soc.cress.extrawidgets.api.IntegerPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.JComponentWidget
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
+import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.const
-import uk.ac.surrey.soc.cress.extrawidgets.api.swing._
+import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichSlider
 
-class Slider(val key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace)
-  extends JPanel with JComponentWidget {
+class Slider(
+  val key: WidgetKey,
+  val stateUpdater: StateUpdater,
+  ws: GUIWorkspace)
+  extends JPanel
+  with JComponentWidget {
 
   setLayout(new BorderLayout())
 
@@ -63,8 +67,10 @@ class Slider(val key: WidgetKey, properties: PropertyMap, ws: GUIWorkspace)
     slider.getValue,
     const(slider.getValue))
 
-  slider.onChange { _ ⇒
-    valueLabel.setText(slider.getValue.toString)
+  slider.onStateChange { _ ⇒
+    val value = slider.getValue
+    valueLabel.setText(value.toString)
+    xwValue.setValue(Int.box(value))
   }
 
 }

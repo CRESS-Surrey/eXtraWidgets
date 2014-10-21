@@ -35,12 +35,12 @@ class Reader(
   def isUnique[A](value: A, existingValues: Iterable[A]) =
     !existingValues.exists(_ == value)
 
-  def get(propertyKey: PropertyKey, widgetKey: WidgetKey): Either[XWException, PropertyValue] =
-    for {
-      propertyMap ← mutablePropertyMap(widgetKey).right
-      propertyValue ← propertyMap.get(normalizeString(propertyKey)).orException(
-        "Property " + propertyKey + " does not exist for widget " + widgetKey + ".").right
-    } yield propertyValue
+  def get(propertyKey: PropertyKey, widgetKey: WidgetKey): PropertyValue =
+    mutablePropertyMap(widgetKey)
+      .rightOrThrow
+      .get(normalizeString(propertyKey))
+      .getOrElse(throw XWException(
+        "Property " + propertyKey + " does not exist for widget " + widgetKey + "."))
 
   def widgetKeySet: Set[WidgetKey] = widgetMap.keys.toSet
 

@@ -3,6 +3,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension.prim
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
 import org.nlogo.api.DefaultReporter
+import org.nlogo.api.ScalaConversions.toLogoObject
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 import org.nlogo.api.Syntax.reporterSyntax
@@ -14,7 +15,7 @@ class Get(reader: Reader) extends DefaultReporter {
   def report(args: Array[Argument], context: Context): AnyRef = {
     val propertyKey = args(0).getString
     val widgetKey = args(1).getString
-    reader.get(propertyKey, widgetKey)
+    toLogoObject(reader.get(propertyKey, widgetKey))
   }
 }
 
@@ -22,6 +23,6 @@ class GetProperty(reader: Reader, propertyKey: String) extends DefaultReporter {
   override def getSyntax = reporterSyntax(Array(StringType), WildcardType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val widgetKey = args(0).getString
-    reader.get(propertyKey, widgetKey)
+    toLogoObject(reader.get(propertyKey, widgetKey))
   }
 }

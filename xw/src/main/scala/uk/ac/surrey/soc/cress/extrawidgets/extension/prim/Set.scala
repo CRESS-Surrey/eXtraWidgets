@@ -16,7 +16,7 @@ class Set(writer: Writer) extends DefaultCommand {
     val propertyKey = args(0).getString
     val widgetKey = args(1).getString
     val propertyValue = args(2).get
-    writer.set(propertyKey, widgetKey, propertyValue)
+    writer.set(propertyKey, widgetKey, propertyValue, true)
   }
 }
 
@@ -25,6 +25,6 @@ class SetProperty(writer: Writer, propertyKey: String) extends DefaultCommand {
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey = args(0).getString
     val propertyValue = args(1).get
-    writer.set(propertyKey, widgetKey, propertyValue)
+    writer.set(propertyKey, widgetKey, propertyValue, true)
   }
 }

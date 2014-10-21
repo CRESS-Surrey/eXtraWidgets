@@ -5,6 +5,7 @@ import scala.collection.mutable.Publisher
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
+import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.api.enrichEither
@@ -16,7 +17,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 class Writer(
   widgetMap: MutableWidgetMap,
   val reader: Reader)
-  extends Publisher[StateEvent] {
+  extends Publisher[StateEvent]
+  with StateUpdater {
 
   override type Pub = Publisher[StateEvent]
 
@@ -38,14 +40,24 @@ class Writer(
   def set(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
-    propertyValue: PropertyValue): Unit = {
+    propertyValue: PropertyValue): Unit =
+    set(propertyKey, widgetKey, propertyValue, false)
+
+  def set(
+    propertyKey: PropertyKey,
+    widgetKey: WidgetKey,
+    propertyValue: PropertyValue,
+    publishEvent: Boolean): Unit = {
 
     val wKey = normalizeString(widgetKey)
     val propertyMap = widgetMap.getOrElse(wKey,
       throw XWException("Widget " + wKey + " does not exist."))
     val pKey = normalizeString(propertyKey)
+    val oldValue = propertyMap.get(pKey)
     propertyMap += pKey -> propertyValue
-    publish(SetProperty(wKey, pKey, propertyValue))
+    println(wKey + "/" + pKey + " := " + propertyValue)
+    if (publishEvent && propertyMap.get(pKey) != oldValue)
+      publish(SetProperty(wKey, pKey, propertyValue))
   }
 
   def clearAll() {

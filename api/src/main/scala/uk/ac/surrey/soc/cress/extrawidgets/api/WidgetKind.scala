@@ -14,8 +14,8 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
       classOf[StateUpdater],
       classOf[GUIWorkspace])
 
-  def newInstance(widgetKey: WidgetKey, propertyMap: PropertyMap, ws: GUIWorkspace) =
-    constructor.newInstance(widgetKey, propertyMap, ws)
+  def newInstance(widgetKey: WidgetKey, stateUpdater: StateUpdater, ws: GUIWorkspace) =
+    constructor.newInstance(widgetKey, stateUpdater, ws)
 
   val propertyMethods: Seq[Method] =
     clazz.getMethods.filter { method ⇒
