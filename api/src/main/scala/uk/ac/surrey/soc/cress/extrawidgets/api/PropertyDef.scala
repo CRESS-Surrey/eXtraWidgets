@@ -1,20 +1,27 @@
 package uk.ac.surrey.soc.cress.extrawidgets.api
 
-import org.nlogo.api.Syntax._
-import org.nlogo.api.Color._
-import org.nlogo.api.LogoList
-import org.nlogo.agent.Agent._
+import org.nlogo.api.Color.MaxColor
+import org.nlogo.api.Color.getColor
+import org.nlogo.api.Color.modulateDouble
 import org.nlogo.api.I18N
+import org.nlogo.api.LogoList
+import org.nlogo.api.Syntax.BooleanType
+import org.nlogo.api.Syntax.ListType
+import org.nlogo.api.Syntax.NumberType
+import org.nlogo.api.Syntax.StringType
 
 abstract class PropertyDef[+W <: ExtraWidget, T](
   val widget: W,
-  val setter: T ⇒ Unit,
+  setter: T ⇒ Unit, // should never be directly accessed from the outside
   val getter: () ⇒ T,
   val default: () ⇒ T) {
   val inputTypeConstant: Int
   val outputTypeConstant: Int
   def asInputType(obj: AnyRef): T = obj.asInstanceOf[T] // TODO: handle this
-  private def set(v: T): Unit = setter(v)
+  private def set(v: T): Unit = {
+    setter(v)
+    widget.updatePropertyInState(this)
+  }
   def setValue(obj: AnyRef): Unit = set(asInputType(obj))
   def setToDefault(): Unit = set(default())
 }
