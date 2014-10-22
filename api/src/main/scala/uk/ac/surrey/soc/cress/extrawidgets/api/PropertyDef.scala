@@ -18,7 +18,7 @@ abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
   val getter: () ⇒ T) {
   val inputTypeConstant: Int
   val outputTypeConstant: Int
-  def asInputType(obj: AnyRef): T = obj.asInstanceOf[T] // TODO: handle this
+  protected def asInputType(obj: AnyRef): T = obj.asInstanceOf[T]
   def updateInState(): Unit = widget.updatePropertyInState(this)
   def setValue(obj: AnyRef): Unit = {
     setter(asInputType(obj))
