@@ -36,12 +36,8 @@ class Slider(
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
 
   val slider = new JSlider()
-  val textLabel = new JLabel(key) {
-    setVerticalAlignment(SwingConstants.TOP)
-  }
-  val valueLabel = new JLabel(slider.getValue.toString) {
-    setVerticalAlignment(SwingConstants.TOP)
-  }
+  val textLabel = new JLabel(key)
+  val valueLabel = new JLabel(slider.getValue.toString)
   add(slider, PAGE_START)
   add(textLabel, CENTER)
   add(valueLabel, LINE_END)
