@@ -7,31 +7,28 @@ trait ExtraWidget extends Component {
   val key: WidgetKey
   val stateUpdater: StateUpdater
 
-  private var _propertyMap: PropertyMap = Map.empty
-
-  final def propertyMap = _propertyMap
-
   /* Let's be careful not to access the following lazy vals
    * in this trait's constructor because the property fields
    * in `this` won't be initialised yet. NP 2014-10-10.
    */
   lazy val kind = new WidgetKind(this.getClass)
-  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget, _]] =
+  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget, _ <: AnyRef]] =
     kind.propertyDefs(this)
-  lazy val propertyKeys: Map[PropertyDef[_ <: ExtraWidget, _], PropertyKey] =
+  lazy val propertyKeys: Map[PropertyDef[_ <: ExtraWidget, _ <: AnyRef], PropertyKey] =
     propertyDefs.map(_.swap)
 
-  def init(newPropertyMap: PropertyMap): Unit = {
-    _propertyMap = newPropertyMap
+  /**
+   *  Initialize the widget by setting all its properties.
+   *  The properties we got in the map are set to the provided
+   *  value. The other properties get "set" to their current values,
+   *  to ensure that these values are written back to the State.
+   */
+  def init(propertyMap: PropertyMap): Unit = {
+    println(propertyMap)
     for {
       propertyKey ← kind.propertyKeys
-      if !propertyMap.contains(key)
       prop ← propertyDefs.get(propertyKey)
-    } prop.setToDefault()
-
-    for {
-      (propertyKey, propertyValue) ← newPropertyMap
-      prop ← propertyDefs.get(propertyKey)
+      propertyValue = propertyMap.getOrElse(propertyKey, prop.getter())
     } prop.setValue(propertyValue)
   }
 
@@ -43,7 +40,7 @@ trait ExtraWidget extends Component {
     } prop.setValue(propertyValue)
   }
 
-  def updatePropertyInState(propertyDef: PropertyDef[_ <: ExtraWidget, _]): Unit =
+  def updatePropertyInState(propertyDef: PropertyDef[_ <: ExtraWidget, _ <: AnyRef]): Unit =
     stateUpdater.set(
       propertyKeys(propertyDef), key,
       propertyDef.getter().asInstanceOf[AnyRef])

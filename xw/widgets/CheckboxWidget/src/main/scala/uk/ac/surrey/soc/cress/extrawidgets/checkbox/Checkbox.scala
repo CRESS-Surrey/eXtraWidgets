@@ -16,6 +16,6 @@ class Checkbox(
   with AbstractButtonWidget {
 
   setBorderPainted(true)
-  override def defaultBackground = SWITCH_BACKGROUND
+  setBackground(SWITCH_BACKGROUND)
 
 }

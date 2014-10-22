@@ -10,28 +10,24 @@ import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 
-abstract class PropertyDef[+W <: ExtraWidget, T](
+abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
   val widget: W,
   setter: T ⇒ Unit, // should never be directly accessed from the outside
-  val getter: () ⇒ T,
-  val default: () ⇒ T) {
+  val getter: () ⇒ T) {
   val inputTypeConstant: Int
   val outputTypeConstant: Int
   def asInputType(obj: AnyRef): T = obj.asInstanceOf[T] // TODO: handle this
-  private def set(v: T): Unit = {
-    setter(v)
+  def setValue(obj: AnyRef): Unit = {
+    setter(asInputType(obj))
     widget.updatePropertyInState(this)
   }
-  def setValue(obj: AnyRef): Unit = set(asInputType(obj))
-  def setToDefault(): Unit = set(default())
 }
 
 class StringPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: String ⇒ Unit,
-  getter: () ⇒ String,
-  default: () ⇒ String)
-  extends PropertyDef(w, setter, getter, default) {
+  getter: () ⇒ String)
+  extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = StringType
   val outputTypeConstant = StringType
   override def asInputType(obj: AnyRef): String = obj.toString
@@ -40,9 +36,8 @@ class StringPropertyDef[+W <: ExtraWidget](
 class BooleanPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.lang.Boolean ⇒ Unit,
-  getter: () ⇒ java.lang.Boolean,
-  default: () ⇒ java.lang.Boolean)
-  extends PropertyDef(w, setter, getter, default) {
+  getter: () ⇒ java.lang.Boolean)
+  extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = BooleanType
   val outputTypeConstant = BooleanType
 }
@@ -50,9 +45,8 @@ class BooleanPropertyDef[+W <: ExtraWidget](
 class IntegerPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.lang.Integer ⇒ Unit,
-  getter: () ⇒ java.lang.Integer,
-  default: () ⇒ java.lang.Integer)
-  extends PropertyDef(w, setter, getter, default) {
+  getter: () ⇒ java.lang.Integer)
+  extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
   override def asInputType(obj: AnyRef): java.lang.Integer = obj match {
@@ -64,9 +58,8 @@ class IntegerPropertyDef[+W <: ExtraWidget](
 class ColorPropertyDef[+W <: ExtraWidget](
   w: W,
   setter: java.awt.Color ⇒ Unit,
-  getter: () ⇒ java.awt.Color,
-  default: () ⇒ java.awt.Color)
-  extends PropertyDef(w, setter, getter, default) {
+  getter: () ⇒ java.awt.Color)
+  extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = NumberType | ListType
   val outputTypeConstant = ListType
   override def asInputType(obj: AnyRef): java.awt.Color = obj match {

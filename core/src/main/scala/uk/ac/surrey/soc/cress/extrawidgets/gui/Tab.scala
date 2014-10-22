@@ -23,15 +23,15 @@ class Tab(
   with JComponentWidget {
 
   override def isOptimizedDrawingEnabled = false
-  override def defaultOpacity = true
 
-  val xwTitle = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle, () ⇒ key)
-  override val xwBackground = new ColorPropertyDef(this, setBackground, getBackground, () ⇒ white)
+  val xwTitle = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle)
+  override val xwBackground = new ColorPropertyDef(this, setBackground, getBackground)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }
     .getOrElse(throw new XWException("Tab widget can't access application tabs."))
 
+  setBackground(white)
   setLayout(null) // use absolute layout
 
   addToAppTabs()

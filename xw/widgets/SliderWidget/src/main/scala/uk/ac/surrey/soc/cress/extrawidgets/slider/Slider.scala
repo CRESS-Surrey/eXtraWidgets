@@ -29,6 +29,7 @@ class Slider(
   with JComponentWidget {
 
   setLayout(new BorderLayout())
+  setBackground(SLIDER_BACKGROUND)
 
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
 
@@ -44,27 +45,21 @@ class Slider(
   add(textLabel, CENTER)
   add(valueLabel, LINE_END)
 
-  override def defaultBackground = SLIDER_BACKGROUND
-
   val xwText = new StringPropertyDef(this,
     x ⇒ { text = x; textLabel.setText(text) },
-    () ⇒ text,
-    const(text))
+    () ⇒ text)
 
   val xwMinimum = new IntegerPropertyDef(this,
     x ⇒ slider.setMinimum(x),
-    slider.getMinimum,
-    const(slider.getMinimum))
+    slider.getMinimum)
 
   val xwMaximum = new IntegerPropertyDef(this,
     x ⇒ slider.setMaximum(x),
-    slider.getMaximum,
-    const(slider.getMaximum))
+    slider.getMaximum)
 
   val xwValue = new IntegerPropertyDef(this,
     x ⇒ slider.setValue(x),
-    slider.getValue,
-    const(slider.getValue))
+    slider.getValue)
 
   slider.onStateChange { _ ⇒
     val value = slider.getValue
