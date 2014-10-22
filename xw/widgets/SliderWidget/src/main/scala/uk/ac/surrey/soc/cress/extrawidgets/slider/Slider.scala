@@ -51,15 +51,15 @@ class Slider(
     textLabel.getText)
 
   val xwMinimum = new IntegerPropertyDef(this,
-    x ⇒ slider.setMinimum(x),
+    slider.setMinimum(_),
     slider.getMinimum)
 
   val xwMaximum = new IntegerPropertyDef(this,
-    x ⇒ slider.setMaximum(x),
+    slider.setMaximum(_),
     slider.getMaximum)
 
   val xwValue = new IntegerPropertyDef(this,
-    x ⇒ slider.setValue(x),
+    slider.setValue(_),
     slider.getValue)
 
   slider.onStateChange { _ ⇒

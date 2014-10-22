@@ -24,7 +24,7 @@ class Tab(
 
   override def isOptimizedDrawingEnabled = false
 
-  val xwTitle = new StringPropertyDef(this, v ⇒ setTitle(v), () ⇒ getTitle)
+  val xwTitle = new StringPropertyDef(this, setTitle, getTitle _)
   override val xwBackground = new ColorPropertyDef(this, setBackground, getBackground)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
