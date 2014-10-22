@@ -30,6 +30,8 @@ class Slider(
 
   setLayout(new BorderLayout())
   setBackground(SLIDER_BACKGROUND)
+  setHeight(45)
+  setWidth(150)
 
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
 
