@@ -35,9 +35,8 @@ class Slider(
 
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
 
-  private var text = key
   val slider = new JSlider()
-  val textLabel = new JLabel(text) {
+  val textLabel = new JLabel(key) {
     setVerticalAlignment(SwingConstants.TOP)
   }
   val valueLabel = new JLabel(slider.getValue.toString) {
@@ -48,8 +47,8 @@ class Slider(
   add(valueLabel, LINE_END)
 
   val xwText = new StringPropertyDef(this,
-    x ⇒ { text = x; textLabel.setText(text) },
-    () ⇒ text)
+    textLabel.setText,
+    textLabel.getText)
 
   val xwMinimum = new IntegerPropertyDef(this,
     x ⇒ slider.setMinimum(x),
