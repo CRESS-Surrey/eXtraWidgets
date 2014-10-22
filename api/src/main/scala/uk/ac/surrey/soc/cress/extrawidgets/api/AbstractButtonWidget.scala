@@ -9,6 +9,6 @@ trait AbstractButtonWidget extends JComponentWidget {
   val xwText = new StringPropertyDef(this, setText, getText)
 
   self.onItemStateChanged { _ ⇒
-    xwSelected.setValue(Boolean.box(isSelected))
+    xwSelected.updateInState()
   }
 }

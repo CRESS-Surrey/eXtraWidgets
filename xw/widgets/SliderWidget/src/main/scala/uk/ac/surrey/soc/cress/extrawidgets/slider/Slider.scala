@@ -4,10 +4,8 @@ import java.awt.BorderLayout
 import java.awt.BorderLayout.CENTER
 import java.awt.BorderLayout.LINE_END
 import java.awt.BorderLayout.PAGE_START
-
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.window.InterfaceColors.SLIDER_BACKGROUND
-
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -59,9 +57,8 @@ class Slider(
     slider.getValue)
 
   slider.onStateChange { _ ⇒
-    val value = slider.getValue
-    valueLabel.setText(value.toString)
-    xwValue.setValue(Int.box(value))
+    valueLabel.setText(xwValue.stringValue)
+    xwValue.updateInState()
   }
 
 }
