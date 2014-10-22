@@ -5,7 +5,7 @@ import org.nlogo.api.Color.getColor
 import org.nlogo.api.Color.modulateDouble
 import org.nlogo.api.I18N
 import org.nlogo.api.LogoList
-import org.nlogo.api.Syntax.BooleanType
+import org.nlogo.api.Syntax._
 import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
@@ -17,10 +17,20 @@ abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
   val inputTypeConstant: Int
   val outputTypeConstant: Int
   def asInputType(obj: AnyRef): T = obj.asInstanceOf[T] // TODO: handle this
+  def updateInState(): Unit = widget.updatePropertyInState(this)
   def setValue(obj: AnyRef): Unit = {
     setter(asInputType(obj))
-    widget.updatePropertyInState(this)
+    updateInState()
   }
+}
+
+class ObjectPropertyDef[+W <: ExtraWidget](
+  w: W,
+  setter: AnyRef ⇒ Unit,
+  getter: () ⇒ AnyRef)
+  extends PropertyDef(w, setter, getter) {
+  val inputTypeConstant = WildcardType
+  val outputTypeConstant = WildcardType
 }
 
 class StringPropertyDef[+W <: ExtraWidget](
@@ -98,4 +108,24 @@ class ColorPropertyDef[+W <: ExtraWidget](
         }
       }
       .fold(e ⇒ throw e, identity)
+}
+
+class ListPropertyDef[+W <: ExtraWidget](
+  w: W,
+  setter: LogoList ⇒ Unit,
+  getter: () ⇒ LogoList)
+  extends PropertyDef(w, setter, getter) {
+  val inputTypeConstant = ListType
+  val outputTypeConstant = ListType
+  override def asInputType(obj: AnyRef): LogoList = obj match {
+    case xs: Vector[_] ⇒
+      LogoList.fromVector(xs.asInstanceOf[Vector[AnyRef]])
+    case xs: java.lang.Iterable[_] ⇒
+      LogoList.fromJava(xs.asInstanceOf[java.lang.Iterable[AnyRef]])
+    case xs: Seq[_] ⇒
+      LogoList(xs.asInstanceOf[Seq[AnyRef]]: _*)
+    case it: Iterator[_] ⇒
+      LogoList.fromIterator(it.asInstanceOf[Iterator[AnyRef]])
+    case _ ⇒ super.asInputType(obj)
+  }
 }
