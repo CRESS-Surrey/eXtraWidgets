@@ -3,12 +3,14 @@ package uk.ac.surrey.soc.cress.extrawidgets.api
 import org.nlogo.api.Color.MaxColor
 import org.nlogo.api.Color.getColor
 import org.nlogo.api.Color.modulateDouble
+import org.nlogo.api.Dump
 import org.nlogo.api.I18N
 import org.nlogo.api.LogoList
-import org.nlogo.api.Syntax._
+import org.nlogo.api.Syntax.BooleanType
 import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
+import org.nlogo.api.Syntax.WildcardType
 
 abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
   val widget: W,
@@ -22,6 +24,12 @@ abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
     setter(asInputType(obj))
     updateInState()
   }
+  def stringValue =
+    Dump.logoObject(getter() match {
+      case i: java.lang.Integer ⇒   // `Dump` doesn't like Integer
+        Double.box(i.doubleValue()) // so we give it a Double
+      case x: AnyRef ⇒ x
+    })
 }
 
 class ObjectPropertyDef[+W <: ExtraWidget](
