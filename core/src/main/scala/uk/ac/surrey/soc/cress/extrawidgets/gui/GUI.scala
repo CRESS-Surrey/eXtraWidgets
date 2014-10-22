@@ -74,7 +74,7 @@ class GUI(
       }
   }
 
-  private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
+  private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit =
     for {
       kindName ← propertyMap.get("KIND").map(_.toString).orException(
         "Can't find KIND for " + widgetKey + " in " + propertyMap).right
@@ -83,11 +83,9 @@ class GUI(
     } {
       val w = kind.newInstance(widgetKey, writer, app.workspace)
       w.init(propertyMap)
-      if (kind.name != tabKindName)
-        for (tab ← getTabFor(widgetKey, propertyMap).right)
-          tab.add(w)
+      if (!w.isInstanceOf[Tab])
+        getTabFor(widgetKey, propertyMap).right.foreach(_.add(w))
     }
-  }
 
   private def setProperty(
     widgetKey: WidgetKey,
@@ -102,7 +100,7 @@ class GUI(
 
   private def removeWidget(widgetKey: WidgetKey): Unit =
     for (w ← getWidget(widgetKey)) w match {
-      case tab: Tab ⇒ removeTab(tab)
+      case tab: Tab ⇒ tab.removeFromAppTabs()
       case _ ⇒ for (tab ← getTabOf(w)) tab.remove(w)
     }
 
@@ -119,14 +117,6 @@ class GUI(
         .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
     } yield tab
   }
-
-  private def removeTab(component: Component): Unit =
-    (0 until tabs.getTabCount)
-      .find(i ⇒ tabs.getComponentAt(i) == component)
-      .foreach { i ⇒
-        tabs.remove(component)
-        tabs.removeMenuItem(i)
-      }
 
   private def extraWidgetTabs: Vector[Tab] =
     tabs.getComponents.collect {
