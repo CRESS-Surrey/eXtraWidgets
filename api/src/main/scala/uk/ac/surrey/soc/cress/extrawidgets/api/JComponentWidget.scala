@@ -10,6 +10,9 @@ import javax.swing.border.Border
 trait JComponentWidget extends ComponentWidget {
   self: JComponent ⇒
 
+  setHeight(25)
+  setWidth(150)
+
   private val _borderPadding = createEmptyBorder(1, 1, 1, 1)
   def borderPadding: Border = _borderPadding
 
