@@ -95,27 +95,21 @@ class ColorPropertyDef[+W <: ExtraWidget](
    * Throws an error if the rgb list if not a proper list of
    * three or four numbers between 0 and 255.
    * Similar in intent to org.nlogo.Agent.validRGBList.
-   * Not sure if the Either stuff is the paramount of elegance
-   * or just insanely obscure and complicated. Probably the latter.
    * NP 2014-10-13.
    */
-  def validRGBList(rgb: Vector[Any]): LogoList =
-    Either.cond(Set(3, 4).contains(rgb.size), rgb: Vector[Any],
-      new XWException(I18N.errors.get("org.nlogo.agent.Agent.rgbListSizeError.3or4"))
-    ).right.flatMap { rgb ⇒
-        rgb.map { x ⇒
-          tryTo(x.asInstanceOf[java.lang.Number].intValue).right.flatMap { c ⇒
-            Either.cond(c < 0 || c > 255, c,
-              new XWException(I18N.errors.get("org.nlogo.agent.Agent.rgbValueError")))
-          }
-        }.foldLeft(Right(LogoList.Empty): Either[XWException, LogoList]) {
-          case (acc, x) ⇒
-            acc.fold(e ⇒ Left(e), ll ⇒ x.fold(
-              e ⇒ Left(e),
-              c ⇒ Right(ll.lput(c: java.lang.Integer))))
-        }
+  def validRGBList(rgb: Vector[AnyRef]): LogoList = {
+    if (!Set(3, 4).contains(rgb.size)) throw XWException(
+      I18N.errors.get("org.nlogo.agent.Agent.rgbListSizeError.3or4"))
+    LogoList.fromVector(rgb.map { x ⇒
+      val c = try x.asInstanceOf[java.lang.Number].intValue catch {
+        case e: ClassCastException ⇒ throw XWException(
+          "Got " + Dump.logoObject(x) + ", but RGB values must be numbers.")
       }
-      .fold(e ⇒ throw e, identity)
+      if (c < 0 || c > 255) throw XWException(
+        I18N.errors.get("org.nlogo.agent.Agent.rgbValueError"))
+      Double.box(c.doubleValue)
+    })
+  }
 }
 
 class ListPropertyDef[+W <: ExtraWidget](
