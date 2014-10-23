@@ -62,11 +62,13 @@ class IntegerPropertyDef[+W <: ExtraWidget](
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
-  override def fromInputType(x: Any) = x match {
+  override def fromInputType(x: Any): Int = x match {
     case d: java.lang.Double ⇒ d.intValue
     case _ ⇒ super.fromInputType(x)
   }
-  override def toOutputType = Double.box(getter())
+  override def toOutputType = Double.box(getter().toDouble)
+}
+
 }
 
 class ColorPropertyDef[+W <: ExtraWidget](
