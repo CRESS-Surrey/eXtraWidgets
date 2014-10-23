@@ -69,6 +69,13 @@ class IntegerPropertyDef[+W <: ExtraWidget](
   override def toOutputType = Double.box(getter().toDouble)
 }
 
+class DoublePropertyDef[+W <: ExtraWidget](
+  w: W,
+  setter: Double ⇒ Unit,
+  getter: () ⇒ Double)
+  extends PropertyDef(w, setter, getter) {
+  val inputTypeConstant = NumberType
+  val outputTypeConstant = NumberType
 }
 
 class ColorPropertyDef[+W <: ExtraWidget](
