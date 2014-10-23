@@ -57,7 +57,7 @@ class Slider(
     slider.getValue)
 
   slider.onStateChange { _ ⇒
-    valueLabel.setText(xwValue.stringValue)
+    valueLabel.setText(xwValue.toString)
     xwValue.updateInState()
   }
 

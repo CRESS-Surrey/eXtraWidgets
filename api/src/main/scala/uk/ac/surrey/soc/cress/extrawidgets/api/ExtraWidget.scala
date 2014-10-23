@@ -12,9 +12,9 @@ trait ExtraWidget extends Component {
    * in `this` won't be initialised yet. NP 2014-10-10.
    */
   lazy val kind = new WidgetKind(this.getClass)
-  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget, _ <: AnyRef]] =
+  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_ <: ExtraWidget, _]] =
     kind.propertyDefs(this)
-  lazy val propertyKeys: Map[PropertyDef[_ <: ExtraWidget, _ <: AnyRef], PropertyKey] =
+  lazy val propertyKeys: Map[PropertyDef[_ <: ExtraWidget, _], PropertyKey] =
     propertyDefs.map(_.swap)
 
   /**
@@ -40,8 +40,8 @@ trait ExtraWidget extends Component {
     } prop.setValue(propertyValue)
   }
 
-  def updatePropertyInState(propertyDef: PropertyDef[_ <: ExtraWidget, _ <: AnyRef]): Unit =
+  def updatePropertyInState(propertyDef: PropertyDef[_ <: ExtraWidget, _]): Unit =
     stateUpdater.set(
       propertyKeys(propertyDef), key,
-      propertyDef.getter().asInstanceOf[AnyRef])
+      propertyDef.toOutputType)
 }

@@ -49,7 +49,7 @@ class Chooser(
       isSelected: Boolean, cellHasFocus: Boolean) = {
       super.getListCellRendererComponent(list, value, index,
         isSelected, cellHasFocus)
-      setText(Dump.logoObject(value))
+      setText(Option(value).map(Dump.logoObject).getOrElse(""))
       this
     }
   })

@@ -15,7 +15,7 @@ class Get(reader: Reader) extends DefaultReporter {
   def report(args: Array[Argument], context: Context): AnyRef = {
     val propertyKey = args(0).getString
     val widgetKey = args(1).getString
-    toLogoObject(reader.get(propertyKey, widgetKey))
+    reader.get(propertyKey, widgetKey)
   }
 }
 
@@ -23,6 +23,6 @@ class GetProperty(reader: Reader, propertyKey: String) extends DefaultReporter {
   override def getSyntax = reporterSyntax(Array(StringType), WildcardType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val widgetKey = args(0).getString
-    toLogoObject(reader.get(propertyKey, widgetKey))
+    reader.get(propertyKey, widgetKey)
   }
 }

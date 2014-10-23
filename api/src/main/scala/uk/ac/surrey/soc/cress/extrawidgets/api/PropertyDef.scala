@@ -12,24 +12,20 @@ import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
-abstract class PropertyDef[+W <: ExtraWidget, T <: AnyRef](
+abstract class PropertyDef[+W <: ExtraWidget, T](
   val widget: W,
   setter: T ⇒ Unit, // should never be directly accessed from the outside
   val getter: () ⇒ T) {
   val inputTypeConstant: Int
+  protected def fromInputType(x: Any): T = x.asInstanceOf[T]
   val outputTypeConstant: Int
-  protected def asInputType(obj: AnyRef): T = obj.asInstanceOf[T]
+  def toOutputType: AnyRef = getter().asInstanceOf[AnyRef]
   def updateInState(): Unit = widget.updatePropertyInState(this)
-  def setValue(obj: AnyRef): Unit = {
-    setter(asInputType(obj))
+  def setValue(value: Any): Unit = {
+    setter(fromInputType(value))
     updateInState()
   }
-  def stringValue =
-    Dump.logoObject(getter() match {
-      case i: java.lang.Integer ⇒   // `Dump` doesn't like Integer
-        Double.box(i.doubleValue()) // so we give it a Double
-      case x: AnyRef ⇒ x
-    })
+  override def toString = Dump.logoObject(toOutputType)
 }
 
 class ObjectPropertyDef[+W <: ExtraWidget](
@@ -48,13 +44,12 @@ class StringPropertyDef[+W <: ExtraWidget](
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = StringType
   val outputTypeConstant = StringType
-  override def asInputType(obj: AnyRef): String = obj.toString
 }
 
 class BooleanPropertyDef[+W <: ExtraWidget](
   w: W,
-  setter: java.lang.Boolean ⇒ Unit,
-  getter: () ⇒ java.lang.Boolean)
+  setter: Boolean ⇒ Unit,
+  getter: () ⇒ Boolean)
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = BooleanType
   val outputTypeConstant = BooleanType
@@ -62,15 +57,16 @@ class BooleanPropertyDef[+W <: ExtraWidget](
 
 class IntegerPropertyDef[+W <: ExtraWidget](
   w: W,
-  setter: java.lang.Integer ⇒ Unit,
-  getter: () ⇒ java.lang.Integer)
+  setter: Int ⇒ Unit,
+  getter: () ⇒ Int)
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
-  override def asInputType(obj: AnyRef): java.lang.Integer = obj match {
+  override def fromInputType(x: Any) = x match {
     case d: java.lang.Double ⇒ d.intValue
-    case _ ⇒ super.asInputType(obj)
+    case _ ⇒ super.fromInputType(x)
   }
+  override def toOutputType = Double.box(getter())
 }
 
 class ColorPropertyDef[+W <: ExtraWidget](
@@ -80,15 +76,24 @@ class ColorPropertyDef[+W <: ExtraWidget](
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = NumberType | ListType
   val outputTypeConstant = ListType
-  override def asInputType(obj: AnyRef): java.awt.Color = obj match {
-    case c: java.lang.Double ⇒
-      getColor(
-        if (c >= 0 || c < MaxColor) c
-        else Double.box(modulateDouble(c))
-      )
-    case v: Vector[_] ⇒ getColor(validRGBList(v))
-    case ll: LogoList ⇒ getColor(validRGBList(ll.toVector))
-    case _ ⇒ super.asInputType(obj)
+  override def fromInputType(x: Any): java.awt.Color = {
+    x match {
+      case c: java.lang.Double ⇒
+        getColor(
+          if (c >= 0 || c < MaxColor) c
+          else Double.box(modulateDouble(c))
+        )
+      case ll: LogoList ⇒ getColor(validRGBList(ll.toVector))
+      case _ ⇒ super.fromInputType(x)
+    }
+  }
+
+  override def toOutputType: AnyRef = {
+    val c = getter()
+    val rgb = Vector(c.getRed, c.getGreen, c.getBlue)
+    val a = c.getAlpha
+    val rgba = if (a == 255) rgb else rgb :+ a
+    LogoList.fromVector(rgba.map(Double.box(_)))
   }
 
   /**
@@ -119,15 +124,4 @@ class ListPropertyDef[+W <: ExtraWidget](
   extends PropertyDef(w, setter, getter) {
   val inputTypeConstant = ListType
   val outputTypeConstant = ListType
-  override def asInputType(obj: AnyRef): LogoList = obj match {
-    case xs: Vector[_] ⇒
-      LogoList.fromVector(xs.asInstanceOf[Vector[AnyRef]])
-    case xs: java.lang.Iterable[_] ⇒
-      LogoList.fromJava(xs.asInstanceOf[java.lang.Iterable[AnyRef]])
-    case xs: Seq[_] ⇒
-      LogoList(xs.asInstanceOf[Seq[AnyRef]]: _*)
-    case it: Iterator[_] ⇒
-      LogoList.fromIterator(it.asInstanceOf[Iterator[AnyRef]])
-    case _ ⇒ super.asInputType(obj)
-  }
 }
