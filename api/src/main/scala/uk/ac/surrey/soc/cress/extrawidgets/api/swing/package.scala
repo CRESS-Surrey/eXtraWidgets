@@ -1,11 +1,19 @@
 package uk.ac.surrey.soc.cress.extrawidgets.api
 
+import java.awt.Component
+import java.awt.ItemSelectable
+import java.awt.event.ActionEvent
+import java.awt.event.FocusEvent
+import java.awt.event.FocusListener
+import java.awt.event.ItemEvent
+import java.awt.event.ItemListener
+
+import org.nlogo.api.I18N
+
+import javax.swing.AbstractAction
 import javax.swing.JSlider
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
-import java.awt.event.ItemEvent
-import java.awt.ItemSelectable
-import java.awt.event.ItemListener
 
 package object swing {
 
@@ -28,6 +36,31 @@ package object swing {
   class RichItemSelectable(is: ItemSelectable) {
     def onItemStateChanged[T](f: (ItemEvent) ⇒ T) =
       is.addItemListener(itemListener(f))
+  }
+
+  def newAction[T](f: (ActionEvent) ⇒ T) = new AbstractAction {
+    def actionPerformed(evt: ActionEvent) = f(evt)
+  }
+
+  implicit def enrichComponent(c: Component) = new RichComponent(c)
+  class RichComponent(c: Component) {
+    def onFocusGained[T](f: (FocusEvent) ⇒ T) =
+      c.addFocusListener(new FocusListener {
+        override def focusGained(evt: FocusEvent) = f(evt)
+        override def focusLost(evt: FocusEvent) = Unit
+      })
+    def onFocusLost[T](f: (FocusEvent) ⇒ T) =
+      c.addFocusListener(new FocusListener {
+        override def focusGained(evt: FocusEvent) = Unit
+        override def focusLost(evt: FocusEvent) = f(evt)
+      })
+    def showMessage(msg: String) {
+      val frame = org.nlogo.awt.Hierarchy.getFrame(c)
+      if (frame != null) {
+        org.nlogo.swing.OptionDialog.show(frame, msg,
+          msg, Array(I18N.gui.get("common.buttons.ok")))
+      }
+    }
   }
 
 }
