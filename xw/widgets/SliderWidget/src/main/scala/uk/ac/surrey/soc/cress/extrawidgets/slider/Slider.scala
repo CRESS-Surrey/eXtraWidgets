@@ -4,14 +4,17 @@ import java.awt.BorderLayout.CENTER
 import java.awt.BorderLayout.EAST
 import java.awt.BorderLayout.NORTH
 
+import org.nlogo.api.Dump
 import org.nlogo.window.GUIWorkspace
+import org.nlogo.window.SliderData
 
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JSlider
-import uk.ac.surrey.soc.cress.extrawidgets.api.IntegerPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.DoublePropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichSlider
 
@@ -21,28 +24,71 @@ class Slider(
   ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
+  val sliderData = new SliderData() {
+    def update(v: Double) = valueSetter(coerceValue(v))
+  }
+
+  val slider = new JSlider() {
+    minorTickSpacing = 1
+    snapToTicks = true
+    updateFromData()
+    def updateFromData(): Unit = {
+      val nbUnits = (sliderData.maximum - sliderData.minimum) / sliderData.increment
+      setMaximum(nbUnits.intValue)
+      setValue((nbUnits / sliderData.increment).intValue)
+    }
+  }
+  add(slider, NORTH)
+
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
   override def labelPosition = CENTER
-  val slider = new JSlider()
-  val valueLabel = new JLabel(slider.getValue.toString)
-  add(slider, NORTH)
+
+  val valueLabel = new JLabel() {
+    def update(): Unit = setText(valueString(sliderData.value))
+    update()
+  }
   add(valueLabel, EAST)
 
-  val xwMinimum = new IntegerPropertyDef(this,
-    slider.setMinimum(_),
-    slider.getMinimum)
+  private var units = ""
+  val xwUnits = new StringPropertyDef(this,
+    u ⇒ { units = u; valueLabel.update() },
+    () ⇒ units)
 
-  val xwMaximum = new IntegerPropertyDef(this,
-    slider.setMaximum(_),
-    slider.getMaximum)
+  val xwMinimum = new DoublePropertyDef(this,
+    min ⇒ { sliderData.minimum = min; slider.updateFromData() },
+    () ⇒ sliderData.minimum)
 
-  val xwValue = new IntegerPropertyDef(this,
-    slider.setValue(_),
-    slider.getValue)
+  val xwMaximum = new DoublePropertyDef(this,
+    max ⇒ { sliderData.maximum = max; slider.updateFromData() },
+    () ⇒ sliderData.maximum)
+
+  val xwValue = new DoublePropertyDef(this,
+    v ⇒ if (sliderData.update(v)) slider.updateFromData(),
+    () ⇒ sliderData.value)
+
+  val xwIncrement = new DoublePropertyDef(this,
+    inc ⇒ { sliderData.increment = inc; slider.updateFromData() },
+    () ⇒ sliderData.increment)
 
   slider.onStateChange { _ ⇒
-    valueLabel.setText(xwValue.toString)
+    sliderData.update(slider.getValue * sliderData.increment)
+    valueLabel.update()
     xwValue.updateInState()
   }
 
+  /** copied from org.nlogo.window.AbstractSliderWidget */
+  def valueString(num: Double): String = {
+    var numString = Dump.number(num)
+    var place = numString.indexOf('.')
+    val p = sliderData.precision
+    if (p > 0 && place == -1) {
+      numString += "."
+      place = numString.length - 1
+    }
+    if (place != -1 && numString.indexOf('E') == -1) {
+      val padding = p - (numString.length - place - 1)
+      numString = numString + ("0" * padding)
+    }
+    if (units == "") numString else numString + " " + units
+  }
 }
