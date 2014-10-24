@@ -35,7 +35,7 @@ class Slider(
     def updateFromData(): Unit = {
       val nbUnits = (sliderData.maximum - sliderData.minimum) / sliderData.increment
       setMaximum(nbUnits.intValue)
-      setValue((nbUnits / sliderData.increment).intValue)
+      setValue((sliderData.value / sliderData.increment).intValue)
     }
   }
   add(slider, NORTH)
