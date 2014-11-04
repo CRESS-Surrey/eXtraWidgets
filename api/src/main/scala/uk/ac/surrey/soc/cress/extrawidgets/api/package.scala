@@ -23,7 +23,7 @@ package object api {
 
   def makePropertyKey(method: Method) =
     makeKey(method.getName) +
-      (if (classOf[BooleanProperty[_]]
+      (if (classOf[BooleanProperty]
         .isAssignableFrom(method.getReturnType))
         "?" else "")
 

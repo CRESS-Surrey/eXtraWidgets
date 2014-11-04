@@ -13,7 +13,7 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
 abstract class Property[T](
-  setter: T ⇒ Unit, // should never be directly accessed from the outside
+  setter: T ⇒ Unit,
   getter: () ⇒ T) {
   val inputTypeConstant: Int
   protected def fromInputType(x: Any): T = x.asInstanceOf[T]
@@ -23,7 +23,7 @@ abstract class Property[T](
   override def toString = Dump.logoObject(get)
 }
 
-class ObjectProperty[+W <: ExtraWidget](
+class ObjectProperty(
   setter: AnyRef ⇒ Unit,
   getter: () ⇒ AnyRef)
   extends Property(setter, getter) {
@@ -31,7 +31,7 @@ class ObjectProperty[+W <: ExtraWidget](
   val outputTypeConstant = WildcardType
 }
 
-class StringProperty[+W <: ExtraWidget](
+class StringProperty(
   setter: String ⇒ Unit,
   getter: () ⇒ String)
   extends Property(setter, getter) {
@@ -39,7 +39,7 @@ class StringProperty[+W <: ExtraWidget](
   val outputTypeConstant = StringType
 }
 
-class BooleanProperty[+W <: ExtraWidget](
+class BooleanProperty(
   setter: Boolean ⇒ Unit,
   getter: () ⇒ Boolean)
   extends Property(setter, getter) {
@@ -47,7 +47,7 @@ class BooleanProperty[+W <: ExtraWidget](
   val outputTypeConstant = BooleanType
 }
 
-class IntegerProperty[+W <: ExtraWidget](
+class IntegerProperty(
   setter: Int ⇒ Unit,
   getter: () ⇒ Int)
   extends Property(setter, getter) {
@@ -60,7 +60,7 @@ class IntegerProperty[+W <: ExtraWidget](
   override def get = Double.box(getter().toDouble)
 }
 
-class DoubleProperty[+W <: ExtraWidget](
+class DoubleProperty(
   setter: Double ⇒ Unit,
   getter: () ⇒ Double)
   extends Property(setter, getter) {
@@ -68,7 +68,7 @@ class DoubleProperty[+W <: ExtraWidget](
   val outputTypeConstant = NumberType
 }
 
-class ColorProperty[+W <: ExtraWidget](
+class ColorProperty(
   setter: java.awt.Color ⇒ Unit,
   getter: () ⇒ java.awt.Color)
   extends Property(setter, getter) {
@@ -115,7 +115,7 @@ class ColorProperty[+W <: ExtraWidget](
   }
 }
 
-class ListProperty[+W <: ExtraWidget](
+class ListProperty(
   setter: LogoList ⇒ Unit,
   getter: () ⇒ LogoList)
   extends Property(setter, getter) {
