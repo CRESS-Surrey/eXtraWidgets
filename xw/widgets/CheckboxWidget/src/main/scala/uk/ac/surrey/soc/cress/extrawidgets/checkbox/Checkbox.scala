@@ -17,5 +17,6 @@ class Checkbox(
 
   setBorderPainted(true)
   setBackground(SWITCH_BACKGROUND)
+  setOpaque(true)
 
 }
