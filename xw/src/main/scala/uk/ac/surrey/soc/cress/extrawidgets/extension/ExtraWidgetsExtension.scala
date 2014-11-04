@@ -25,6 +25,8 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertySyntax
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -59,17 +61,28 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       ("ADD-" + kindName) -> new AddWidget(writer, kindName)
     }
 
-    val propertyPrimitives =
-      widgetKinds.values.flatMap { kind ⇒
-        kind.syntaxes.flatMap {
-          case (key, syntax) ⇒
-            Seq(
-              ("GET-" + key) -> new GetProperty(reader, key, syntax.outputType),
-              ("SET-" + key) -> new SetProperty(writer, key, syntax.inputType))
-        }
-      }
+    // multiple widget kinds may define properties with the same key,
+    // so we group each of these keys with all their possible syntaxes,
+    // which we will "collapse" together when building primitives
+    // by using bitwise ORs (.reduce(_ | _))
+    val keysToSyntaxes: Map[PropertyKey, Iterable[PropertySyntax]] =
+      widgetKinds.values.flatMap(_.syntaxes).groupBy(_._1).mapValues(_.unzip._2)
 
-    primitives = staticPrimitives ++ widgetPrimitives ++ propertyPrimitives
+    val getters = for {
+      (key, syntaxes) ← keysToSyntaxes
+      name = "GET-" + key
+      outputType = syntaxes.map(_.outputType).reduce(_ | _)
+      prim = new GetProperty(reader, key, outputType)
+    } yield name -> prim
+
+    val setters = for {
+      (key, syntaxes) ← keysToSyntaxes
+      name = "SET-" + key
+      inputType = syntaxes.map(_.inputType).reduce(_ | _)
+      prim = new SetProperty(writer, key, inputType)
+    } yield name -> prim
+
+    primitives = staticPrimitives ++ widgetPrimitives ++ getters ++ setters
 
     Seq(extensionManager)
       .collect { case em: org.nlogo.workspace.ExtensionManager ⇒ em }
