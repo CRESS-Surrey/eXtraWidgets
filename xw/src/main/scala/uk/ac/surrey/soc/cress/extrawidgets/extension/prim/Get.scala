@@ -7,7 +7,6 @@ import org.nlogo.api.ScalaConversions.toLogoObject
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 import org.nlogo.api.Syntax.reporterSyntax
-
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
 class Get(reader: Reader) extends DefaultReporter {
@@ -19,8 +18,12 @@ class Get(reader: Reader) extends DefaultReporter {
   }
 }
 
-class GetProperty(reader: Reader, propertyKey: String) extends DefaultReporter {
-  override def getSyntax = reporterSyntax(Array(StringType), WildcardType)
+class GetProperty(
+  reader: Reader,
+  propertyKey: String,
+  outputType: Int)
+  extends DefaultReporter {
+  override def getSyntax = reporterSyntax(Array(StringType), outputType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val widgetKey = args(0).getString
     reader.get(propertyKey, widgetKey)

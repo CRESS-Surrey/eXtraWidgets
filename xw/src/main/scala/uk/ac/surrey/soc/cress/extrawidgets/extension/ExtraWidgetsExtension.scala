@@ -59,13 +59,15 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       ("ADD-" + kindName) -> new AddWidget(writer, kindName)
     }
 
-    val propertyPrimitives = widgetKinds.values.flatMap { kind ⇒
-      kind.propertyKeys.flatMap { key ⇒
-        Seq(
-          ("GET-" + key) -> new GetProperty(reader, key),
-          ("SET-" + key) -> new SetProperty(writer, key))
+    val propertyPrimitives =
+      widgetKinds.values.flatMap { kind ⇒
+        kind.syntaxes.flatMap {
+          case (key, syntax) ⇒
+            Seq(
+              ("GET-" + key) -> new GetProperty(reader, key, syntax.outputType),
+              ("SET-" + key) -> new SetProperty(writer, key, syntax.inputType))
+        }
       }
-    }
 
     primitives = staticPrimitives ++ widgetPrimitives ++ propertyPrimitives
 

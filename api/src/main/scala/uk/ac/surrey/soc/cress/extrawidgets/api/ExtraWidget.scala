@@ -26,7 +26,7 @@ trait ExtraWidget extends Component {
   def init(propertyMap: PropertyMap): Unit = {
     println(propertyMap)
     for {
-      propertyKey ← kind.propertyKeys
+      propertyKey ← propertyKeys.values
       property ← properties.get(propertyKey)
       propertyValue = propertyMap.getOrElse(propertyKey, property.get)
     } setProperty(property, propertyValue)

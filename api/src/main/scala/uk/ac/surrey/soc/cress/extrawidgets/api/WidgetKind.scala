@@ -17,17 +17,22 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
   def newInstance(widgetKey: WidgetKey, stateUpdater: StateUpdater, ws: GUIWorkspace) =
     constructor.newInstance(widgetKey, stateUpdater, ws)
 
-  val propertyMethods: Seq[Method] =
-    clazz.getMethods.filter { method ⇒
-      classOf[Property[_]]
-        .isAssignableFrom(method.getReturnType)
+  private val methods: Map[PropertyKey, Method] =
+    clazz.getMethods.collect {
+      case method if classOf[Property[_]].isAssignableFrom(method.getReturnType) ⇒
+        makePropertyKey(method) -> method
+    }(collection.breakOut)
+
+  val syntaxes: Map[PropertyKey, PropertySyntax] =
+    methods.mapValues { method ⇒
+      method.getReturnType // should be some sort of Property
+        .getConstructors.head // with one and only one constructor
+        .newInstance(null, null) // that we use to instantiate a dummy Property
+        .asInstanceOf[PropertySyntax] // that implements the PropertySyntax trait
     }
 
-  val propertyKeys: Seq[PropertyKey] =
-    propertyMethods.map { method ⇒ makePropertyKey(method) }
-
   def properties(w: ExtraWidget): Map[PropertyKey, Property[_]] =
-    (propertyKeys zip propertyMethods.map { method ⇒
+    methods.mapValues { method ⇒
       method.invoke(w).asInstanceOf[Property[_]]
-    })(collection.breakOut)
+    }
 }
