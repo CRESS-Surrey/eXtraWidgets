@@ -28,7 +28,7 @@ trait ExtraWidget extends Component {
     for {
       propertyKey ← kind.propertyKeys
       propertyDef ← propertyDefs.get(propertyKey)
-      propertyValue = propertyMap.getOrElse(propertyKey, propertyDef.toOutputType)
+      propertyValue = propertyMap.getOrElse(propertyKey, propertyDef.get)
     } setProperty(propertyDef, propertyValue)
   }
 
@@ -40,12 +40,12 @@ trait ExtraWidget extends Component {
   def setProperty(
     propertyDef: PropertyDef[_],
     propertyValue: PropertyValue): Unit = {
-    propertyDef.setValue(propertyValue)
+    propertyDef.set(propertyValue)
     updateInState(propertyDef)
   }
 
   def updateInState(propertyDef: PropertyDef[_]): Unit =
     stateUpdater.set(
       propertyKeys(propertyDef), key,
-      propertyDef.toOutputType)
+      propertyDef.get)
 }

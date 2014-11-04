@@ -14,13 +14,13 @@ import org.nlogo.api.Syntax.WildcardType
 
 abstract class PropertyDef[T](
   setter: T ⇒ Unit, // should never be directly accessed from the outside
-  val getter: () ⇒ T) {
+  getter: () ⇒ T) {
   val inputTypeConstant: Int
   protected def fromInputType(x: Any): T = x.asInstanceOf[T]
   val outputTypeConstant: Int
-  def toOutputType: AnyRef = getter().asInstanceOf[AnyRef]
-  def setValue(value: Any): Unit = setter(fromInputType(value))
-  override def toString = Dump.logoObject(toOutputType)
+  def get: AnyRef = getter().asInstanceOf[AnyRef]
+  def set(value: Any): Unit = setter(fromInputType(value))
+  override def toString = Dump.logoObject(get)
 }
 
 class ObjectPropertyDef[+W <: ExtraWidget](
@@ -57,7 +57,7 @@ class IntegerPropertyDef[+W <: ExtraWidget](
     case d: java.lang.Double ⇒ d.intValue
     case _ ⇒ super.fromInputType(x)
   }
-  override def toOutputType = Double.box(getter().toDouble)
+  override def get = Double.box(getter().toDouble)
 }
 
 class DoublePropertyDef[+W <: ExtraWidget](
@@ -86,7 +86,7 @@ class ColorPropertyDef[+W <: ExtraWidget](
     }
   }
 
-  override def toOutputType: AnyRef = {
+  override def get: AnyRef = {
     val c = getter()
     val rgb = Vector(c.getRed, c.getGreen, c.getBlue)
     val a = c.getAlpha
