@@ -12,12 +12,16 @@ import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
+trait PropertySyntax {
+  val inputType: Int
+  val outputType: Int
+}
+
 abstract class Property[T](
   setter: T ⇒ Unit,
-  getter: () ⇒ T) {
-  val inputTypeConstant: Int
+  getter: () ⇒ T)
+  extends PropertySyntax {
   protected def fromInputType(x: Any): T = x.asInstanceOf[T]
-  val outputTypeConstant: Int
   def get: AnyRef = getter().asInstanceOf[AnyRef]
   def set(value: Any): Unit = setter(fromInputType(value))
   override def toString = Dump.logoObject(get)
@@ -27,32 +31,32 @@ class ObjectProperty(
   setter: AnyRef ⇒ Unit,
   getter: () ⇒ AnyRef)
   extends Property(setter, getter) {
-  val inputTypeConstant = WildcardType
-  val outputTypeConstant = WildcardType
+  val inputType = WildcardType
+  val outputType = WildcardType
 }
 
 class StringProperty(
   setter: String ⇒ Unit,
   getter: () ⇒ String)
   extends Property(setter, getter) {
-  val inputTypeConstant = StringType
-  val outputTypeConstant = StringType
+  val inputType = StringType
+  val outputType = StringType
 }
 
 class BooleanProperty(
   setter: Boolean ⇒ Unit,
   getter: () ⇒ Boolean)
   extends Property(setter, getter) {
-  val inputTypeConstant = BooleanType
-  val outputTypeConstant = BooleanType
+  val inputType = BooleanType
+  val outputType = BooleanType
 }
 
 class IntegerProperty(
   setter: Int ⇒ Unit,
   getter: () ⇒ Int)
   extends Property(setter, getter) {
-  val inputTypeConstant = NumberType
-  val outputTypeConstant = NumberType
+  val inputType = NumberType
+  val outputType = NumberType
   override def fromInputType(x: Any): Int = x match {
     case d: java.lang.Double ⇒ d.intValue
     case _ ⇒ super.fromInputType(x)
@@ -64,16 +68,16 @@ class DoubleProperty(
   setter: Double ⇒ Unit,
   getter: () ⇒ Double)
   extends Property(setter, getter) {
-  val inputTypeConstant = NumberType
-  val outputTypeConstant = NumberType
+  val inputType = NumberType
+  val outputType = NumberType
 }
 
 class ColorProperty(
   setter: java.awt.Color ⇒ Unit,
   getter: () ⇒ java.awt.Color)
   extends Property(setter, getter) {
-  val inputTypeConstant = NumberType | ListType
-  val outputTypeConstant = ListType
+  val inputType = NumberType | ListType
+  val outputType = ListType
   override def fromInputType(x: Any): java.awt.Color = {
     x match {
       case c: java.lang.Double ⇒
@@ -119,6 +123,6 @@ class ListProperty(
   setter: LogoList ⇒ Unit,
   getter: () ⇒ LogoList)
   extends Property(setter, getter) {
-  val inputTypeConstant = ListType
-  val outputTypeConstant = ListType
+  val inputType = ListType
+  val outputType = ListType
 }
