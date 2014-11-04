@@ -27,7 +27,7 @@ trait JComponentWidget extends ComponentWidget {
     if (isOpaque) setBorder(borderWhenOpaque)
     else setBorder(borderWhenTransparent)
 
-  val xwOpaque = new BooleanPropertyDef(this,
+  val xwOpaque = new BooleanPropertyDef(
     (b) ⇒ { setOpaque(b); updateBorder() },
     isOpaque)
 

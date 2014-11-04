@@ -15,6 +15,6 @@ class Note(
   extends JLabel
   with JComponentWidget {
 
-  val xwText = new StringPropertyDef(this, setText, getText)
+  val xwText = new StringPropertyDef(setText, getText)
 
 }

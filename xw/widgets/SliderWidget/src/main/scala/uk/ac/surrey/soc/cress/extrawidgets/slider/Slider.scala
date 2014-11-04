@@ -50,30 +50,30 @@ class Slider(
   add(valueLabel, EAST)
 
   private var units = ""
-  val xwUnits = new StringPropertyDef(this,
+  val xwUnits = new StringPropertyDef(
     u ⇒ { units = u; valueLabel.update() },
     () ⇒ units)
 
-  val xwMinimum = new DoublePropertyDef(this,
+  val xwMinimum = new DoublePropertyDef(
     min ⇒ { sliderData.minimum = min; slider.updateFromData() },
     () ⇒ sliderData.minimum)
 
-  val xwMaximum = new DoublePropertyDef(this,
+  val xwMaximum = new DoublePropertyDef(
     max ⇒ { sliderData.maximum = max; slider.updateFromData() },
     () ⇒ sliderData.maximum)
 
-  val xwValue = new DoublePropertyDef(this,
+  val xwValue = new DoublePropertyDef(
     v ⇒ if (sliderData.update(v)) slider.updateFromData(),
     () ⇒ sliderData.value)
 
-  val xwIncrement = new DoublePropertyDef(this,
+  val xwIncrement = new DoublePropertyDef(
     inc ⇒ { sliderData.increment = inc; slider.updateFromData() },
     () ⇒ sliderData.increment)
 
   slider.onStateChange { _ ⇒
     sliderData.update(slider.getValue * sliderData.increment)
     valueLabel.update()
-    xwValue.updateInState()
+    updateInState(xwValue)
   }
 
   /** copied from org.nlogo.window.AbstractSliderWidget */

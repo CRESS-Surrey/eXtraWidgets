@@ -56,13 +56,13 @@ class TextInput(
 
   add(textField, CENTER)
 
-  val xwText = new StringPropertyDef(this,
+  val xwText = new StringPropertyDef(
     s ⇒ { text = s; textField.setText(s) },
     () ⇒ text
   )
 
   override def afterTextUpdate() =
-    updatePropertyInState(xwText)
+    updateInState(xwText)
 }
 
 class NumericInput(
@@ -80,7 +80,7 @@ class NumericInput(
   var number: Double = 0.0
   override def defaultText = format(number)
 
-  val xwNumber = new DoublePropertyDef(this,
+  val xwNumber = new DoublePropertyDef(
     d ⇒ { number = d; textField.setText(format(number)) },
     () ⇒ number
   )
@@ -94,6 +94,6 @@ class NumericInput(
   override def afterTextUpdate() =
     for (d ← NumberParser.parse(textField.getText()).right) {
       number = d
-      updatePropertyInState(xwNumber)
+      updateInState(xwNumber)
     }
 }

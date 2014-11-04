@@ -40,7 +40,7 @@ class Chooser(
     }
   })
 
-  val xwItems = new ListPropertyDef(this,
+  val xwItems = new ListPropertyDef(
     xs ⇒ {
       combo.removeAllItems()
       xs.foreach(combo.addItem(_))
@@ -49,13 +49,13 @@ class Chooser(
     () ⇒ LogoList((0 until combo.getItemCount).map(combo.getItemAt): _*)
   )
 
-  val xwSelectedItem = new ObjectPropertyDef(this,
+  val xwSelectedItem = new ObjectPropertyDef(
     combo.setSelectedItem,
     () ⇒ Option(combo.getSelectedItem).getOrElse(Nobody)
   )
 
   combo.onItemStateChanged { event ⇒
     if (event.getStateChange == SELECTED)
-      xwSelectedItem.updateInState()
+      updateInState(xwSelectedItem)
   }
 }

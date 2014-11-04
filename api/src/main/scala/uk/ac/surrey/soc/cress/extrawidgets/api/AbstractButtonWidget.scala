@@ -5,10 +5,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichItemSelectable
 
 trait AbstractButtonWidget extends JComponentWidget {
   self: AbstractButton ⇒
-  val xwSelected = new BooleanPropertyDef(this, setSelected(_), isSelected)
-  val xwLabel = new StringPropertyDef(this, setText, getText)
+  val xwSelected = new BooleanPropertyDef(setSelected(_), isSelected)
+  val xwLabel = new StringPropertyDef(setText, getText)
 
   self.onItemStateChanged { _ ⇒
-    xwSelected.updateInState()
+    updateInState(xwSelected)
   }
 }

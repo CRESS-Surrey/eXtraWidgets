@@ -20,8 +20,5 @@ trait LabeledPanelWidget
   def labelPosition = NORTH
   add(label, labelPosition)
 
-  val xwLabel = new StringPropertyDef(this,
-    label.setText,
-    label.getText
-  )
+  val xwLabel = new StringPropertyDef(label.setText, label.getText)
 }
