@@ -12,7 +12,7 @@ import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
-abstract class PropertyDef[T](
+abstract class Property[T](
   setter: T ⇒ Unit, // should never be directly accessed from the outside
   getter: () ⇒ T) {
   val inputTypeConstant: Int
@@ -23,34 +23,34 @@ abstract class PropertyDef[T](
   override def toString = Dump.logoObject(get)
 }
 
-class ObjectPropertyDef[+W <: ExtraWidget](
+class ObjectProperty[+W <: ExtraWidget](
   setter: AnyRef ⇒ Unit,
   getter: () ⇒ AnyRef)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = WildcardType
   val outputTypeConstant = WildcardType
 }
 
-class StringPropertyDef[+W <: ExtraWidget](
+class StringProperty[+W <: ExtraWidget](
   setter: String ⇒ Unit,
   getter: () ⇒ String)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = StringType
   val outputTypeConstant = StringType
 }
 
-class BooleanPropertyDef[+W <: ExtraWidget](
+class BooleanProperty[+W <: ExtraWidget](
   setter: Boolean ⇒ Unit,
   getter: () ⇒ Boolean)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = BooleanType
   val outputTypeConstant = BooleanType
 }
 
-class IntegerPropertyDef[+W <: ExtraWidget](
+class IntegerProperty[+W <: ExtraWidget](
   setter: Int ⇒ Unit,
   getter: () ⇒ Int)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
   override def fromInputType(x: Any): Int = x match {
@@ -60,18 +60,18 @@ class IntegerPropertyDef[+W <: ExtraWidget](
   override def get = Double.box(getter().toDouble)
 }
 
-class DoublePropertyDef[+W <: ExtraWidget](
+class DoubleProperty[+W <: ExtraWidget](
   setter: Double ⇒ Unit,
   getter: () ⇒ Double)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = NumberType
   val outputTypeConstant = NumberType
 }
 
-class ColorPropertyDef[+W <: ExtraWidget](
+class ColorProperty[+W <: ExtraWidget](
   setter: java.awt.Color ⇒ Unit,
   getter: () ⇒ java.awt.Color)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = NumberType | ListType
   val outputTypeConstant = ListType
   override def fromInputType(x: Any): java.awt.Color = {
@@ -115,10 +115,10 @@ class ColorPropertyDef[+W <: ExtraWidget](
   }
 }
 
-class ListPropertyDef[+W <: ExtraWidget](
+class ListProperty[+W <: ExtraWidget](
   setter: LogoList ⇒ Unit,
   getter: () ⇒ LogoList)
-  extends PropertyDef(setter, getter) {
+  extends Property(setter, getter) {
   val inputTypeConstant = ListType
   val outputTypeConstant = ListType
 }

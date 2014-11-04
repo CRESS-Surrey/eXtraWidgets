@@ -13,8 +13,8 @@ import javax.swing.DefaultListCellRenderer
 import javax.swing.JComboBox
 import javax.swing.JList
 import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
-import uk.ac.surrey.soc.cress.extrawidgets.api.ListPropertyDef
-import uk.ac.surrey.soc.cress.extrawidgets.api.ObjectPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.ListProperty
+import uk.ac.surrey.soc.cress.extrawidgets.api.ObjectProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichItemSelectable
@@ -40,7 +40,7 @@ class Chooser(
     }
   })
 
-  val xwItems = new ListPropertyDef(
+  val xwItems = new ListProperty(
     xs ⇒ {
       combo.removeAllItems()
       xs.foreach(combo.addItem(_))
@@ -49,7 +49,7 @@ class Chooser(
     () ⇒ LogoList((0 until combo.getItemCount).map(combo.getItemAt): _*)
   )
 
-  val xwSelectedItem = new ObjectPropertyDef(
+  val xwSelectedItem = new ObjectProperty(
     combo.setSelectedItem,
     () ⇒ Option(combo.getSelectedItem).getOrElse(Nobody)
   )

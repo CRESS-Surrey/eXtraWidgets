@@ -11,10 +11,10 @@ import org.nlogo.window.SliderData
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JSlider
-import uk.ac.surrey.soc.cress.extrawidgets.api.DoublePropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.DoubleProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
-import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichSlider
 
@@ -50,23 +50,23 @@ class Slider(
   add(valueLabel, EAST)
 
   private var units = ""
-  val xwUnits = new StringPropertyDef(
+  val xwUnits = new StringProperty(
     u ⇒ { units = u; valueLabel.update() },
     () ⇒ units)
 
-  val xwMinimum = new DoublePropertyDef(
+  val xwMinimum = new DoubleProperty(
     min ⇒ { sliderData.minimum = min; slider.updateFromData() },
     () ⇒ sliderData.minimum)
 
-  val xwMaximum = new DoublePropertyDef(
+  val xwMaximum = new DoubleProperty(
     max ⇒ { sliderData.maximum = max; slider.updateFromData() },
     () ⇒ sliderData.maximum)
 
-  val xwValue = new DoublePropertyDef(
+  val xwValue = new DoubleProperty(
     v ⇒ if (sliderData.update(v)) slider.updateFromData(),
     () ⇒ sliderData.value)
 
-  val xwIncrement = new DoublePropertyDef(
+  val xwIncrement = new DoubleProperty(
     inc ⇒ { sliderData.increment = inc; slider.updateFromData() },
     () ⇒ sliderData.increment)
 

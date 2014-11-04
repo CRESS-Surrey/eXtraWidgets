@@ -10,13 +10,13 @@ trait ComponentWidget extends ExtraWidget {
 
   adjustDefaultFont(this)
 
-  val xwX = new IntegerPropertyDef(setX(_), getX)
-  val xwY = new IntegerPropertyDef(setY(_), getY)
-  val xwWidth = new IntegerPropertyDef(setWidth(_), getWidth)
-  val xwHeight = new IntegerPropertyDef(setHeight(_), getHeight)
-  val xwHidden = new BooleanPropertyDef(b ⇒ setVisible(!b), () ⇒ !isVisible)
-  val xwBackground = new ColorPropertyDef(setBackground, getBackground)
-  val xwForeground = new ColorPropertyDef(setForeground, getForeground)
+  val xwX = new IntegerProperty(setX(_), getX)
+  val xwY = new IntegerProperty(setY(_), getY)
+  val xwWidth = new IntegerProperty(setWidth(_), getWidth)
+  val xwHeight = new IntegerProperty(setHeight(_), getHeight)
+  val xwHidden = new BooleanProperty(b ⇒ setVisible(!b), () ⇒ !isVisible)
+  val xwBackground = new ColorProperty(setBackground, getBackground)
+  val xwForeground = new ColorProperty(setForeground, getForeground)
 
   def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
   def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)

@@ -8,10 +8,10 @@ import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
 import uk.ac.surrey.soc.cress.extrawidgets
-import uk.ac.surrey.soc.cress.extrawidgets.api.ColorPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.ColorProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.JComponentWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
-import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
@@ -24,8 +24,8 @@ class Tab(
 
   override def isOptimizedDrawingEnabled = false
 
-  val xwTitle = new StringPropertyDef(setTitle, getTitle _)
-  override val xwBackground = new ColorPropertyDef(setBackground, getBackground)
+  val xwTitle = new StringProperty(setTitle, getTitle _)
+  override val xwBackground = new ColorProperty(setBackground, getBackground)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }

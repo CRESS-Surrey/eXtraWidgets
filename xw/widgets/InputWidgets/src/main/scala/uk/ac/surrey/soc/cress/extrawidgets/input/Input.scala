@@ -11,10 +11,10 @@ import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JTextField
 import javax.swing.KeyStroke.getKeyStroke
-import uk.ac.surrey.soc.cress.extrawidgets.api.DoublePropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.DoubleProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
-import uk.ac.surrey.soc.cress.extrawidgets.api.StringPropertyDef
+import uk.ac.surrey.soc.cress.extrawidgets.api.StringProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichComponent
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.newAction
@@ -56,7 +56,7 @@ class TextInput(
 
   add(textField, CENTER)
 
-  val xwText = new StringPropertyDef(
+  val xwText = new StringProperty(
     s ⇒ { text = s; textField.setText(s) },
     () ⇒ text
   )
@@ -80,7 +80,7 @@ class NumericInput(
   var number: Double = 0.0
   override def defaultText = format(number)
 
-  val xwNumber = new DoublePropertyDef(
+  val xwNumber = new DoubleProperty(
     d ⇒ { number = d; textField.setText(format(number)) },
     () ⇒ number
   )

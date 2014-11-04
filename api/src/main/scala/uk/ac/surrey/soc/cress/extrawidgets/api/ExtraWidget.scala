@@ -12,10 +12,10 @@ trait ExtraWidget extends Component {
    * in `this` won't be initialised yet. NP 2014-10-10.
    */
   lazy val kind = new WidgetKind(this.getClass)
-  lazy val propertyDefs: Map[PropertyKey, PropertyDef[_]] =
-    kind.propertyDefs(this)
-  lazy val propertyKeys: Map[PropertyDef[_], PropertyKey] =
-    propertyDefs.map(_.swap)
+  lazy val properties: Map[PropertyKey, Property[_]] =
+    kind.properties(this)
+  lazy val propertyKeys: Map[Property[_], PropertyKey] =
+    properties.map(_.swap)
 
   /**
    *  Initialize the widget by setting all its properties.
@@ -27,25 +27,25 @@ trait ExtraWidget extends Component {
     println(propertyMap)
     for {
       propertyKey ← kind.propertyKeys
-      propertyDef ← propertyDefs.get(propertyKey)
-      propertyValue = propertyMap.getOrElse(propertyKey, propertyDef.get)
-    } setProperty(propertyDef, propertyValue)
+      property ← properties.get(propertyKey)
+      propertyValue = propertyMap.getOrElse(propertyKey, property.get)
+    } setProperty(property, propertyValue)
   }
 
   def setProperty(
     propertyKey: PropertyKey,
     propertyValue: PropertyValue): Unit =
-    propertyDefs.get(propertyKey).foreach(setProperty(_, propertyValue))
+    properties.get(propertyKey).foreach(setProperty(_, propertyValue))
 
   def setProperty(
-    propertyDef: PropertyDef[_],
+    property: Property[_],
     propertyValue: PropertyValue): Unit = {
-    propertyDef.set(propertyValue)
-    updateInState(propertyDef)
+    property.set(propertyValue)
+    updateInState(property)
   }
 
-  def updateInState(propertyDef: PropertyDef[_]): Unit =
+  def updateInState(property: Property[_]): Unit =
     stateUpdater.set(
-      propertyKeys(propertyDef), key,
-      propertyDef.get)
+      propertyKeys(property), key,
+      property.get)
 }
