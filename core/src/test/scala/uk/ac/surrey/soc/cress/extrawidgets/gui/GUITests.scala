@@ -61,8 +61,7 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
     }
 
     it("should be able to create extra widgets tabs") {
-      val res = addTab("first tab")
-      invokeAndWait { res should be('right) }
+      invokeAndWait { addTab("first tab") }
       shouldBeThere("FIRST TAB")
     }
 
@@ -86,8 +85,7 @@ class GUITests extends FunSpec with ShouldMatchers with GivenWhenThen {
     }
 
     it("should be able to create a second tab with a different id") {
-      val res = addTab("second tab")
-      invokeAndWait { res should be('right) }
+      invokeAndWait { addTab("second tab") }
       shouldBeThere("FIRST TAB")
       shouldBeThere("SECOND TAB")
     }
