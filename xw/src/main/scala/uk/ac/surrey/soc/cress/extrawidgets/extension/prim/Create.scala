@@ -4,6 +4,7 @@ import org.nlogo.api.Argument
 import org.nlogo.api.Context
 import org.nlogo.api.DefaultCommand
 import org.nlogo.api.Syntax.CommandBlockType
+import org.nlogo.api.Syntax.OptionalType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.commandSyntax
 
@@ -14,7 +15,7 @@ class Create(kindName: String, writer: Writer, wcm: WidgetContextManager)
   extends DefaultCommand
   with HasCommandBlock {
   override def getSyntax = commandSyntax(Array(
-    StringType, CommandBlockType
+    StringType, CommandBlockType | OptionalType
   ))
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey = args(0).getString
