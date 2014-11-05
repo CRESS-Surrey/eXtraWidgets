@@ -7,10 +7,14 @@ import org.nlogo.api.PrimitiveManager
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.PropertySyntax
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKind
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Add
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.AddWidget
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Ask
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Create
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.GetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Properties
@@ -24,10 +28,6 @@ import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
-import uk.ac.surrey.soc.cress.extrawidgets.api.PropertySyntax
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Ask
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -51,7 +51,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val staticPrimitives = Seq(
       "VERSION" -> new Version("0.0.0-wip"),
       "ASK" -> new Ask(widgetContextManager),
-      "__ADD" -> new Add(writer),
       "__SET" -> new Set(writer),
       "__GET" -> new Get(reader),
       "REMOVE" -> new Remove(writer),
@@ -62,7 +61,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     )
 
     val widgetPrimitives = widgetKinds.keys.map { kindName ⇒
-      ("ADD-" + kindName) -> new AddWidget(writer, kindName)
+      ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
     }
 
     // multiple widget kinds may define properties with the same key,

@@ -6,7 +6,7 @@ import org.nlogo.nvm.AssemblerAssistant
 import org.nlogo.nvm.CustomAssembled
 import org.nlogo.nvm.ExtensionContext
 
-trait HasBlock extends CustomAssembled {
+trait HasCommandBlock extends CustomAssembled {
   def runBlock(context: Context): Unit = {
     val extContext = context.asInstanceOf[ExtensionContext]
     val nvmContext = extContext.nvmContext
