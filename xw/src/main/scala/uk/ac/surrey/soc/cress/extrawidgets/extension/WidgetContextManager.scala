@@ -16,9 +16,10 @@ class WidgetContextManager extends WidgetContextProvider {
       | you are trying to use should be called from inside a
       | block passed to xw:create-<kind>, xw:ask or xw:of.
       |""".stripMargin))
-  def withContext[A](key: WidgetKey)(f: () ⇒ A): Unit = {
+  def withContext[A](key: WidgetKey)(f: () ⇒ A): A = {
     stack = normalizeString(key) :: stack // push
-    f()
+    val result = f()
     stack = stack.tail // pop
+    result
   }
 }

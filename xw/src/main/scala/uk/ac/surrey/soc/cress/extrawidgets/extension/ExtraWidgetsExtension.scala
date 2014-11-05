@@ -7,7 +7,6 @@ import org.nlogo.api.PrimitiveManager
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
-
 import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertySyntax
@@ -28,6 +27,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
 import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Of
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -51,6 +51,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val staticPrimitives = Seq(
       "VERSION" -> new Version("0.0.0-wip"),
       "ASK" -> new Ask(widgetContextManager),
+      "OF" -> new Of(widgetContextManager),
       "__SET" -> new Set(writer),
       "__GET" -> new Get(reader),
       "REMOVE" -> new Remove(writer),
@@ -73,9 +74,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
     val getters = for {
       (key, syntaxes) ← keysToSyntaxes
-      name = "GET-" + key
+      name = key
       outputType = syntaxes.map(_.outputType).reduce(_ | _)
-      prim = new GetProperty(reader, key, outputType)
+      prim = new GetProperty(reader, key, outputType, widgetContextManager)
     } yield name -> prim
 
     val setters = for {
