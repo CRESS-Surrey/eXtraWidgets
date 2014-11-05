@@ -7,6 +7,7 @@ import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 import org.nlogo.api.Syntax.commandSyntax
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
+import uk.ac.surrey.soc.cress.extrawidgets.extension.WidgetContextProvider
 
 // xw:set property-key widget-key property-value
 class Set(writer: Writer) extends DefaultCommand {
@@ -22,12 +23,13 @@ class Set(writer: Writer) extends DefaultCommand {
 class SetProperty(
   writer: Writer,
   propertyKey: String,
-  inputType: Int)
+  inputType: Int,
+  wcp: WidgetContextProvider)
   extends DefaultCommand {
-  override def getSyntax = commandSyntax(Array(StringType, inputType))
+  override def getSyntax = commandSyntax(Array(inputType))
   def perform(args: Array[Argument], context: Context): Unit = {
-    val widgetKey = args(0).getString
-    val propertyValue = args(1).get
+    val widgetKey = wcp.currentContext
+    val propertyValue = args(0).get
     writer.set(propertyKey, widgetKey, propertyValue, true)
   }
 }

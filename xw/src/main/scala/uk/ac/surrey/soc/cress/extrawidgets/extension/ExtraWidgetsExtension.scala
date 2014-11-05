@@ -27,9 +27,11 @@ import uk.ac.surrey.soc.cress.extrawidgets.state.newMutableWidgetMap
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertySyntax
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Ask
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
+  private var widgetContextManager: WidgetContextManager = null
   private var writer: Writer = null
   private var reader: Reader = null
   private var primitives: Seq[(String, Primitive)] = null
@@ -40,6 +42,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       val widgetMap = newMutableWidgetMap
       reader = new Reader(widgetMap)
       writer = new Writer(widgetMap, reader)
+      widgetContextManager = new WidgetContextManager
     }
 
     val widgetKinds: Map[String, WidgetKind] =
@@ -47,6 +50,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
     val staticPrimitives = Seq(
       "VERSION" -> new Version("0.0.0-wip"),
+      "ASK" -> new Ask(widgetContextManager),
       "__ADD" -> new Add(writer),
       "__SET" -> new Set(writer),
       "__GET" -> new Get(reader),
@@ -79,7 +83,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       (key, syntaxes) ← keysToSyntaxes
       name = "SET-" + key
       inputType = syntaxes.map(_.inputType).reduce(_ | _)
-      prim = new SetProperty(writer, key, inputType)
+      prim = new SetProperty(writer, key, inputType, widgetContextManager)
     } yield name -> prim
 
     primitives = staticPrimitives ++ widgetPrimitives ++ getters ++ setters
@@ -100,7 +104,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
   def load(primitiveManager: PrimitiveManager): Unit = {
     println("load() " + this)
-
     println("Loaded primitives: " + primitives.unzip._1.toList)
     for ((name, prim) ← primitives)
       primitiveManager.addPrimitive(name, prim)
@@ -111,5 +114,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     clearAll()
   }
 
-  override def clearAll(): Unit = writer.clearAll()
+  override def clearAll(): Unit = {
+    widgetContextManager.clear()
+    writer.clearAll()
+  }
 }
