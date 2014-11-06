@@ -2,9 +2,13 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 
 import org.nlogo.api.Dump
 import org.nlogo.api.ExtensionException
+import org.nlogo.api.ExtensionManager
 import org.nlogo.api.LogoList
+import org.nlogo.app.App
+import org.nlogo.app.AppFrame
+import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
-import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
 package object util {
 
@@ -32,4 +36,15 @@ package object util {
       }(collection.breakOut)
     }
   }
+
+  def getApp(extensionManager: ExtensionManager): Option[App] =
+    Seq(extensionManager)
+      .collect { case em: org.nlogo.workspace.ExtensionManager ⇒ em }
+      .map(_.workspace)
+      .collect { case ws: GUIWorkspace ⇒ ws }
+      .map(_.getFrame)
+      .collect { case af: AppFrame ⇒ af }
+      .flatMap(_.getLinkChildren)
+      .collect { case app: App ⇒ app }
+      .headOption
 }

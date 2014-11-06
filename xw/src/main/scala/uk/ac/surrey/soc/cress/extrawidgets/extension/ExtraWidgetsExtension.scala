@@ -4,9 +4,6 @@ import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.Primitive
 import org.nlogo.api.PrimitiveManager
-import org.nlogo.app.App
-import org.nlogo.app.AppFrame
-import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.soc.cress.extrawidgets.WidgetsLoader
 import uk.ac.surrey.soc.cress.extrawidgets.api.KindName
@@ -26,6 +23,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Widgets
+import uk.ac.surrey.soc.cress.extrawidgets.extension.util.getApp
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
@@ -99,18 +97,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       staticPrimitives ++ constructorPrimitives ++ kindListPrimitives ++
         getterPrimitives ++ setterPrimitives
 
-    Seq(extensionManager)
-      .collect { case em: org.nlogo.workspace.ExtensionManager ⇒ em }
-      .map(_.workspace)
-      .collect { case ws: GUIWorkspace ⇒ ws }
-      .map(_.getFrame)
-      .collect { case af: AppFrame ⇒ af }
-      .flatMap(_.getLinkChildren)
-      .collect { case app: App ⇒ app }
-      .foreach { app ⇒
-        new Manager(app, reader, writer, widgetKinds)
-      }
-
+    for (app ← getApp(extensionManager))
+      new Manager(app, reader, writer, widgetKinds)
   }
 
   def load(primitiveManager: PrimitiveManager): Unit = {
