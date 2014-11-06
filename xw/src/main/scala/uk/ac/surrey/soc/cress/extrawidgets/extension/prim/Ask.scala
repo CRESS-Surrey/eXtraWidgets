@@ -1,15 +1,19 @@
 package uk.ac.surrey.soc.cress.extrawidgets.extension.prim
 
-import org.nlogo.api._
+import org.nlogo.api.Argument
 import org.nlogo.api.Context
 import org.nlogo.api.DefaultCommand
+import org.nlogo.api.Dump
 import org.nlogo.api.LogoList
+import org.nlogo.api.LogoList.toIterator
 import org.nlogo.api.Syntax.CommandBlockType
 import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.commandSyntax
+
+import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 import uk.ac.surrey.soc.cress.extrawidgets.extension.WidgetContextManager
-import uk.ac.surrey.soc.cress.extrawidgets.api._
 
 class Ask(wcm: WidgetContextManager)
   extends DefaultCommand
