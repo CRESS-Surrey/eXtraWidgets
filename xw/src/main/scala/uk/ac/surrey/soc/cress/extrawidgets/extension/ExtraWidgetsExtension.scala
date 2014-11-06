@@ -18,6 +18,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ClearAll
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Create
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.GetProperty
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.KindList
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Of
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Properties
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.PropertyKeys
@@ -65,7 +66,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "CLEAR-ALL" -> new ClearAll(writer)
     )
 
-    println(widgetKinds.mapValues(_.pluralName))
+    val kindListPrimitives = for {
+      (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
+    } yield pluralName -> new KindList(kindName, reader)
 
     val constructorPrimitives = widgetKinds.keys.map { kindName ⇒
       ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
@@ -93,7 +96,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     } yield name -> prim
 
     primitives =
-      staticPrimitives ++ constructorPrimitives ++
+      staticPrimitives ++ constructorPrimitives ++ kindListPrimitives ++
         getterPrimitives ++ setterPrimitives
 
     Seq(extensionManager)
