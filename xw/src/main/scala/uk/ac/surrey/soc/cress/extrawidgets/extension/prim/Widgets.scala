@@ -9,7 +9,7 @@ import org.nlogo.api.Syntax.reporterSyntax
 
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 
-class WidgetKeys(reader: Reader) extends DefaultReporter {
+class Widgets(reader: Reader) extends DefaultReporter {
   override def getSyntax = reporterSyntax(ListType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     LogoList.fromVector(reader.widgetKeyVector)

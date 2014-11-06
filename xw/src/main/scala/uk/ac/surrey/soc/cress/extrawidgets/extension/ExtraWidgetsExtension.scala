@@ -24,7 +24,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.PropertyKeys
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
-import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.WidgetKeys
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Widgets
 import uk.ac.surrey.soc.cress.extrawidgets.gui.Manager
 import uk.ac.surrey.soc.cress.extrawidgets.state.Reader
 import uk.ac.surrey.soc.cress.extrawidgets.state.Writer
@@ -59,7 +59,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "OF" -> new Of(widgetContextManager),
       "GET" -> new Get(reader, defaultProperties, widgetContextManager),
       "REMOVE" -> new Remove(writer),
-      "WIDGET-KEYS" -> new WidgetKeys(reader),
+      "WIDGETS" -> new Widgets(reader),
       "PROPERTY-KEYS" -> new PropertyKeys(reader),
       "PROPERTIES" -> new Properties(reader),
       "CLEAR-ALL" -> new ClearAll(writer)
