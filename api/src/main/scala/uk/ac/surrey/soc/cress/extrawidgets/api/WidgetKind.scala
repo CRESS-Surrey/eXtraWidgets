@@ -1,8 +1,8 @@
 package uk.ac.surrey.soc.cress.extrawidgets.api
 
 import java.lang.reflect.Method
-
 import org.nlogo.window.GUIWorkspace
+import uk.ac.surrey.soc.cress.extrawidgets.api.annotations._
 
 class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
 
@@ -17,11 +17,17 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
   def newInstance(widgetKey: WidgetKey, stateUpdater: StateUpdater, ws: GUIWorkspace) =
     constructor.newInstance(widgetKey, stateUpdater, ws)
 
+  private def isProperty(method: Method) =
+    classOf[Property[_]].isAssignableFrom(method.getReturnType)
+
   private val methods: Map[PropertyKey, Method] =
     clazz.getMethods.collect {
-      case method if classOf[Property[_]].isAssignableFrom(method.getReturnType) ⇒
+      case method if isProperty(method) ⇒
         makePropertyKey(method) -> method
     }(collection.breakOut)
+
+  val defaultProperty: Option[String] =
+    Option(clazz.getAnnotation(classOf[DefaultProperty])).map(_.value)
 
   val syntaxes: Map[PropertyKey, PropertySyntax] =
     methods.mapValues { method ⇒

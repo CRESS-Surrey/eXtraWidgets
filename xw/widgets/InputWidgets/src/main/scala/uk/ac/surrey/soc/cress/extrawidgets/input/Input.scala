@@ -16,6 +16,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.StringProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.annotations.DefaultProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichComponent
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.newAction
 import uk.ac.surrey.soc.cress.extrawidgets.api.toRunnable
@@ -47,6 +48,7 @@ trait HasTextField {
   }
 }
 
+@DefaultProperty("TEXT")
 class TextInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
@@ -65,6 +67,7 @@ class TextInput(
     updateInState(xwText)
 }
 
+@DefaultProperty("NUMBER")
 class NumericInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,

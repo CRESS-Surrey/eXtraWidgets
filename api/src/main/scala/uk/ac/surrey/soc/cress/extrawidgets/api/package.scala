@@ -15,6 +15,7 @@ package object api {
   type WidgetKey = Key
   type PropertyKey = Key
   type PropertyValue = AnyRef
+  type KindName = String
 
   type PropertyMap = immutable.Map[PropertyKey, PropertyValue]
   type WidgetMap = immutable.Map[WidgetKey, PropertyMap]

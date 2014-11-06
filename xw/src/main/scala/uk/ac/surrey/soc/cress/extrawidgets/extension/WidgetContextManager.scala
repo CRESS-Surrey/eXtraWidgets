@@ -3,11 +3,7 @@ package uk.ac.surrey.soc.cress.extrawidgets.extension
 import uk.ac.surrey.soc.cress.extrawidgets.api._
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
 
-trait WidgetContextProvider {
-  def currentContext: WidgetKey
-}
-
-class WidgetContextManager extends WidgetContextProvider {
+class WidgetContextManager {
   var stack: List[WidgetKey] = List.empty
   def clear(): Unit = stack = List.empty
   def currentContext: WidgetKey =

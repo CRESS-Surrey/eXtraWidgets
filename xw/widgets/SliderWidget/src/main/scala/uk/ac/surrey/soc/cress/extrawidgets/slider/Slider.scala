@@ -16,8 +16,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.LabeledPanelWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.StringProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.annotations.DefaultProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichSlider
 
+@DefaultProperty("VALUE")
 class Slider(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,

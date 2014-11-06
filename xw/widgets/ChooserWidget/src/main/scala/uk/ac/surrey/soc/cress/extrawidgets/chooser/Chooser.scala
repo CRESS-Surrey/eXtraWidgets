@@ -17,8 +17,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.ListProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.ObjectProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
+import uk.ac.surrey.soc.cress.extrawidgets.api.annotations.DefaultProperty
 import uk.ac.surrey.soc.cress.extrawidgets.api.swing.enrichItemSelectable
 
+@DefaultProperty("SELECTED-ITEM")
 class Chooser(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
