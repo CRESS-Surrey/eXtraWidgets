@@ -21,17 +21,18 @@ class Ask(wcm: WidgetContextManager)
   override def getSyntax = commandSyntax(Array(
     StringType | ListType, CommandBlockType
   ))
-  private def runFor(key: WidgetKey, context: Context) =
-    wcm.withContext(key) { () ⇒ runBlock(context) }
-  def perform(args: Array[Argument], context: Context): Unit =
+  def perform(args: Array[Argument], context: Context): Unit = {
+    def runFor(key: WidgetKey) =
+      wcm.withContext(key) { () ⇒ runBlock(context) }
     args(0).get match {
-      case key: String ⇒ runFor(key, context)
+      case key: WidgetKey ⇒ runFor(key)
       case list: LogoList ⇒
         for (obj ← list) obj match {
-          case key: String ⇒ runFor(key, context)
+          case key: String ⇒ runFor(key)
           case _ ⇒ throw XWException(
             "Expected a widget key string but got " + Dump.logoObject(obj) +
               " of type " + Dump.typeName(obj).toUpperCase + " instead.")
         }
     }
+  }
 }
