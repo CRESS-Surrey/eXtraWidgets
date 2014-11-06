@@ -65,6 +65,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "CLEAR-ALL" -> new ClearAll(writer)
     )
 
+    println(widgetKinds.mapValues(_.pluralName))
+
     val constructorPrimitives = widgetKinds.keys.map { kindName ⇒
       ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
     }

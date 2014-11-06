@@ -8,6 +8,12 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
 
   val name = makeKey(clazz.getSimpleName)
 
+  val pluralName = {
+    Option(clazz.getAnnotation(classOf[PluralName]))
+      .map(annotation ⇒ makeKey(annotation.value))
+      .getOrElse(name + "S")
+  }
+
   val constructor =
     clazz.getConstructor(
       classOf[WidgetKey],

@@ -7,8 +7,10 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.AbstractButtonWidget
 import uk.ac.surrey.soc.cress.extrawidgets.api.StateUpdater
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.annotations.DefaultProperty
+import uk.ac.surrey.soc.cress.extrawidgets.api.annotations.PluralName
 
 @DefaultProperty("SELECTED?")
+@PluralName("CHECKBOXES")
 class Checkbox(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
