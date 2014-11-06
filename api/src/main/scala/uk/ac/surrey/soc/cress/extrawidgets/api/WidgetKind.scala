@@ -26,8 +26,16 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
         makePropertyKey(method) -> method
     }(collection.breakOut)
 
-  val defaultProperty: Option[String] =
-    Option(clazz.getAnnotation(classOf[DefaultProperty])).map(_.value)
+  val defaultProperty: Option[String] = {
+    Option(clazz.getAnnotation(classOf[DefaultProperty]))
+      .map { annotation ⇒
+        val key = makeKey(annotation.value)
+        if (!methods.isDefinedAt(key)) throw XWException(
+          key + " is defined as the default property for widget kind " +
+            name + " but not such property exists.")
+        key
+      }
+  }
 
   val syntaxes: Map[PropertyKey, PropertySyntax] =
     methods.mapValues { method ⇒
