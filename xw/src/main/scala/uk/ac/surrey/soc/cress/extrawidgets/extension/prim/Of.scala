@@ -20,7 +20,7 @@ class Of(wcm: WidgetContextManager) extends DefaultReporter {
   override def getSyntax =
     Syntax.reporterSyntax(
       ReporterTaskType,
-      Array(StringType|ListType),
+      Array(StringType | ListType),
       WildcardType,
       NormalPrecedence + 1,
       true)
@@ -34,9 +34,11 @@ class Of(wcm: WidgetContextManager) extends DefaultReporter {
         for (obj ← list.toVector) yield obj match {
           case key: String ⇒ reportFor(key)
           case _ ⇒ throw XWException(
-            "Expected a widget key string but got " + Dump.logoObject(obj) +
-              " of type " + Dump.typeName(obj).toUpperCase + " instead.")
+            "Expected a widget key string but got " +
+              Dump.logoObject(obj) + " instead.")
         })
     }
   }
 }
+
+

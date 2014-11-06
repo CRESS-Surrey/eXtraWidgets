@@ -30,8 +30,8 @@ class Ask(wcm: WidgetContextManager)
         for (obj ← list) obj match {
           case key: String ⇒ runFor(key)
           case _ ⇒ throw XWException(
-            "Expected a widget key string but got " + Dump.logoObject(obj) +
-              " of type " + Dump.typeName(obj).toUpperCase + " instead.")
+            "Expected a widget key string but got " +
+              Dump.logoObject(obj) + " instead.")
         }
     }
   }
