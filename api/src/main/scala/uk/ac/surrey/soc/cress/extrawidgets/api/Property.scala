@@ -21,9 +21,9 @@ abstract class Property[T](
   setter: T ⇒ Unit,
   getter: () ⇒ T)
   extends PropertySyntax {
-  protected def fromInputType(x: Any): T = x.asInstanceOf[T]
+  protected def fromAny(x: Any): T = x.asInstanceOf[T]
   def get: AnyRef = getter().asInstanceOf[AnyRef]
-  def set(value: Any): Unit = setter(fromInputType(value))
+  def set(value: Any): Unit = setter(fromAny(value))
   override def toString = Dump.logoObject(get)
 }
 
@@ -57,9 +57,9 @@ class IntegerProperty(
   extends Property(setter, getter) {
   val inputType = NumberType
   val outputType = NumberType
-  override def fromInputType(x: Any): Int = x match {
+  override def fromAny(x: Any): Int = x match {
     case d: java.lang.Double ⇒ d.intValue
-    case _ ⇒ super.fromInputType(x)
+    case _ ⇒ super.fromAny(x)
   }
   override def get = Double.box(getter().toDouble)
 }
@@ -78,7 +78,7 @@ class ColorProperty(
   extends Property(setter, getter) {
   val inputType = NumberType | ListType
   val outputType = ListType
-  override def fromInputType(x: Any): java.awt.Color = {
+  override def fromAny(x: Any): java.awt.Color = {
     x match {
       case c: java.lang.Double ⇒
         getColor(
@@ -86,7 +86,7 @@ class ColorProperty(
           else Double.box(modulateDouble(c))
         )
       case ll: LogoList ⇒ getColor(validRGBList(ll.toVector))
-      case _ ⇒ super.fromInputType(x)
+      case _ ⇒ super.fromAny(x)
     }
   }
 
