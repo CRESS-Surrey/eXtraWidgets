@@ -23,7 +23,14 @@ abstract class Property[T](
   extends PropertySyntax {
   protected def fromAny(x: Any): T = x.asInstanceOf[T]
   def get: AnyRef = getter().asInstanceOf[AnyRef]
-  def set(value: Any): Unit = setter(fromAny(value))
+  def set(value: Any): Unit =
+    try setter(fromAny(value))
+    catch {
+      case e: ClassCastException ⇒ throw XWException(
+        "Expected " + Dump.typeName(get) + " but got " +
+          Dump.logoObject(value.asInstanceOf[AnyRef]) +
+          " instead.", e)
+    }
   override def toString = Dump.logoObject(get)
 }
 
