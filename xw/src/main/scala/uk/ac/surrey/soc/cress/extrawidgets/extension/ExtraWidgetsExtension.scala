@@ -16,12 +16,14 @@ import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Create
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Get
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.GetProperty
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.KindList
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.LoadJSON
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Of
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Properties
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.PropertyKeys
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Remove
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Set
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.SetProperty
+import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.ToJSON
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Version
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.Widgets
 import uk.ac.surrey.soc.cress.extrawidgets.extension.prim.With
@@ -65,7 +67,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "WIDGETS" -> new Widgets(reader),
       "PROPERTY-KEYS" -> new PropertyKeys(reader),
       "PROPERTIES" -> new Properties(reader),
-      "CLEAR-ALL" -> new ClearAll(writer)
+      "CLEAR-ALL" -> new ClearAll(writer),
+      "JSON" -> new ToJSON(reader),
+      "LOAD-JSON" -> new LoadJSON(writer)
     )
 
     val kindListPrimitives = for {

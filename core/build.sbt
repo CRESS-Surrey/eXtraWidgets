@@ -16,7 +16,8 @@ fork := true
 
 libraryDependencies ++= Seq(
   "org.nlogo" % "NetLogo" % "5.1.0" from
-    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
+    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar",
+  "com.googlecode.json-simple" % "json-simple" % "1.1.1"
 )
 
 libraryDependencies ++= Seq( // test libraries

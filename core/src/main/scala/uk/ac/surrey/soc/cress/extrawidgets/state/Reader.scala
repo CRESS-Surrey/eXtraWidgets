@@ -1,7 +1,9 @@
 package uk.ac.surrey.soc.cress.extrawidgets.state
 
-import org.nlogo.api.SimpleChangeEvent
-import org.nlogo.api.SimpleChangeEventPublisher
+import scala.collection.JavaConverters.asJavaConcurrentMapConverter
+import scala.collection.JavaConverters.mapAsJavaMapConverter
+
+import org.json.simple.JSONObject
 
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
@@ -10,6 +12,7 @@ import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyMap
 import uk.ac.surrey.soc.cress.extrawidgets.api.PropertyValue
 import uk.ac.surrey.soc.cress.extrawidgets.api.WidgetKey
 import uk.ac.surrey.soc.cress.extrawidgets.api.XWException
+import uk.ac.surrey.soc.cress.extrawidgets.api.enrichEither
 import uk.ac.surrey.soc.cress.extrawidgets.api.enrichOption
 import uk.ac.surrey.soc.cress.extrawidgets.api.normalizeString
 
@@ -60,4 +63,6 @@ class Reader(
 
   def properties(widgetKey: WidgetKey): Either[XWException, Vector[(PropertyKey, PropertyValue)]] =
     mutablePropertyMap(widgetKey).right.map(Vector() ++ _.iterator)
+
+  def toJSON = new JSONObject(widgetMap.mapValues(_.asJava).asJava).toJSONString
 }
