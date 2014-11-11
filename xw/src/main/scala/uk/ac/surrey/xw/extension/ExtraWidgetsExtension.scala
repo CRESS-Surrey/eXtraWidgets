@@ -1,0 +1,128 @@
+package uk.ac.surrey.xw.extension
+
+import org.nlogo.api.DefaultClassManager
+import org.nlogo.api.ExtensionManager
+import org.nlogo.api.Primitive
+import org.nlogo.api.PrimitiveManager
+
+import uk.ac.surrey.xw.api.KindName
+import uk.ac.surrey.xw.api.PropertyKey
+import uk.ac.surrey.xw.api.PropertySyntax
+import uk.ac.surrey.xw.api.WidgetKind
+import uk.ac.surrey.xw.WidgetsLoader;
+import uk.ac.surrey.xw.extension.prim.Ask
+import uk.ac.surrey.xw.extension.prim.ClearAll
+import uk.ac.surrey.xw.extension.prim.Create
+import uk.ac.surrey.xw.extension.prim.Get
+import uk.ac.surrey.xw.extension.prim.GetProperty
+import uk.ac.surrey.xw.extension.prim.KindList
+import uk.ac.surrey.xw.extension.prim.LoadJSON
+import uk.ac.surrey.xw.extension.prim.Of
+import uk.ac.surrey.xw.extension.prim.Properties
+import uk.ac.surrey.xw.extension.prim.PropertyKeys
+import uk.ac.surrey.xw.extension.prim.Remove
+import uk.ac.surrey.xw.extension.prim.Set
+import uk.ac.surrey.xw.extension.prim.SetProperty
+import uk.ac.surrey.xw.extension.prim.ToJSON
+import uk.ac.surrey.xw.extension.prim.Version
+import uk.ac.surrey.xw.extension.prim.Widgets
+import uk.ac.surrey.xw.extension.prim.With
+import uk.ac.surrey.xw.extension.util.getApp
+import uk.ac.surrey.xw.gui.Manager
+import uk.ac.surrey.xw.state.Reader
+import uk.ac.surrey.xw.state.Writer
+import uk.ac.surrey.xw.state.newMutableWidgetMap
+
+class ExtraWidgetsExtension extends DefaultClassManager {
+
+  private var widgetContextManager: WidgetContextManager = null
+  private var writer: Writer = null
+  private var reader: Reader = null
+  private var primitives: Seq[(String, Primitive)] = null
+
+  override def runOnce(extensionManager: ExtensionManager): Unit = {
+
+    locally {
+      val widgetMap = newMutableWidgetMap
+      reader = new Reader(widgetMap)
+      writer = new Writer(widgetMap, reader)
+      widgetContextManager = new WidgetContextManager
+    }
+
+    val widgetKinds: Map[KindName, WidgetKind] =
+      WidgetsLoader.loadWidgetKinds
+
+    val defaultProperties: Map[KindName, PropertyKey] =
+      widgetKinds.mapValues(_.defaultProperty)
+        .collect { case (name, Some(propertyKey)) ⇒ name -> propertyKey }
+
+    val staticPrimitives = Seq(
+      "VERSION" -> new Version("0.0.0-wip"),
+      "ASK" -> new Ask(widgetContextManager),
+      "OF" -> new Of(widgetContextManager),
+      "WITH" -> new With(widgetContextManager),
+      "GET" -> new Get(reader, defaultProperties, widgetContextManager),
+      "SET" -> new Set(reader, writer, defaultProperties, widgetContextManager),
+      "REMOVE" -> new Remove(writer),
+      "WIDGETS" -> new Widgets(reader),
+      "PROPERTY-KEYS" -> new PropertyKeys(reader),
+      "PROPERTIES" -> new Properties(reader),
+      "CLEAR-ALL" -> new ClearAll(writer),
+      "JSON" -> new ToJSON(reader),
+      "LOAD-JSON" -> new LoadJSON(writer)
+    )
+
+    val kindListPrimitives = for {
+      (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
+    } yield pluralName -> new KindList(kindName, reader)
+
+    val constructorPrimitives = widgetKinds.keys.map { kindName ⇒
+      ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
+    }
+
+    // multiple widget kinds may define properties with the same key,
+    // so we group each of these keys with all their possible syntaxes,
+    // which we will "collapse" together when building primitives
+    // by using bitwise ORs (.reduce(_ | _))
+    val propertySyntaxes: Map[PropertyKey, Iterable[PropertySyntax]] =
+      widgetKinds.values.flatMap(_.syntaxes).groupBy(_._1).mapValues(_.unzip._2)
+
+    val getterPrimitives = for {
+      (key, syntaxes) ← propertySyntaxes
+      name = key
+      outputType = syntaxes.map(_.outputType).reduce(_ | _)
+      prim = new GetProperty(reader, key, outputType, widgetContextManager)
+    } yield name -> prim
+
+    val setterPrimitives = for {
+      (key, syntaxes) ← propertySyntaxes
+      name = "SET-" + key
+      inputType = syntaxes.map(_.inputType).reduce(_ | _)
+      prim = new SetProperty(writer, key, inputType, widgetContextManager)
+    } yield name -> prim
+
+    primitives =
+      staticPrimitives ++ constructorPrimitives ++ kindListPrimitives ++
+        getterPrimitives ++ setterPrimitives
+
+    for (app ← getApp(extensionManager))
+      new Manager(app, reader, writer, widgetKinds)
+  }
+
+  def load(primitiveManager: PrimitiveManager): Unit = {
+    println("load() " + this)
+    println("Loaded primitives: " + primitives.unzip._1.toList)
+    for ((name, prim) ← primitives)
+      primitiveManager.addPrimitive(name, prim)
+  }
+
+  override def unload(em: ExtensionManager): Unit = {
+    println("unload() " + this)
+    clearAll()
+  }
+
+  override def clearAll(): Unit = {
+    widgetContextManager.clear()
+    writer.clearAll()
+  }
+}
