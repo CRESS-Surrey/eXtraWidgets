@@ -27,7 +27,12 @@ class Slider(
   extends LabeledPanelWidget {
 
   val sliderData = new SliderData() {
-    def update(v: Double) = valueSetter(coerceValue(v))
+    def toTicks(v: Double): Int = math.round((v - minimum) / increment).toInt
+    def fromTicks(ticks: Int): Double = minimum + (ticks * increment)
+    def update(v: Double): Boolean = valueSetter(coerceValue(v))
+    def updateFromTicks(ticks: Int): Boolean = update(fromTicks(ticks))
+    def maxToTicks: Int = toTicks(maximum)
+    def valueToTicks: Int = toTicks(value)
   }
 
   val slider = new JSlider() {
@@ -35,9 +40,10 @@ class Slider(
     snapToTicks = true
     updateFromData()
     def updateFromData(): Unit = {
-      val nbUnits = (sliderData.maximum - sliderData.minimum) / sliderData.increment
-      setMaximum(nbUnits.intValue)
-      setValue((sliderData.value / sliderData.increment).intValue)
+      val newMax = sliderData.maxToTicks
+      val newValue = sliderData.valueToTicks
+      setMaximum(newMax)
+      setValue(newValue)
     }
   }
   add(slider, NORTH)
@@ -73,7 +79,7 @@ class Slider(
     () ⇒ sliderData.increment)
 
   slider.onStateChange { _ ⇒
-    sliderData.update(slider.getValue * sliderData.increment)
+    sliderData.updateFromTicks(slider.getValue)
     valueLabel.update()
     updateInState(xwValue)
   }
