@@ -19,7 +19,7 @@ artifactName := { (_, _, _) => jarName }
 
 packageOptions += Package.ManifestAttributes(
   ("Extension-Name", "xw"),
-  ("Class-Manager", "uk.ac.surrey.soc.cress.extrawidgets.extension.ExtraWidgetsExtension"),
+  ("Class-Manager", "uk.ac.surrey.xw.extension.ExtraWidgetsExtension"),
   ("NetLogo-Extension-API-Version", "5.0")
 )
 
