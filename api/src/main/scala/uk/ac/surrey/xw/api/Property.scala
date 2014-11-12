@@ -12,7 +12,7 @@ import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
-trait PropertySyntax {
+trait PropertyMetaData[T] {
   val inputType: Int
   val outputType: Int
 }
@@ -20,7 +20,7 @@ trait PropertySyntax {
 abstract class Property[T](
   setter: T ⇒ Unit,
   getter: () ⇒ T)
-  extends PropertySyntax {
+  extends PropertyMetaData[T] {
   protected def fromAny(x: Any): T = x.asInstanceOf[T]
   def get: AnyRef = getter().asInstanceOf[AnyRef]
   def set(value: Any): Unit =

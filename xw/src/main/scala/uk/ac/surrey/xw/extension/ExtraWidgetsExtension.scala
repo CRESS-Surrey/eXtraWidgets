@@ -4,12 +4,10 @@ import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.Primitive
 import org.nlogo.api.PrimitiveManager
-
 import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
-import uk.ac.surrey.xw.api.PropertySyntax
 import uk.ac.surrey.xw.api.WidgetKind
-import uk.ac.surrey.xw.WidgetsLoader;
+import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.extension.prim.Ask
 import uk.ac.surrey.xw.extension.prim.ClearAll
 import uk.ac.surrey.xw.extension.prim.Create
@@ -32,6 +30,7 @@ import uk.ac.surrey.xw.gui.Manager
 import uk.ac.surrey.xw.state.Reader
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
+import uk.ac.surrey.xw.api.PropertyMetaData
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -62,7 +61,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "OF" -> new Of(widgetContextManager),
       "WITH" -> new With(widgetContextManager),
       "GET" -> new Get(reader, defaultProperties, widgetContextManager),
-      "SET" -> new Set(reader, writer, defaultProperties, widgetContextManager),
+      "SET" -> new Set(reader, writer, widgetKinds, defaultProperties, widgetContextManager),
       "REMOVE" -> new Remove(writer),
       "WIDGETS" -> new Widgets(reader),
       "PROPERTY-KEYS" -> new PropertyKeys(reader),
@@ -81,23 +80,25 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     }
 
     // multiple widget kinds may define properties with the same key,
-    // so we group each of these keys with all their possible syntaxes,
-    // which we will "collapse" together when building primitives
+    // so we group each of these keys with all their possible metadata,
+    val propertyMetaData: Map[PropertyKey, Iterable[PropertyMetaData[_]]] =
+      widgetKinds.values.flatMap(_.metaData).groupBy(_._1).mapValues(_.unzip._2)
+
+    // When building getters and setters for properties that are
+    // multiply defined, we fold their syntactic indications together
     // by using bitwise ORs (.reduce(_ | _))
-    val propertySyntaxes: Map[PropertyKey, Iterable[PropertySyntax]] =
-      widgetKinds.values.flatMap(_.syntaxes).groupBy(_._1).mapValues(_.unzip._2)
 
     val getterPrimitives = for {
-      (key, syntaxes) ← propertySyntaxes
+      (key, metaData) ← propertyMetaData
       name = key
-      outputType = syntaxes.map(_.outputType).reduce(_ | _)
+      outputType = metaData.map(_.outputType).reduce(_ | _)
       prim = new GetProperty(reader, key, outputType, widgetContextManager)
     } yield name -> prim
 
     val setterPrimitives = for {
-      (key, syntaxes) ← propertySyntaxes
+      (key, metaData) ← propertyMetaData
       name = "SET-" + key
-      inputType = syntaxes.map(_.inputType).reduce(_ | _)
+      inputType = metaData.map(_.inputType).reduce(_ | _)
       prim = new SetProperty(writer, key, inputType, widgetContextManager)
     } yield name -> prim
 

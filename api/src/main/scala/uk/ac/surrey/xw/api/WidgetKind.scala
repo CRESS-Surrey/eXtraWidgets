@@ -46,12 +46,12 @@ class WidgetKind(clazz: Class[_ <: ExtraWidget]) {
       }
   }
 
-  val syntaxes: Map[PropertyKey, PropertySyntax] =
+  val metaData: Map[PropertyKey, PropertyMetaData[_]] =
     methods.mapValues { method ⇒
       method.getReturnType // should be some sort of Property
         .getConstructors.head // with one and only one constructor
         .newInstance(null, null) // that we use to instantiate a dummy Property
-        .asInstanceOf[PropertySyntax] // that implements the PropertySyntax trait
+        .asInstanceOf[PropertyMetaData[_]] // that implements the PropertyMetaData trait
     }
 
   def properties(w: ExtraWidget): Map[PropertyKey, Property[_]] =
