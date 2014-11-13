@@ -3,6 +3,7 @@ package uk.ac.surrey.xw
 import java.io.File
 import java.io.File.separator
 import java.lang.reflect.Modifier.isAbstract
+import java.lang.reflect.Modifier.isPublic
 import java.net.JarURLConnection
 import java.net.URL
 import java.net.URLClassLoader
@@ -27,8 +28,9 @@ object WidgetsLoader {
         classLoader = newClassLoader(file, getClass.getClassLoader)
         className ← classNamesIn(file)
         clazz = loadClass(className, classLoader, file.toURI.toURL)
-        if classOf[WidgetKind[_]].isAssignableFrom(clazz) &&
-          (!isAbstract(clazz.getModifiers))
+        modifiers = clazz.getModifiers
+        if isPublic(modifiers) && !isAbstract(modifiers) &&
+          classOf[WidgetKind[_]].isAssignableFrom(clazz)
       } yield clazz.newInstance.asInstanceOf[WidgetKind[_]]
     (new TabKind +: widgetKinds)
       .map(kind ⇒ kind.name -> kind)
