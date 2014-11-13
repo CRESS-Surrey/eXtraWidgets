@@ -2,11 +2,13 @@ package uk.ac.surrey.xw.api
 
 import java.awt.Color.black
 import java.awt.Component
-
 import org.nlogo.awt.Fonts.adjustDefaultFont
 import org.nlogo.window.InterfaceColors.SLIDER_BACKGROUND
+import java.awt.Container
 
 abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
+  val enabledProperty = new BooleanProperty[W](
+    "ENABLED", _.setEnabled(_), _.isEnabled, true)
   val xProperty = new IntegerProperty[W](
     "X", _.setX(_), _.getX)
   val yProperty = new IntegerProperty[W](
@@ -22,7 +24,7 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val textColorProperty = new ColorProperty[W](
     "TEXT-COLOR", _.setForeground(_), _.getForeground, black)
   def propertySet = Set(
-    xProperty, yProperty, widthProperty, heightProperty,
+    enabledProperty, xProperty, yProperty, widthProperty, heightProperty,
     hiddenProperty, colorProperty, textColorProperty)
 }
 
@@ -33,4 +35,11 @@ trait ComponentWidget extends ExtraWidget {
   def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)
   def setWidth(width: Int): Unit = setBounds(getX, getY, width, getHeight)
   def setHeight(height: Int): Unit = setBounds(getX, getY, getWidth, height)
+  override def setEnabled(b: Boolean) {
+    super.setEnabled(b)
+    this match {
+      case container: Container ⇒
+        container.getComponents.foreach(_.setEnabled(b))
+    }
+  }
 }

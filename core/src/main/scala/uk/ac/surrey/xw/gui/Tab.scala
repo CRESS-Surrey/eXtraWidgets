@@ -1,12 +1,10 @@
 package uk.ac.surrey.xw.gui
 
 import java.awt.Color.white
-
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.awt.Fonts.adjustDefaultFont
 import org.nlogo.window.GUIWorkspace
-
 import javax.swing.JPanel
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ExtraWidget
@@ -15,15 +13,20 @@ import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
+import uk.ac.surrey.xw.api.ComponentWidgetKind
+import uk.ac.surrey.xw.api.ComponentWidget
 
-class TabKind[W <: Tab] extends WidgetKind[W] {
+class TabKind[W <: Tab] extends ComponentWidgetKind[W] {
   val newWidget = new Tab(_, _, _)
   val name = "TAB"
   val defaultProperty = None
-  val colorProperty = new ColorProperty[W](
+  override val colorProperty = new ColorProperty[W](
     "COLOR", _.setBackground(_), _.getBackground, white)
-  val titleProperty = new StringProperty[W]("TITLE", _.setTitle(_), _.getTitle)
-  override def propertySet = Set(titleProperty, colorProperty)
+  val titleProperty = new StringProperty[W](
+    "TITLE", _.setTitle(_), _.getTitle)
+  override def propertySet = Set(
+    titleProperty, colorProperty, enabledProperty, textColorProperty
+  )
 }
 
 class Tab(
@@ -31,9 +34,7 @@ class Tab(
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends JPanel
-  with ExtraWidget {
-
-  adjustDefaultFont(this)
+  with ComponentWidget {
 
   val kind = new TabKind[this.type]
 
