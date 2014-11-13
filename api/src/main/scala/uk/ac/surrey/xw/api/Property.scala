@@ -60,7 +60,10 @@ class BooleanProperty[W](
   getter: W ⇒ Boolean,
   override val defaultValue: Boolean = false)
   extends Property(_key, setter, getter, defaultValue) {
-  override val key = makeKey(_key) + "?"
+  override val key = {
+    val k = makeKey(_key)
+    if (k.endsWith("?")) k else k + "?"
+  }
   val inputType = BooleanType
   val outputType = BooleanType
 }
