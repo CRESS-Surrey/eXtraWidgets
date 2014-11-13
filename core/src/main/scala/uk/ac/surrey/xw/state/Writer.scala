@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw.state
 
 import scala.collection.mutable.Publisher
-
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
@@ -10,12 +9,16 @@ import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.enrichEither
 import uk.ac.surrey.xw.api.normalizeString
+import uk.ac.surrey.xw.api.XWException
+import uk.ac.surrey.xw.api.WidgetKind
+import uk.ac.surrey.xw.api.KindName
 
 /**
  *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.
  */
 class Writer(
   widgetMap: MutableWidgetMap,
+  widgetKinds: Map[KindName, WidgetKind[_]],
   val reader: Reader)
   extends Publisher[StateEvent]
   with StateUpdater {
@@ -27,8 +30,24 @@ class Writer(
     val properties = propertyMap.normalizeKeys
     reader.validateNonEmpty("widget key", wKey).rightOrThrow
     reader.validateUnique("widget key", wKey).rightOrThrow
-    widgetMap += wKey -> properties.asMutablePropertyMap
-    publish(AddWidget(wKey, properties))
+    val kindName = properties
+      .getOrElse("KIND", throw XWException(
+        "Cannot add widget " + wKey + " since its kind is unspecified.",
+        XWException("KIND missing in: " + properties))
+      ) match {
+        case s: String ⇒ s
+        case x ⇒ throw XWException(
+          "Expected widget kind to be a string but got " + x + " instead.",
+          XWException("KIND not a string in: " + properties)
+        )
+      }
+    val kind = widgetKinds.getOrElse(kindName, throw XWException(
+      "Undefined widget kind: " + kindName + ". " +
+        "Available kinds are: " + widgetKinds.keys.mkString(", ") + "."))
+
+    val allProperties = kind.defaultValues ++ properties
+    widgetMap += wKey -> allProperties.asMutablePropertyMap
+    publish(AddWidget(wKey, allProperties))
   }
 
   def remove(widgetKey: WidgetKey): Unit = {

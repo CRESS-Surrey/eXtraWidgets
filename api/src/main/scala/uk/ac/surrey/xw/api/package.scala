@@ -1,6 +1,5 @@
 package uk.ac.surrey.xw
 
-import java.lang.reflect.Method
 import java.util.Locale.ENGLISH
 
 import scala.collection.immutable
@@ -22,16 +21,10 @@ package object api {
 
   def normalizeString(s: String): String = s.toUpperCase(ENGLISH)
 
-  def makePropertyKey(method: Method) =
-    makeKey(method.getName) +
-      (if (classOf[BooleanProperty]
-        .isAssignableFrom(method.getReturnType))
-        "?" else "")
-
   def makeKey(s: String): Key =
     normalizeString((" " + s).toCharArray.sliding(2)
       .map { case Array(a, b) ⇒ (if (a.isLower && b.isUpper) "-" else "") + b }
-      .mkString).stripPrefix("XW-")
+      .mkString)
 
   implicit def toRunnable[T](block: ⇒ T) =
     new Runnable() { def run() { block } }

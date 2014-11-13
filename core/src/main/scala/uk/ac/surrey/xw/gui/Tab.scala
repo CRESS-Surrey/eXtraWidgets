@@ -4,35 +4,47 @@ import java.awt.Color.white
 
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
+import org.nlogo.awt.Fonts.adjustDefaultFont
 import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
-import uk.ac.surrey.xw
 import uk.ac.surrey.xw.api.ColorProperty
-import uk.ac.surrey.xw.api.JComponentWidget
+import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.StateUpdater
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
+import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
+
+class TabKind[W <: Tab] extends WidgetKind[W] {
+  val newWidget = new Tab(_, _, _)
+  val name = "TAB"
+  val defaultProperty = None
+  val colorProperty = new ColorProperty[W](
+    "COLOR", _.setBackground(_), _.getBackground, white)
+  val titleProperty = new StringProperty[W]("TITLE", _.setTitle(_), _.getTitle)
+  override def propertySet = Set(titleProperty, colorProperty)
+}
 
 class Tab(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends JPanel
-  with JComponentWidget {
+  with ExtraWidget {
+
+  adjustDefaultFont(this)
+
+  val kind = new TabKind[this.type]
 
   override def isOptimizedDrawingEnabled = false
-
-  val xwTitle = new StringProperty(setTitle, getTitle _)
-  override val xwBackground = new ColorProperty(setBackground, getBackground)
 
   val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
     .collectFirst { case app: App ⇒ app.tabs }
     .getOrElse(throw new XWException("Tab widget can't access application tabs."))
 
-  setBackground(white)
   setLayout(null) // use absolute layout
+  setOpaque(true)
 
   addToAppTabs()
 
@@ -53,7 +65,7 @@ class Tab(
       .find { i ⇒
         tabs.getComponentAt(i) match {
           case _: org.nlogo.app.InterfaceTab ⇒ false
-          case _: xw.gui.Tab ⇒ false
+          case _: Tab ⇒ false
           case _ ⇒ true
         }
       }

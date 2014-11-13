@@ -13,27 +13,52 @@ import javax.swing.JLabel
 import javax.swing.JSlider
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
+import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
 import uk.ac.surrey.xw.api.StateUpdater
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
-import uk.ac.surrey.xw.api.annotations.DefaultProperty
 import uk.ac.surrey.xw.api.swing.enrichSlider
 
-@DefaultProperty("VALUE")
+class SliderKind[W <: Slider] extends LabeledPanelWidgetKind[W] {
+  override val name = "SLIDER"
+  override val newWidget = new Slider(_, _, _)
+  val valueProperty = new DoubleProperty[W](
+    "VALUE", _.sliderData.setValue(_), _.sliderData.value, 50)
+  override val defaultProperty = Some(valueProperty)
+  override val propertySet = super.propertySet ++ Set(valueProperty,
+    new StringProperty[W]("UNITS",
+      _.setUnits(_), _.units),
+    new DoubleProperty[W]("MINIMUM",
+      _.sliderData.setMinimum(_), _.sliderData.minimum, 0d),
+    new DoubleProperty[W]("MAXIMUM",
+      _.sliderData.setMaximum(_), _.sliderData.maximum, 100d),
+    new DoubleProperty[W]("INCREMENT",
+      _.sliderData.setIncrement(_), _.sliderData.increment, 1d)
+  )
+}
+
 class Slider(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
-  val sliderData = new SliderData() {
+  override val kind = new SliderKind[this.type]
+
+  class Data extends SliderData {
     def toTicks(v: Double): Int = math.round((v - minimum) / increment).toInt
     def fromTicks(ticks: Int): Double = minimum + (ticks * increment)
     def update(v: Double): Boolean = valueSetter(coerceValue(v))
     def updateFromTicks(ticks: Int): Boolean = update(fromTicks(ticks))
     def maxToTicks: Int = toTicks(maximum)
     def valueToTicks: Int = toTicks(value)
+    def setIncrement(inc: Double): Unit = { increment = inc; slider.updateFromData() }
+    def setMinimum(min: Double): Unit = { minimum = min; slider.updateFromData() }
+    def setMaximum(max: Double): Unit = { maximum = max; slider.updateFromData() }
+    def setValue(v: Double): Unit = { value = v; slider.updateFromData() }
   }
+
+  val sliderData = new Data()
 
   val slider = new JSlider() {
     minorTickSpacing = 1
@@ -57,31 +82,14 @@ class Slider(
   }
   add(valueLabel, EAST)
 
-  private var units = ""
-  val xwUnits = new StringProperty(
-    u ⇒ { units = u; valueLabel.update() },
-    () ⇒ units)
-
-  val xwMinimum = new DoubleProperty(
-    min ⇒ { sliderData.minimum = min; slider.updateFromData() },
-    () ⇒ sliderData.minimum)
-
-  val xwMaximum = new DoubleProperty(
-    max ⇒ { sliderData.maximum = max; slider.updateFromData() },
-    () ⇒ sliderData.maximum)
-
-  val xwValue = new DoubleProperty(
-    v ⇒ if (sliderData.update(v)) slider.updateFromData(),
-    () ⇒ sliderData.value)
-
-  val xwIncrement = new DoubleProperty(
-    inc ⇒ { sliderData.increment = inc; slider.updateFromData() },
-    () ⇒ sliderData.increment)
+  private var _units = ""
+  def setUnits(units: String): Unit = { _units = units; valueLabel.update() }
+  def units = _units
 
   slider.onStateChange { _ ⇒
     sliderData.updateFromTicks(slider.getValue)
     valueLabel.update()
-    updateInState(xwValue)
+    updateInState(kind.valueProperty)
   }
 
   /** copied from org.nlogo.window.AbstractSliderWidget */

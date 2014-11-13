@@ -1,6 +1,5 @@
 package uk.ac.surrey.xw.gui
 
-import java.awt.Component
 import java.awt.Container
 
 import scala.Array.canBuildFrom
@@ -38,7 +37,7 @@ import uk.ac.surrey.xw.state.Writer
 class GUI(
   val app: App,
   val writer: Writer,
-  val widgetKinds: Map[String, WidgetKind])
+  val widgetKinds: Map[String, WidgetKind[_]])
   extends Subscriber[StateEvent, Publisher[StateEvent]] {
 
   writer.subscribe(this)
@@ -81,7 +80,7 @@ class GUI(
       kind ← widgetKinds.get(normalizeString(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
     } {
-      val w = kind.newInstance(widgetKey, writer, app.workspace)
+      val w = kind.newWidget(widgetKey, writer, app.workspace)
       w.init(propertyMap)
       if (!w.isInstanceOf[Tab])
         getTabFor(widgetKey, propertyMap).right.foreach(_.add(w))

@@ -13,10 +13,10 @@ import javax.swing.JTextField
 import javax.swing.KeyStroke.getKeyStroke
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
+import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
 import uk.ac.surrey.xw.api.StateUpdater
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
-import uk.ac.surrey.xw.api.annotations.DefaultProperty
 import uk.ac.surrey.xw.api.swing.enrichComponent
 import uk.ac.surrey.xw.api.swing.newAction
 import uk.ac.surrey.xw.api.toRunnable
@@ -27,7 +27,7 @@ trait HasTextField {
   def afterTextUpdate(): Unit = {}
   def defaultText = ""
 
-  protected var text = defaultText
+  var text = defaultText
 
   val textField = new JTextField(text) {
     getInputMap.put(getKeyStroke(VK_ENTER, 0),
@@ -48,7 +48,16 @@ trait HasTextField {
   }
 }
 
-@DefaultProperty("TEXT")
+class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
+  val newWidget = new TextInput(_, _, _)
+  val name = "TEXT-INPUT"
+  val defaultProperty = None
+  val textProperty = new StringProperty[W]("TEXT",
+    (w, s) ⇒ { w.text = s; w.textField.setText(s) },
+    _.text)
+  override def propertySet = (super.propertySet) ++ Set(textProperty)
+}
+
 class TextInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
@@ -56,24 +65,31 @@ class TextInput(
   extends LabeledPanelWidget
   with HasTextField {
 
+  override val kind = new TextInputKind[this.type]
   add(textField, CENTER)
-
-  val xwText = new StringProperty(
-    s ⇒ { text = s; textField.setText(s) },
-    () ⇒ text
-  )
-
-  override def afterTextUpdate() =
-    updateInState(xwText)
+  override def afterTextUpdate() = updateInState(kind.textProperty)
 }
 
-@DefaultProperty("NUMBER")
+class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
+  val newWidget = new TextInput(_, _, _)
+  val name = "NUMERIC-INPUT"
+  val numberProperty = new DoubleProperty[W](
+    "NUMBER",
+    (w, d) ⇒ { w.number = d; w.textField.setText(w.format(w.number)) },
+    _.number
+  )
+  val defaultProperty = Some(numberProperty)
+  override def propertySet = (super.propertySet) ++ Set(numberProperty)
+}
+
 class NumericInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends LabeledPanelWidget
   with HasTextField {
+
+  override val kind = new NumericInputKind[this.type]
 
   add(textField, CENTER)
 
@@ -82,11 +98,6 @@ class NumericInput(
 
   var number: Double = 0.0
   override def defaultText = format(number)
-
-  val xwNumber = new DoubleProperty(
-    d ⇒ { number = d; textField.setText(format(number)) },
-    () ⇒ number
-  )
 
   override def validateText =
     NumberParser.parse(textField.getText()) match {
@@ -97,6 +108,6 @@ class NumericInput(
   override def afterTextUpdate() =
     for (d ← NumberParser.parse(textField.getText()).right) {
       number = d
-      updateInState(xwNumber)
+      updateInState(kind.numberProperty)
     }
 }

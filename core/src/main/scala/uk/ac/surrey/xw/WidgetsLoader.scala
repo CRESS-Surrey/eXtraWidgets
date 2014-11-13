@@ -2,23 +2,22 @@ package uk.ac.surrey.xw
 
 import java.io.File
 import java.io.File.separator
+import java.lang.reflect.Modifier.isAbstract
 import java.net.JarURLConnection
 import java.net.URL
 import java.net.URLClassLoader
 import java.util.jar.Attributes
 import java.util.jar.JarFile
 
-import scala.Array.canBuildFrom
 import scala.collection.JavaConverters.enumerationAsScalaIteratorConverter
 
-import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.gui.Tab
+import uk.ac.surrey.xw.gui.TabKind
 
 object WidgetsLoader {
 
-  def loadWidgetKinds(): Map[String, WidgetKind] = {
+  def loadWidgetKinds(): Map[String, WidgetKind[_]] = {
     val widgetKinds =
       for {
         folder ← getWidgetsFolder.listFiles
@@ -28,11 +27,12 @@ object WidgetsLoader {
         classLoader = newClassLoader(file, getClass.getClassLoader)
         className ← classNamesIn(file)
         clazz = loadClass(className, classLoader, file.toURI.toURL)
-        if classOf[ExtraWidget].isAssignableFrom(clazz)
-        widgetClass = clazz.asSubclass(classOf[ExtraWidget])
-      } yield new WidgetKind(widgetClass)
-    (new WidgetKind(classOf[Tab]) +: widgetKinds)
-      .map(kind ⇒ kind.name -> kind)(collection.breakOut)
+        if classOf[WidgetKind[_]].isAssignableFrom(clazz) &&
+          (!isAbstract(clazz.getModifiers))
+      } yield clazz.newInstance.asInstanceOf[WidgetKind[_]]
+    (new TabKind +: widgetKinds)
+      .map(kind ⇒ kind.name -> kind)
+      .toMap
   }
 
   def classNamesIn(jar: File): Iterator[String] =

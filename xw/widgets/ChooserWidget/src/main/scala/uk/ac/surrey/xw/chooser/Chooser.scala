@@ -17,15 +17,42 @@ import uk.ac.surrey.xw.api.ListProperty
 import uk.ac.surrey.xw.api.ObjectProperty
 import uk.ac.surrey.xw.api.StateUpdater
 import uk.ac.surrey.xw.api.WidgetKey
-import uk.ac.surrey.xw.api.annotations.DefaultProperty
+import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.swing.enrichItemSelectable
 
-@DefaultProperty("SELECTED-ITEM")
+class ChooserKind[W <: Chooser] extends WidgetKind[W] {
+
+  override val name = "CHOOSER"
+  override val newWidget = new Chooser(_, _, _)
+
+  val selectedItemProperty = new ObjectProperty[W](
+    "SELECTED-ITEM",
+    _.combo.setSelectedItem(_),
+    w ⇒ Option(w.combo.getSelectedItem).getOrElse(Nobody)
+  )
+
+  val itemsProperty = new ListProperty[W](
+    "ITEMS",
+    (w, xs) ⇒ {
+      w.combo.removeAllItems()
+      xs.foreach(w.combo.addItem(_))
+      w.combo.setSelectedItem(xs.toVector.headOption.orNull)
+    },
+    w ⇒ LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt): _*)
+  )
+
+  override def propertySet = Set(selectedItemProperty, itemsProperty)
+
+  override def defaultProperty = Some(selectedItemProperty)
+}
+
 class Chooser(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends LabeledPanelWidget {
+
+  override val kind = new ChooserKind[this.type]
 
   val combo = new JComboBox()
   add(combo, CENTER)
@@ -42,22 +69,8 @@ class Chooser(
     }
   })
 
-  val xwItems = new ListProperty(
-    xs ⇒ {
-      combo.removeAllItems()
-      xs.foreach(combo.addItem(_))
-      combo.setSelectedItem(xs.toVector.headOption.orNull)
-    },
-    () ⇒ LogoList((0 until combo.getItemCount).map(combo.getItemAt): _*)
-  )
-
-  val xwSelectedItem = new ObjectProperty(
-    combo.setSelectedItem,
-    () ⇒ Option(combo.getSelectedItem).getOrElse(Nobody)
-  )
-
   combo.onItemStateChanged { event ⇒
     if (event.getStateChange == SELECTED)
-      updateInState(xwSelectedItem)
+      updateInState(kind.selectedItemProperty)
   }
 }

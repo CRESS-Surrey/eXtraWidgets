@@ -25,7 +25,7 @@ class Manager(
   val app: App,
   val reader: Reader,
   val writer: Writer,
-  val widgetKinds: Map[String, WidgetKind]) {
+  val widgetKinds: Map[String, WidgetKind[_]]) {
 
   val gui = new GUI(app, writer, widgetKinds)
 

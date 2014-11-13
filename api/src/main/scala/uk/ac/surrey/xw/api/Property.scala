@@ -1,5 +1,7 @@
 package uk.ac.surrey.xw.api
 
+import java.awt.Color
+
 import org.nlogo.api.Color.MaxColor
 import org.nlogo.api.Color.getColor
 import org.nlogo.api.Color.modulateDouble
@@ -12,77 +14,89 @@ import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 
-trait PropertyMetaData[T] {
+abstract class Property[+T, W](
+  _key: PropertyKey,
+  setter: (W, T) ⇒ Unit,
+  getter: W ⇒ T,
+  val defaultValue: T) {
   val inputType: Int
   val outputType: Int
-}
-
-abstract class Property[T](
-  setter: T ⇒ Unit,
-  getter: () ⇒ T)
-  extends PropertyMetaData[T] {
+  val key = makeKey(_key)
   protected def fromAny(x: Any): T = x.asInstanceOf[T]
-  def get: AnyRef = getter().asInstanceOf[AnyRef]
-  def set(value: Any): Unit =
-    try setter(fromAny(value))
+  def get(w: W): AnyRef = getter(w).asInstanceOf[AnyRef]
+  def set(w: W, value: Any): Unit =
+    try setter(w, fromAny(value))
     catch {
       case e: ClassCastException ⇒ throw XWException(
-        "Expected " + Dump.typeName(get) + " but got " +
+        "Expected " + Dump.typeName(get(w)) + " but got " +
           Dump.logoObject(value.asInstanceOf[AnyRef]) +
           " instead.", e)
     }
-  override def toString = Dump.logoObject(get)
 }
 
-class ObjectProperty(
-  setter: AnyRef ⇒ Unit,
-  getter: () ⇒ AnyRef)
-  extends Property(setter, getter) {
+class ObjectProperty[W](
+  _key: PropertyKey,
+  setter: (W, AnyRef) ⇒ Unit,
+  getter: W ⇒ AnyRef,
+  override val defaultValue: AnyRef = null)
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = WildcardType
   val outputType = WildcardType
 }
 
-class StringProperty(
-  setter: String ⇒ Unit,
-  getter: () ⇒ String)
-  extends Property(setter, getter) {
+class StringProperty[W](
+  _key: PropertyKey,
+  setter: (W, String) ⇒ Unit,
+  getter: W ⇒ String,
+  override val defaultValue: String = "")
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = StringType
   val outputType = StringType
 }
 
-class BooleanProperty(
-  setter: Boolean ⇒ Unit,
-  getter: () ⇒ Boolean)
-  extends Property(setter, getter) {
+class BooleanProperty[W](
+  _key: PropertyKey,
+  setter: (W, Boolean) ⇒ Unit,
+  getter: W ⇒ Boolean,
+  override val defaultValue: Boolean = false)
+  extends Property(_key, setter, getter, defaultValue) {
+  override val key = makeKey(_key) + "?"
   val inputType = BooleanType
   val outputType = BooleanType
 }
 
-class IntegerProperty(
-  setter: Int ⇒ Unit,
-  getter: () ⇒ Int)
-  extends Property(setter, getter) {
+class IntegerProperty[W](
+  _key: PropertyKey,
+  setter: (W, Int) ⇒ Unit,
+  getter: W ⇒ Int,
+  override val defaultValue: Int = 0)
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = NumberType
   val outputType = NumberType
   override def fromAny(x: Any): Int = x match {
     case d: java.lang.Double ⇒ d.intValue
     case _ ⇒ super.fromAny(x)
   }
-  override def get = Double.box(getter().toDouble)
+  override def get(w: W) = Double.box(getter(w).toDouble)
 }
 
-class DoubleProperty(
-  setter: Double ⇒ Unit,
-  getter: () ⇒ Double)
-  extends Property(setter, getter) {
+class DoubleProperty[W](
+  _key: PropertyKey,
+  setter: (W, Double) ⇒ Unit,
+  getter: W ⇒ Double,
+  override val defaultValue: Double = 0d)
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = NumberType
   val outputType = NumberType
+
 }
 
-class ColorProperty(
-  setter: java.awt.Color ⇒ Unit,
-  getter: () ⇒ java.awt.Color)
-  extends Property(setter, getter) {
+class ColorProperty[W](
+  _key: PropertyKey,
+  setter: (W, Color) ⇒ Unit,
+  getter: W ⇒ Color,
+  override val defaultValue: Color = Color.white)
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = NumberType | ListType
   val outputType = ListType
   override def fromAny(x: Any): java.awt.Color = {
@@ -97,8 +111,8 @@ class ColorProperty(
     }
   }
 
-  override def get: AnyRef = {
-    val c = getter()
+  override def get(w: W): AnyRef = {
+    val c = getter(w)
     val rgb = Vector(c.getRed, c.getGreen, c.getBlue)
     val a = c.getAlpha
     val rgba = if (a == 255) rgb else rgb :+ a
@@ -126,10 +140,13 @@ class ColorProperty(
   }
 }
 
-class ListProperty(
-  setter: LogoList ⇒ Unit,
-  getter: () ⇒ LogoList)
-  extends Property(setter, getter) {
+class ListProperty[W](
+  _key: PropertyKey,
+  setter: (W, LogoList) ⇒ Unit,
+  getter: W ⇒ LogoList,
+  override val defaultValue: LogoList = LogoList.Empty)
+  extends Property(_key, setter, getter, defaultValue) {
   val inputType = ListType
   val outputType = ListType
+
 }
