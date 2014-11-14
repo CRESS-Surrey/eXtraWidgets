@@ -1,16 +1,13 @@
 package uk.ac.surrey.xw.gui
 
 import java.awt.Container
-
 import scala.Array.canBuildFrom
 import scala.Option.option2Iterable
 import scala.collection.TraversableOnce.flattenTraversableOnce
 import scala.collection.mutable.Publisher
 import scala.collection.mutable.Subscriber
-
 import org.nlogo.app.App
 import org.nlogo.awt.EventQueue.invokeLater
-
 import Strings.DefaultTabName
 import Strings.TabIDQuestion
 import Swing.inputDialog
@@ -20,6 +17,7 @@ import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
+import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 import uk.ac.surrey.xw.api.Tab
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
@@ -34,6 +32,7 @@ import uk.ac.surrey.xw.state.RemoveWidget
 import uk.ac.surrey.xw.state.SetProperty
 import uk.ac.surrey.xw.state.StateEvent
 import uk.ac.surrey.xw.state.Writer
+import uk.ac.surrey.xw.api.TabKind
 
 class GUI(
   val app: App,
@@ -44,7 +43,7 @@ class GUI(
   writer.subscribe(this)
 
   val tabs = app.tabs
-  val tabKindName = makeKey(classOf[Tab].getSimpleName)
+  val tabKindName = new TabKind[Tab].name
 
   override def notify(pub: Publisher[StateEvent], event: StateEvent): Unit =
     invokeLater {
@@ -105,23 +104,18 @@ class GUI(
     }
 
   private def getTabFor(widgetKey: WidgetKey, propertyMap: PropertyMap): Either[XWException, Tab] = {
-    val tabs = extraWidgetTabs
+    val tabs = app.workspace.xwTabs
     for {
       tabKey ← propertyMap
         .get(tabKindName)
         .map(key ⇒ normalizeString(key.toString))
-        .orElse(tabs.headOption.map(_.key))
+        .orElse(tabs.lastOption.map(_.key))
         .orException("There exists no tab for widget " + widgetKey + ".").right
       tab ← tabs
         .find(_.key == tabKey)
         .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
     } yield tab
   }
-
-  private def extraWidgetTabs: Vector[Tab] =
-    tabs.getComponents.collect {
-      case t: Tab ⇒ t
-    }(collection.breakOut)
 
   def createNewTab(): Unit = {
     def askName(default: String) = inputDialog(TabIDQuestion, default)
