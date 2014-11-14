@@ -8,8 +8,6 @@ import org.nlogo.api.LogoList
 
 package object api {
 
-  val pluginName = "eXtraWidgets"
-
   type Key = String
   type WidgetKey = Key
   type PropertyKey = Key

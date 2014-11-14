@@ -9,7 +9,6 @@ import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
 import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.api.pluginName
 
 object Swing {
 
@@ -69,7 +68,7 @@ object Swing {
     Option(JOptionPane.showInputDialog(
       null, // parent frame
       question,
-      pluginName,
+      "eXtraWidgets",
       JOptionPane.QUESTION_MESSAGE,
       null, // icon
       null, // options
@@ -82,7 +81,7 @@ object Swing {
     JOptionPane.showMessageDialog(
       null, // parent frame
       exception.message,
-      pluginName + " Plugin Warning!",
+      "eXtraWidgets Extension Warning!",
       JOptionPane.WARNING_MESSAGE)
   }
 }
