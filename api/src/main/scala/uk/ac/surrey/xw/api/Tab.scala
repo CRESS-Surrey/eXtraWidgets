@@ -17,8 +17,11 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
     "TITLE", _.setTitle(_), _.getTitle)
   val enabledProperty = new BooleanProperty[W](
     "ENABLED", _.setEnabled(_), _.isEnabled, true)
+  val orderProperty = new DoubleProperty[W](
+    "ORDER", _.order = _, _.order, 0d
+  )
   override def propertySet = Set(
-    titleProperty, colorProperty, enabledProperty
+    titleProperty, colorProperty, enabledProperty, orderProperty
   )
 }
 
@@ -27,10 +30,12 @@ class Tab(
   val stateUpdater: StateUpdater,
   val ws: GUIWorkspace)
   extends JPanel
-  with ComponentWidget
+  with ExtraWidget
   with ControlsChildrenEnabling {
 
   val kind = new TabKind[this.type]
+
+  var order = 0d
 
   override def isOptimizedDrawingEnabled = false
 
