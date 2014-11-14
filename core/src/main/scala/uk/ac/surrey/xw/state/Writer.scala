@@ -1,19 +1,20 @@
 package uk.ac.surrey.xw.state
 
+import scala.Option.option2Iterable
 import scala.collection.mutable.Publisher
+
+import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
 import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.Tab
+import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKey
+import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.enrichEither
 import uk.ac.surrey.xw.api.normalizeString
-import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.api.WidgetKind
-import uk.ac.surrey.xw.api.KindName
-import uk.ac.surrey.xw.api.TabKind
-import uk.ac.surrey.xw.api.Tab
 
 /**
  *  This is the only class that should <em>ever</em> write to the MutableWidgetMap.
@@ -27,10 +28,12 @@ class Writer(
 
   override type Pub = Publisher[StateEvent]
 
-  val kindPropertyKey = "KIND"
-  val orderPropertyKey = "ORDER"
   val tabPropertyKey = "TAB"
-  val tabKindName = new TabKind[Tab].name
+  val kindPropertyKey = "KIND"
+  val (tabKindName, orderPropertyKey) = {
+    val tabKind = new TabKind[Tab]
+    (tabKind.name, tabKind.orderProperty.key)
+  }
 
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val wKey = normalizeString(widgetKey)
@@ -39,7 +42,6 @@ class Writer(
     reader.validateUnique("widget key", wKey).rightOrThrow
 
     val kind = getKind(widgetKey, properties)
-    println(kind)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒ Map.empty
       case _ if properties.isDefinedAt(tabPropertyKey) ⇒ Map.empty
@@ -72,10 +74,8 @@ class Writer(
       (widgetKey, properties) ← widgetMap.toSeq
       kindName ← properties.get(kindPropertyKey)
       if kindName == tabKindName
-      order = properties.get(orderPropertyKey) match {
-        case Some(n: java.lang.Double) ⇒ n
-        case _ ⇒ Double.box(0)
-      }
+      order ← properties.get(orderPropertyKey)
+        .collect { case order: java.lang.Double ⇒ order }
     } yield (widgetKey, order))
       .sorted
       .lastOption

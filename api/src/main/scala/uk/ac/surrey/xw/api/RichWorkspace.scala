@@ -20,4 +20,10 @@ class RichWorkspace(ws: GUIWorkspace) {
     tabs.getComponents.collect {
       case t: Tab ⇒ t
     }(collection.breakOut)
+
+  def reorderTabs(): Unit =
+    for (tab ← xwTabs.sortBy(t ⇒ (t.getOrder, t.key))) {
+      tabs.remove(tab)
+      tab.addToAppTabs()
+    }
 }
