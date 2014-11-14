@@ -10,10 +10,8 @@ trait ExtraWidget extends Component {
   val kind: WidgetKind[this.type]
 
   def init(propertyMap: PropertyMap): Unit =
-    for ((propertyKey, value) ← propertyMap) {
-      println(propertyKey, value)
+    for ((propertyKey, value) ← propertyMap)
       setProperty(propertyKey, value)
-    }
 
   def setProperty(
     propertyKey: PropertyKey,
