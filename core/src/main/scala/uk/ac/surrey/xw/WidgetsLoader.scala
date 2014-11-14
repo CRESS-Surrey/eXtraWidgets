@@ -9,12 +9,11 @@ import java.net.URL
 import java.net.URLClassLoader
 import java.util.jar.Attributes
 import java.util.jar.JarFile
-
 import scala.collection.JavaConverters.enumerationAsScalaIteratorConverter
-
 import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
+import uk.ac.surrey.xw.api.ExtraWidget
 
 object WidgetsLoader {
 
@@ -31,7 +30,7 @@ object WidgetsLoader {
         modifiers = clazz.getModifiers
         if isPublic(modifiers) && !isAbstract(modifiers) &&
           classOf[WidgetKind[_]].isAssignableFrom(clazz)
-      } yield clazz.newInstance.asInstanceOf[WidgetKind[_]]
+      } yield clazz.newInstance.asInstanceOf[WidgetKind[_ <: ExtraWidget]]
     (new TabKind +: widgetKinds)
       .map(kind ⇒ kind.name -> kind)
       .toMap
