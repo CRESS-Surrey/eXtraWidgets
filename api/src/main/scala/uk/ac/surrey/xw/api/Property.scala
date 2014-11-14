@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Color
-
 import org.nlogo.api.Color.MaxColor
 import org.nlogo.api.Color.getColor
 import org.nlogo.api.Color.modulateDouble
@@ -13,6 +12,7 @@ import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.NumberType
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
+import org.nlogo.api.Nobody
 
 abstract class Property[+T, W](
   _key: PropertyKey,
@@ -38,7 +38,7 @@ class ObjectProperty[W](
   _key: PropertyKey,
   setter: (W, AnyRef) ⇒ Unit,
   getter: W ⇒ AnyRef,
-  override val defaultValue: AnyRef = null)
+  override val defaultValue: AnyRef = Nobody)
   extends Property(_key, setter, getter, defaultValue) {
   val inputType = WildcardType
   val outputType = WildcardType
