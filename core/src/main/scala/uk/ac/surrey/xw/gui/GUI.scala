@@ -43,7 +43,7 @@ class GUI(
   writer.subscribe(this)
 
   val tabs = app.tabs
-  val tabKindName = new TabKind[Tab].name
+  val tabPropertyKey = new TabKind[Tab].name
 
   override def notify(pub: Publisher[StateEvent], event: StateEvent): Unit =
     invokeLater {
@@ -107,10 +107,10 @@ class GUI(
     val tabs = app.workspace.xwTabs
     for {
       tabKey ← propertyMap
-        .get(tabKindName)
-        .map(key ⇒ normalizeString(key.toString))
-        .orElse(tabs.lastOption.map(_.key))
-        .orException("There exists no tab for widget " + widgetKey + ".").right
+        .get(tabPropertyKey)
+        .collect { case s: String ⇒ s }
+        .map(normalizeString)
+        .orException("Tab not defined for widget " + widgetKey + ".").right
       tab ← tabs
         .find(_.key == tabKey)
         .orException("Tab " + tabKey + " does not exist for widget " + widgetKey + ".").right
@@ -123,7 +123,7 @@ class GUI(
       .iterate(askName(DefaultTabName))(_.flatMap(askName))
       .takeWhile(_.isDefined)
       .flatten
-      .map(key ⇒ tryTo(writer.add(key, Map("kind" -> tabKindName))))
+      .map(key ⇒ tryTo(writer.add(key, Map("kind" -> tabPropertyKey))))
       .takeWhile(_.isLeft)
       .flatMap(_.left.toSeq)
       .foreach(warningDialog)
