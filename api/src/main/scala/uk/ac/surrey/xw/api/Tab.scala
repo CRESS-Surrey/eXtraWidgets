@@ -7,16 +7,18 @@ import org.nlogo.window.GUIWorkspace
 import javax.swing.JPanel
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
-class TabKind[W <: Tab] extends ComponentWidgetKind[W] {
+class TabKind[W <: Tab] extends WidgetKind[W] {
   val newWidget = new Tab(_, _, _)
   val name = "TAB"
   val defaultProperty = None
-  override val colorProperty = new ColorProperty[W](
+  val colorProperty = new ColorProperty[W](
     "COLOR", _.setBackground(_), _.getBackground, white)
   val titleProperty = new StringProperty[W](
     "TITLE", _.setTitle(_), _.getTitle)
+  val enabledProperty = new BooleanProperty[W](
+    "ENABLED", _.setEnabled(_), _.isEnabled, true)
   override def propertySet = Set(
-    titleProperty, colorProperty, enabledProperty, textColorProperty
+    titleProperty, colorProperty, enabledProperty
   )
 }
 
@@ -25,7 +27,8 @@ class Tab(
   val stateUpdater: StateUpdater,
   ws: GUIWorkspace)
   extends JPanel
-  with ComponentWidget {
+  with ComponentWidget
+  with ControlsChildrenEnabling {
 
   val kind = new TabKind[this.type]
 

@@ -28,18 +28,12 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
     hiddenProperty, colorProperty, textColorProperty)
 }
 
-trait ComponentWidget extends ExtraWidget {
-  self: Component ⇒
+trait ComponentWidget
+  extends ExtraWidget
+  with ControlsChildrenEnabling {
   adjustDefaultFont(this)
   def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
   def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)
   def setWidth(width: Int): Unit = setBounds(getX, getY, width, getHeight)
   def setHeight(height: Int): Unit = setBounds(getX, getY, getWidth, height)
-  override def setEnabled(b: Boolean) {
-    super.setEnabled(b)
-    this match {
-      case container: Container ⇒
-        container.getComponents.foreach(_.setEnabled(b))
-    }
-  }
 }
