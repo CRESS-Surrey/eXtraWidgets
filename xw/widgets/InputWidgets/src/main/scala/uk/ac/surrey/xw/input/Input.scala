@@ -61,7 +61,7 @@ class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
 class TextInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends LabeledPanelWidget
   with HasTextField {
 
@@ -85,7 +85,7 @@ class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
 class NumericInput(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends LabeledPanelWidget
   with HasTextField {
 

@@ -40,7 +40,7 @@ class SliderKind[W <: Slider] extends LabeledPanelWidgetKind[W] {
 class Slider(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
   override val kind = new SliderKind[this.type]

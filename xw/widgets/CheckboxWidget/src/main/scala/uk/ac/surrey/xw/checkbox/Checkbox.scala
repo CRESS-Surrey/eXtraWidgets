@@ -18,7 +18,7 @@ class CheckboxKind[W <: Checkbox] extends AbstractButtonWidgetKind[W] {
 class Checkbox(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends JCheckBox
   with AbstractButtonWidget {
   override val kind = new CheckboxKind[this.type]

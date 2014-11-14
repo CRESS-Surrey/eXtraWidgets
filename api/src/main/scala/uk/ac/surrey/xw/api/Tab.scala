@@ -25,7 +25,7 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
 class Tab(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends JPanel
   with ComponentWidget
   with ControlsChildrenEnabling {

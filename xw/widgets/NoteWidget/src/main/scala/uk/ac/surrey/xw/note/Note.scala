@@ -20,7 +20,7 @@ class NoteKind[W <: Note] extends JComponentWidgetKind[W] {
 class Note(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends JLabel
   with JComponentWidget {
   val kind = new NoteKind[this.type]

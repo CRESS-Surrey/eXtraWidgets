@@ -1,9 +1,11 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Component
+import org.nlogo.window.GUIWorkspace
 
 trait ExtraWidget extends Component {
 
+  val ws: GUIWorkspace
   val key: WidgetKey
   val stateUpdater: StateUpdater
 

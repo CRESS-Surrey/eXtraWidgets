@@ -49,7 +49,7 @@ class ChooserKind[W <: Chooser] extends WidgetKind[W] {
 class Chooser(
   val key: WidgetKey,
   val stateUpdater: StateUpdater,
-  ws: GUIWorkspace)
+  val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
   override val kind = new ChooserKind[this.type]
