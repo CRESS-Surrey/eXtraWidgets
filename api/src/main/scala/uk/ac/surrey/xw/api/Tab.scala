@@ -18,7 +18,7 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
   val enabledProperty = new BooleanProperty[W](
     "ENABLED", _.setEnabled(_), _.isEnabled, true)
   val orderProperty = new DoubleProperty[W](
-    "ORDER", _.order = _, _.order, 0d
+    "ORDER", _.setOrder(_), _.getOrder, 0d
   )
   override def propertySet = Set(
     titleProperty, colorProperty, enabledProperty, orderProperty
@@ -35,7 +35,12 @@ class Tab(
 
   val kind = new TabKind[this.type]
 
-  var order = 0d
+  private var _order = 0d
+  def setOrder(order: Double) = {
+    _order = order
+    ws.reorderTabs
+  }
+  def getOrder = _order
 
   override def isOptimizedDrawingEnabled = false
 
@@ -51,12 +56,13 @@ class Tab(
       .find(i ⇒ tabs.getComponentAt(i) == this)
       .getOrElse(throw XWException("Tab " + key + " not in application tabs."))
 
+  private var _title = ""
   def setTitle(title: String): Unit = {
+    _title = title
     tabs.setTitleAt(index, title)
     tabs.tabsMenu.getItem(index).setText(title)
   }
-
-  def getTitle: String = tabs.getTitleAt(index)
+  def getTitle: String = _title
 
   def addToAppTabs(): Unit =
     (0 until tabs.getTabCount)
@@ -68,7 +74,7 @@ class Tab(
         }
       }
       .foreach { i ⇒
-        tabs.insertTab(key, null, this, null, i)
+        tabs.insertTab(_title, null, this, null, i)
         rebuildTabsMenu()
       }
 
