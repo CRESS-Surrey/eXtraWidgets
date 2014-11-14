@@ -20,6 +20,7 @@ import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
+import uk.ac.surrey.xw.api.Tab
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException

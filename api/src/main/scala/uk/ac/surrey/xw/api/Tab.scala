@@ -1,20 +1,11 @@
-package uk.ac.surrey.xw.gui
+package uk.ac.surrey.xw.api
 
 import java.awt.Color.white
-import org.nlogo.app.App
-import org.nlogo.app.AppFrame
-import org.nlogo.awt.Fonts.adjustDefaultFont
+
 import org.nlogo.window.GUIWorkspace
+
 import javax.swing.JPanel
-import uk.ac.surrey.xw.api.ColorProperty
-import uk.ac.surrey.xw.api.ExtraWidget
-import uk.ac.surrey.xw.api.StateUpdater
-import uk.ac.surrey.xw.api.StringProperty
-import uk.ac.surrey.xw.api.WidgetKey
-import uk.ac.surrey.xw.api.WidgetKind
-import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.api.ComponentWidgetKind
-import uk.ac.surrey.xw.api.ComponentWidget
+import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
 class TabKind[W <: Tab] extends ComponentWidgetKind[W] {
   val newWidget = new Tab(_, _, _)
@@ -40,9 +31,7 @@ class Tab(
 
   override def isOptimizedDrawingEnabled = false
 
-  val tabs = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
-    .collectFirst { case app: App ⇒ app.tabs }
-    .getOrElse(throw new XWException("Tab widget can't access application tabs."))
+  val tabs = ws.tabs
 
   setLayout(null) // use absolute layout
   setOpaque(true)

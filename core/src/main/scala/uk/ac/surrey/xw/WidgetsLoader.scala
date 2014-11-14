@@ -12,9 +12,9 @@ import java.util.jar.JarFile
 
 import scala.collection.JavaConverters.enumerationAsScalaIteratorConverter
 
+import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.gui.TabKind
 
 object WidgetsLoader {
 
