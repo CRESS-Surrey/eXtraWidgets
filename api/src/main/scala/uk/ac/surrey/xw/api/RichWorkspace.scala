@@ -16,10 +16,8 @@ class RichWorkspace(ws: GUIWorkspace) {
     .collectFirst { case app: App ⇒ app.tabs }
     .getOrElse(throw new XWException("Can't access application tabs."))
 
-  def xwTabs: IndexedSeq[Tab] = {
-    val _tabs = tabs
-    (0 until _tabs.getTabCount)
-      .map(_tabs.getComponentAt)
-      .collect { case tab: Tab ⇒ tab }
-  }
+  def xwTabs: Vector[Tab] =
+    tabs.getComponents.collect {
+      case t: Tab ⇒ t
+    }(collection.breakOut)
 }
