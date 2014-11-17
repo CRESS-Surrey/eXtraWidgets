@@ -88,7 +88,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       (key, syntaxes) ← propertySyntaxes.groupBy(_._1)
       (_, inputTypes, outputTypes) = syntaxes.unzip3
       inputType = inputTypes.reduce(_ | _)
-      setter = new SetProperty(writer, key, inputType, widgetContextManager)
+      setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
       outputType = outputTypes.reduce(_ | _)
       getter = new GetProperty(reader, key, outputType, widgetContextManager)
       (name, prim) ← Seq(("SET-" + key, setter), (key, getter))
