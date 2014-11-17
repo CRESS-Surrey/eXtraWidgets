@@ -23,10 +23,11 @@ abstract class Property[+T, W](
   val outputType: Int
   val key = makeKey(_key)
   def fromAny(x: Any): T = {
-    if (!m.erasure.isAssignableFrom(x.getClass)) throw XWException(
-      "Expected " + Dump.typeName(m.erasure) + " but got " +
-        Dump.logoObject(x.asInstanceOf[AnyRef]) +
-        " instead.")
+    if (!m.erasure.isAssignableFrom(x.getClass))
+      throw new IllegalArgumentException(
+        "Expected a " + Dump.typeName(m.erasure) + " but got " +
+          Dump.logoObject(x.asInstanceOf[AnyRef], true, false) +
+          " instead.")
     x.asInstanceOf[T]
   }
   def get(w: W): AnyRef = getter(w).asInstanceOf[AnyRef]

@@ -6,10 +6,10 @@ import org.nlogo.api.DefaultCommand
 import org.nlogo.api.Syntax.StringType
 import org.nlogo.api.Syntax.WildcardType
 import org.nlogo.api.Syntax.commandSyntax
-
 import uk.ac.surrey.xw.extension.KindInfo
 import uk.ac.surrey.xw.extension.WidgetContextManager
 import uk.ac.surrey.xw.state.Writer
+import uk.ac.surrey.xw.api.XWException
 
 class Set(
   writer: Writer,
@@ -28,7 +28,9 @@ class Set(
      * we want it to fail before we actually write the value
      * to the property map. NP 2014-11-17.
      */
-    val value = property.fromAny(propertyValue).asInstanceOf[AnyRef]
+    val value =
+      try property.fromAny(propertyValue).asInstanceOf[AnyRef]
+      catch { case e: IllegalArgumentException ⇒ throw XWException(e.getMessage, e) }
 
     writer.set(property.key, widgetKey, value, true)
   }
