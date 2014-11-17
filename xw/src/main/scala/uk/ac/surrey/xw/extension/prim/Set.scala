@@ -23,8 +23,13 @@ class Set(
 
     val property = kindInfo.defaultProperty(widgetKey)
 
-    // TODO: check property syntax
+    /* we call `property.fromAny` here instead even though
+     * property.set is also going to call it later because
+     * we want it to fail before we actually write the value
+     * to the property map. NP 2014-11-17.
+     */
+    val value = property.fromAny(propertyValue).asInstanceOf[AnyRef]
 
-    writer.set(property.key, widgetKey, propertyValue, true)
+    writer.set(property.key, widgetKey, value, true)
   }
 }

@@ -18,20 +18,19 @@ abstract class Property[+T, W](
   _key: PropertyKey,
   setter: (W, T) ⇒ Unit,
   getter: W ⇒ T,
-  val defaultValue: T) {
+  val defaultValue: T)(implicit m: Manifest[T]) {
   val inputType: Int
   val outputType: Int
   val key = makeKey(_key)
-  protected def fromAny(x: Any): T = x.asInstanceOf[T]
+  def fromAny(x: Any): T = {
+    if (!m.erasure.isAssignableFrom(x.getClass)) throw XWException(
+      "Expected " + Dump.typeName(m.erasure) + " but got " +
+        Dump.logoObject(x.asInstanceOf[AnyRef]) +
+        " instead.")
+    x.asInstanceOf[T]
+  }
   def get(w: W): AnyRef = getter(w).asInstanceOf[AnyRef]
-  def set(w: W, value: Any): Unit =
-    try setter(w, fromAny(value))
-    catch {
-      case e: ClassCastException ⇒ throw XWException(
-        "Expected " + Dump.typeName(get(w)) + " but got " +
-          Dump.logoObject(value.asInstanceOf[AnyRef]) +
-          " instead.", e)
-    }
+  def set(w: W, value: Any): Unit = setter(w, fromAny(value))
 }
 
 class ObjectProperty[W](
@@ -66,6 +65,11 @@ class BooleanProperty[W](
   }
   val inputType = BooleanType
   val outputType = BooleanType
+  override def fromAny(x: Any): Boolean = x match {
+    case b: java.lang.Boolean ⇒ b.booleanValue
+    case _ ⇒ super.fromAny(x)
+  }
+
 }
 
 class IntegerProperty[W](
@@ -77,7 +81,7 @@ class IntegerProperty[W](
   val inputType = NumberType
   val outputType = NumberType
   override def fromAny(x: Any): Int = x match {
-    case d: java.lang.Double ⇒ d.intValue
+    case n: java.lang.Number ⇒ n.intValue
     case _ ⇒ super.fromAny(x)
   }
   override def get(w: W) = Double.box(getter(w).toDouble)
@@ -91,7 +95,10 @@ class DoubleProperty[W](
   extends Property(_key, setter, getter, defaultValue) {
   val inputType = NumberType
   val outputType = NumberType
-
+  override def fromAny(x: Any): Double = x match {
+    case n: java.lang.Number ⇒ n.doubleValue
+    case _ ⇒ super.fromAny(x)
+  }
 }
 
 class ColorProperty[W](
