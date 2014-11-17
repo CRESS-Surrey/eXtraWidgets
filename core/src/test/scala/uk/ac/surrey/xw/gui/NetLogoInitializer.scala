@@ -17,7 +17,6 @@ import SwingExecutionContext.swingExecutionContext
   App.main(Array[String]())
   val wsPromise = Promise[GUIWorkspace]()
   App.app.frame.onComponentShown { _ ⇒
-    println(App.app.workspace)
     wsPromise.success(App.app.workspace)
   }
   lazy val manager: Manager = {

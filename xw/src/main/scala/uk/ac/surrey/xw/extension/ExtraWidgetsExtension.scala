@@ -102,17 +102,11 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       new Manager(app, reader, writer, widgetKinds)
   }
 
-  def load(primitiveManager: PrimitiveManager): Unit = {
-    println("load() " + this)
-    println("Loaded primitives: " + primitives.unzip._1.toList)
+  def load(primitiveManager: PrimitiveManager): Unit =
     for ((name, prim) ← primitives)
       primitiveManager.addPrimitive(name, prim)
-  }
 
-  override def unload(em: ExtensionManager): Unit = {
-    println("unload() " + this)
-    clearAll()
-  }
+  override def unload(em: ExtensionManager): Unit = clearAll()
 
   override def clearAll(): Unit = {
     widgetContextManager.clear()

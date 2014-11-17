@@ -107,8 +107,6 @@ class Writer(
     val oldValue = propertyMap.get(pKey)
     if (Some(propertyValue) != oldValue) {
       propertyMap += pKey -> propertyValue
-      println("(" + Thread.currentThread().getName() + ") " +
-        wKey + "/" + pKey + " := " + propertyValue)
       if (publishEvent) publish(SetProperty(wKey, pKey, propertyValue))
     }
   }
