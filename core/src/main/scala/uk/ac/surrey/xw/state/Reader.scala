@@ -19,6 +19,12 @@ import uk.ac.surrey.xw.api.normalizeString
 class Reader(
   widgetMap: MutableWidgetMap) { // reader should never expose any part of this
 
+  val keyPropertyKey = "KEY"
+  val kindPropertyKey = "KIND"
+  val orderPropertyKey = "ORDER"
+  val tabKindName = "TAB"
+  val tabPropertyKey = tabKindName
+
   def validateNonEmpty(propertyKey: PropertyKey, value: String) =
     Option(value).filter(_.nonEmpty)
       .orException(propertyMustBeNonEmpty(propertyKey))

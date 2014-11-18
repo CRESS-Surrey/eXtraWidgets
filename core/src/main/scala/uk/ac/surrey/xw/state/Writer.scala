@@ -28,14 +28,6 @@ class Writer(
 
   override type Pub = Publisher[StateEvent]
 
-  val tabPropertyKey = "TAB"
-  val keyPropertyKey = "KEY"
-  val kindPropertyKey = "KIND"
-  val (tabKindName, orderPropertyKey) = {
-    val tabKind = new TabKind[Tab]
-    (tabKind.name, tabKind.orderProperty.key)
-  }
-
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val properties = propertyMap.normalizeKeys
     validateNonEmpty("widget key", widgetKey).rightOrThrow
@@ -122,7 +114,7 @@ class Writer(
     widgetKeyVector.sortBy { k ⇒ // tabs last
       propertyMap(k).right.toOption
         .flatMap(_.get("KIND"))
-        .map(_.toString).map(normalizeString) == Some("TAB")
+        .map(_.toString).map(normalizeString) == Some(tabKindName)
     }.foreach(remove)
   }
 }
