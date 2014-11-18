@@ -14,6 +14,8 @@ class KindList(kindName: KindName, reader: Reader) extends DefaultReporter {
   override def getSyntax = reporterSyntax(ListType)
   def report(args: Array[Argument], context: Context): AnyRef =
     LogoList.fromVector(
-      reader.widgetKeyVector.filter(reader.get("KIND", _) == kindName)
+      reader.widgetKeyVector.filter {
+        reader.get(reader.kindPropertyKey, _) == kindName
+      }
     )
 }
