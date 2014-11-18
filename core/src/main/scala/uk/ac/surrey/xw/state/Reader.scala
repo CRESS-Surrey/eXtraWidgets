@@ -51,7 +51,7 @@ class Reader(
 
   private def mutablePropertyMap(widgetKey: WidgetKey): Either[XWException, MutablePropertyMap] =
     widgetMap.get(normalizeString(widgetKey)).orException(
-      "Widget " + widgetKey + " does not exist in " + widgetMap)
+      "Widget " + widgetKey + " does not exist.")
 
   def propertyMap(widgetKey: WidgetKey): Either[XWException, PropertyMap] =
     mutablePropertyMap(widgetKey).right.map(_.toMap)
