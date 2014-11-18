@@ -46,7 +46,7 @@ trait ComponentWidget
     .getOrElse(throw XWException("Widget " + key + " is not on any tab."))
     .key
   def setTab(tabKey: WidgetKey): Unit =
-    ws.xwTabs.find(_.key == normalizeString(tabKey)) match {
+    ws.xwTabs.find(_.key == tabKey) match {
       case None ⇒ throw XWException("Tab " + tabKey + " does not exist.")
       case Some(newTab) ⇒
         tab match {

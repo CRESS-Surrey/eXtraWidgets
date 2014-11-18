@@ -37,20 +37,19 @@ class Writer(
   }
 
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
-    val wKey = normalizeString(widgetKey)
     val properties = propertyMap.normalizeKeys
-    reader.validateNonEmpty("widget key", wKey).rightOrThrow
-    reader.validateUnique("widget key", wKey).rightOrThrow
+    reader.validateNonEmpty("widget key", widgetKey).rightOrThrow
+    reader.validateUnique("widget key", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒ Map.empty
       case _ if properties.isDefinedAt(tabPropertyKey) ⇒ Map.empty
       case _ ⇒ Map(tabPropertyKey -> getLastTabKey)
     }
-    val keyProperty = Map(keyPropertyKey -> wKey)
+    val keyProperty = Map(keyPropertyKey -> widgetKey)
     val allProperties = kind.defaultValues ++ properties ++ tabProperty ++ keyProperty
-    widgetMap += wKey -> allProperties.asMutablePropertyMap
-    publish(AddWidget(wKey, allProperties))
+    widgetMap += widgetKey -> allProperties.asMutablePropertyMap
+    publish(AddWidget(widgetKey, allProperties))
   }
 
   def getKind(widgetKey: WidgetKey, propertyMap: PropertyMap): WidgetKind[_] = {
@@ -86,16 +85,15 @@ class Writer(
       .getOrElse(throw new XWException("No widget tab has been created yet."))
 
   def remove(widgetKey: WidgetKey): Unit = {
-    val wKey = normalizeString(widgetKey)
     // Special case: if we're removing a tab, also
     // remove the widgets on that tab from the widget map
-    if (reader.get(kindPropertyKey, wKey) == tabKindName) {
+    if (reader.get(kindPropertyKey, widgetKey) == tabKindName) {
       widgetMap --= widgetMap.collect {
-        case (k, ps) if ps.get(tabPropertyKey) == Some(wKey) ⇒ k
+        case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) ⇒ k
       }
     }
-    widgetMap -= wKey
-    publish(RemoveWidget(wKey))
+    widgetMap -= widgetKey
+    publish(RemoveWidget(widgetKey))
   }
 
   def set(
@@ -110,14 +108,13 @@ class Writer(
     propertyValue: PropertyValue,
     publishEvent: Boolean): Unit = {
 
-    val wKey = normalizeString(widgetKey)
-    val propertyMap = widgetMap.getOrElse(wKey,
-      throw XWException("Widget " + wKey + " does not exist."))
+    val propertyMap = widgetMap.getOrElse(widgetKey,
+      throw XWException("Widget " + widgetKey + " does not exist."))
     val pKey = normalizeString(propertyKey)
     val oldValue = propertyMap.get(pKey)
     if (Some(propertyValue) != oldValue) {
       propertyMap += pKey -> propertyValue
-      if (publishEvent) publish(SetProperty(wKey, pKey, propertyValue))
+      if (publishEvent) publish(SetProperty(widgetKey, pKey, propertyValue))
     }
   }
 

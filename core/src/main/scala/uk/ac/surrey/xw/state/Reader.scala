@@ -50,13 +50,13 @@ class Reader(
   def widgetKeyVector: Vector[WidgetKey] = Vector() ++ widgetMap.keys
 
   private def mutablePropertyMap(widgetKey: WidgetKey): Either[XWException, MutablePropertyMap] =
-    widgetMap.get(normalizeString(widgetKey)).orException(
+    widgetMap.get(widgetKey).orException(
       "Widget " + widgetKey + " does not exist.")
 
   def propertyMap(widgetKey: WidgetKey): Either[XWException, PropertyMap] =
     mutablePropertyMap(widgetKey).right.map(_.toMap)
 
-  def contains(widgetKey: WidgetKey) = widgetMap.contains(normalizeString(widgetKey))
+  def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 
   def propertyKeyVector(widgetKey: WidgetKey): Either[XWException, Vector[PropertyKey]] =
     mutablePropertyMap(widgetKey).right.map(Vector() ++ _.keysIterator)
