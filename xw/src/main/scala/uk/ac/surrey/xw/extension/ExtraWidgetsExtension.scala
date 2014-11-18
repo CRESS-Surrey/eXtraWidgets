@@ -24,7 +24,7 @@ import uk.ac.surrey.xw.extension.prim.Version
 import uk.ac.surrey.xw.extension.prim.Widgets
 import uk.ac.surrey.xw.extension.prim.With
 import uk.ac.surrey.xw.extension.util.getApp
-import uk.ac.surrey.xw.gui.Manager
+import uk.ac.surrey.xw.gui.GUI
 import uk.ac.surrey.xw.state.Reader
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
@@ -102,7 +102,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
         kindListPrimitives ++ getters ++ setters
 
     for (app ← getApp(extensionManager))
-      new Manager(app, reader, writer, widgetKinds)
+      new GUI(app, writer, widgetKinds)
   }
 
   def load(primitiveManager: PrimitiveManager): Unit =

@@ -2,19 +2,12 @@ package uk.ac.surrey.xw.gui
 
 import java.awt.Container
 
-import scala.Array.canBuildFrom
-import scala.Option.option2Iterable
-import scala.collection.TraversableOnce.flattenTraversableOnce
 import scala.collection.mutable.Publisher
 import scala.collection.mutable.Subscriber
 
 import org.nlogo.app.App
 import org.nlogo.awt.EventQueue.invokeLater
 
-import Strings.DefaultTabName
-import Strings.TabIDQuestion
-import Swing.inputDialog
-import Swing.warningDialog
 import uk.ac.surrey.xw.api.ComponentWidget
 import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.PropertyKey
@@ -27,7 +20,6 @@ import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.enrichOption
 import uk.ac.surrey.xw.api.normalizeString
 import uk.ac.surrey.xw.api.toRunnable
-import uk.ac.surrey.xw.api.tryTo
 import uk.ac.surrey.xw.state.AddWidget
 import uk.ac.surrey.xw.state.RemoveWidget
 import uk.ac.surrey.xw.state.SetProperty
@@ -95,15 +87,4 @@ class GUI(
       case cw: ComponentWidget ⇒ cw.tab.foreach(_.remove(cw))
     }
 
-  def createNewTab(): Unit = {
-    def askName(default: String) = inputDialog(TabIDQuestion, default)
-    Iterator
-      .iterate(askName(DefaultTabName))(_.flatMap(askName))
-      .takeWhile(_.isDefined)
-      .flatten
-      .map(key ⇒ tryTo(writer.add(key, Map("kind" -> tabPropertyKey))))
-      .takeWhile(_.isLeft)
-      .flatMap(_.left.toSeq)
-      .foreach(warningDialog)
-  }
 }
