@@ -86,6 +86,13 @@ class Writer(
 
   def remove(widgetKey: WidgetKey): Unit = {
     val wKey = normalizeString(widgetKey)
+    // Special case: if we're removing a tab, also
+    // remove the widgets on that tab from the widget map
+    if (reader.get(kindPropertyKey, wKey) == tabKindName) {
+      widgetMap --= widgetMap.collect {
+        case (k, ps) if ps.get(tabPropertyKey) == Some(wKey) ⇒ k
+      }
+    }
     widgetMap -= wKey
     publish(RemoveWidget(wKey))
   }
