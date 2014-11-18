@@ -29,6 +29,7 @@ class Writer(
   override type Pub = Publisher[StateEvent]
 
   val tabPropertyKey = "TAB"
+  val keyPropertyKey = "KEY"
   val kindPropertyKey = "KIND"
   val (tabKindName, orderPropertyKey) = {
     val tabKind = new TabKind[Tab]
@@ -40,14 +41,14 @@ class Writer(
     val properties = propertyMap.normalizeKeys
     reader.validateNonEmpty("widget key", wKey).rightOrThrow
     reader.validateUnique("widget key", wKey).rightOrThrow
-
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒ Map.empty
       case _ if properties.isDefinedAt(tabPropertyKey) ⇒ Map.empty
       case _ ⇒ Map(tabPropertyKey -> getLastTabKey)
     }
-    val allProperties = kind.defaultValues ++ properties ++ tabProperty
+    val keyProperty = Map(keyPropertyKey -> wKey)
+    val allProperties = kind.defaultValues ++ properties ++ tabProperty ++ keyProperty
     widgetMap += wKey -> allProperties.asMutablePropertyMap
     publish(AddWidget(wKey, allProperties))
   }

@@ -20,8 +20,9 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
   val orderProperty = new DoubleProperty[W](
     "ORDER", Some(_.setOrder(_)), _.getOrder, 0d
   )
-  override def propertySet = Set(
-    titleProperty, colorProperty, enabledProperty, orderProperty
+  override def propertySet = super.propertySet ++ Set(
+    titleProperty, colorProperty,
+    enabledProperty, orderProperty
   )
 }
 
