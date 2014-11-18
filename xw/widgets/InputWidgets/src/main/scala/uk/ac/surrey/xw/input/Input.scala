@@ -71,7 +71,7 @@ class TextInput(
 }
 
 class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
-  val newWidget = new TextInput(_, _, _)
+  val newWidget = new NumericInput(_, _, _)
   val name = "NUMERIC-INPUT"
   val numberProperty = new DoubleProperty[W](
     "NUMBER",
