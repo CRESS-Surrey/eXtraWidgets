@@ -21,9 +21,9 @@ import uk.ac.surrey.xw.api.normalizeString
  */
 class Writer(
   widgetMap: MutableWidgetMap,
-  widgetKinds: Map[KindName, WidgetKind[_]],
-  val reader: Reader)
-  extends Publisher[StateEvent]
+  widgetKinds: Map[KindName, WidgetKind[_]])
+  extends Reader(widgetMap)
+  with Publisher[StateEvent]
   with StateUpdater {
 
   override type Pub = Publisher[StateEvent]
@@ -38,8 +38,8 @@ class Writer(
 
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val properties = propertyMap.normalizeKeys
-    reader.validateNonEmpty("widget key", widgetKey).rightOrThrow
-    reader.validateUnique("widget key", widgetKey).rightOrThrow
+    validateNonEmpty("widget key", widgetKey).rightOrThrow
+    validateUnique("widget key", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒ Map.empty
@@ -87,7 +87,7 @@ class Writer(
   def remove(widgetKey: WidgetKey): Unit = {
     // Special case: if we're removing a tab, also
     // remove the widgets on that tab from the widget map
-    if (reader.get(kindPropertyKey, widgetKey) == tabKindName) {
+    if (get(kindPropertyKey, widgetKey) == tabKindName) {
       widgetMap --= widgetMap.collect {
         case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) ⇒ k
       }
@@ -119,8 +119,8 @@ class Writer(
   }
 
   def clearAll() {
-    reader.widgetKeyVector.sortBy { k ⇒ // tabs last
-      reader.propertyMap(k).right.toOption
+    widgetKeyVector.sortBy { k ⇒ // tabs last
+      propertyMap(k).right.toOption
         .flatMap(_.get("KIND"))
         .map(_.toString).map(normalizeString) == Some("TAB")
     }.foreach(remove)

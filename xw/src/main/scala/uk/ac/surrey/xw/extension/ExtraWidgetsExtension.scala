@@ -33,7 +33,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
   private var widgetContextManager: WidgetContextManager = null
   private var writer: Writer = null
-  private var reader: Reader = null
   private var primitives: Seq[(String, Primitive)] = null
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
@@ -43,30 +42,29 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
     locally {
       val widgetMap = newMutableWidgetMap
-      reader = new Reader(widgetMap)
-      writer = new Writer(widgetMap, widgetKinds, reader)
+      writer = new Writer(widgetMap, widgetKinds)
       widgetContextManager = new WidgetContextManager
     }
 
-    val kindInfo = new KindInfo(reader, widgetKinds)
+    val kindInfo = new KindInfo(writer, widgetKinds)
 
     val staticPrimitives = Seq(
       "VERSION" -> new Version("0.0.0-wip"),
       "ASK" -> new Ask(widgetContextManager),
       "OF" -> new Of(widgetContextManager),
       "WITH" -> new With(widgetContextManager),
-      "GET" -> new Get(reader, kindInfo, widgetContextManager),
+      "GET" -> new Get(writer, kindInfo, widgetContextManager),
       "SET" -> new Set(writer, kindInfo, widgetContextManager),
       "REMOVE" -> new Remove(writer),
-      "WIDGETS" -> new Widgets(reader),
+      "WIDGETS" -> new Widgets(writer),
       "CLEAR-ALL" -> new ClearAll(writer),
-      "JSON" -> new ToJSON(reader),
+      "JSON" -> new ToJSON(writer),
       "LOAD-JSON" -> new LoadJSON(writer)
     )
 
     val kindListPrimitives = for {
       (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
-    } yield pluralName -> new KindList(kindName, reader)
+    } yield pluralName -> new KindList(kindName, writer)
 
     val constructorPrimitives = widgetKinds.keys.map { kindName ⇒
       ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
@@ -83,7 +81,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val getters = for {
       (key, outputType) ← outputTypes.groupBy(_._1)
         .mapValues(_.unzip._2.reduce(_ | _))
-      getter = new GetProperty(reader, key, outputType, widgetContextManager)
+      getter = new GetProperty(writer, key, outputType, widgetContextManager)
     } yield key -> getter
 
     val inputTypes = for {
