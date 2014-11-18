@@ -12,7 +12,7 @@ import uk.ac.surrey.xw.api.WidgetKey
 class NoteKind[W <: Note] extends JComponentWidgetKind[W] {
   override val name = "NOTE"
   override val newWidget = new Note(_, _, _)
-  val textProperty = new StringProperty[W]("TEXT", _.setText(_), _.getText)
+  val textProperty = new StringProperty[W]("TEXT", Some(_.setText(_)), _.getText)
   val defaultProperty = Some(textProperty)
   override def propertySet = super.propertySet + textProperty
 }

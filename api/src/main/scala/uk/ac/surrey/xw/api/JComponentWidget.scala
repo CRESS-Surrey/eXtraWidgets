@@ -10,7 +10,7 @@ import javax.swing.border.Border
 abstract class JComponentWidgetKind[W <: JComponentWidget with JComponent]
   extends ComponentWidgetKind[W] {
   val opaqueProperty = new BooleanProperty[W](
-    "OPAQUE", (w, b) ⇒ { w.setOpaque(b); w.updateBorder() }, _.isOpaque, true)
+    "OPAQUE", Some((w, b) ⇒ { w.setOpaque(b); w.updateBorder() }), _.isOpaque, true)
   override def propertySet = super.propertySet ++ Set(opaqueProperty)
 }
 

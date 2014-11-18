@@ -9,23 +9,23 @@ import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
 abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val tabProperty = new StringProperty[W](
-    "TAB", _.setTab(_), _.getTabKey)
+    "TAB", Some(_.setTab(_)), _.getTabKey)
   val enabledProperty = new BooleanProperty[W](
-    "ENABLED", _.setEnabled(_), _.isEnabled, true)
+    "ENABLED", Some(_.setEnabled(_)), _.isEnabled, true)
   val xProperty = new IntegerProperty[W](
-    "X", _.setX(_), _.getX)
+    "X", Some(_.setX(_)), _.getX)
   val yProperty = new IntegerProperty[W](
-    "Y", _.setY(_), _.getY)
+    "Y", Some(_.setY(_)), _.getY)
   val widthProperty = new IntegerProperty[W](
-    "WIDTH", _.setWidth(_), _.getWidth, 150)
+    "WIDTH", Some(_.setWidth(_)), _.getWidth, 150)
   val heightProperty = new IntegerProperty[W](
-    "HEIGHT", _.setHeight(_), _.getHeight, 25)
+    "HEIGHT", Some(_.setHeight(_)), _.getHeight, 25)
   val hiddenProperty = new BooleanProperty[W](
-    "HIDDEN", (w, b) ⇒ w.setVisible(!b), !_.isVisible)
+    "HIDDEN", Some((w, b) ⇒ w.setVisible(!b)), !_.isVisible)
   val colorProperty = new ColorProperty[W](
-    "COLOR", _.setBackground(_), _.getBackground, SLIDER_BACKGROUND)
+    "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
   val textColorProperty = new ColorProperty[W](
-    "TEXT-COLOR", _.setForeground(_), _.getForeground, black)
+    "TEXT-COLOR", Some(_.setForeground(_)), _.getForeground, black)
   override def propertySet = super.propertySet ++ Set(
     tabProperty, xProperty, yProperty,
     widthProperty, heightProperty,

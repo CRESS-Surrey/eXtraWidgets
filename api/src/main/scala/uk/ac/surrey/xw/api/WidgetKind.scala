@@ -7,9 +7,7 @@ abstract class WidgetKind[W <: ExtraWidget] {
   val name: String
   def pluralName = name + "S"
   def defaultProperty: Option[Property[Any, W]]
-  val kindProperty = new StringProperty[W]("KIND",
-    (w, k) ⇒ Unit, // FIXME: this should be a read-only property
-    _.kind.name)
+  val kindProperty = new StringProperty[W]("KIND", None, _.kind.name)
   def propertySet: Set[Property[Any, W]] = Set(kindProperty)
   lazy val properties =
     propertySet.map(p ⇒ p.key -> p).toMap

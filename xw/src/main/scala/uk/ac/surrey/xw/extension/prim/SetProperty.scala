@@ -20,8 +20,15 @@ class SetProperty(
   extends DefaultCommand {
   override def getSyntax = commandSyntax(Array(inputType))
   def perform(args: Array[Argument], context: Context): Unit = {
+
     val widgetKey = wcm.currentContext
     val property = kindInfo.property(propertyKey, widgetKey)
+
+    if (property.readOnly) throw XWException(
+      "The " + property.key + " property is read-only " +
+        " for widgets of kind " + kindInfo.kindName(widgetKey) + "."
+    )
+
     val propertyValue = args(0).get
     writer.set(propertyKey, widgetKey, propertyValue, true)
   }

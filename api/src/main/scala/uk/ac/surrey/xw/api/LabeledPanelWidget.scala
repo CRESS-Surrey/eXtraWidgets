@@ -9,9 +9,9 @@ import javax.swing.JPanel
 abstract class LabeledPanelWidgetKind[W <: LabeledPanelWidget]
   extends JComponentWidgetKind[W] {
   override val heightProperty = new IntegerProperty[W](
-    "HEIGHT", _.setHeight(_), _.getHeight, 50)
+    "HEIGHT", Some(_.setHeight(_)), _.getHeight, 50)
   override def propertySet = super.propertySet ++ Set(
-    new StringProperty[W]("LABEL", _.setText(_), _.getText)
+    new StringProperty[W]("LABEL", Some(_.setText(_)), _.getText)
   )
 }
 

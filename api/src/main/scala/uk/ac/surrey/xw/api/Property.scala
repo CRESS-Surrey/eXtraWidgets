@@ -16,7 +16,7 @@ import org.nlogo.api.Nobody
 
 abstract class Property[+T, W](
   _key: PropertyKey,
-  setter: (W, T) ⇒ Unit,
+  setter: Option[(W, T) ⇒ Unit],
   getter: W ⇒ T,
   val defaultValue: T)(implicit m: Manifest[T]) {
   val inputType: Int
@@ -31,12 +31,13 @@ abstract class Property[+T, W](
     x.asInstanceOf[T]
   }
   def get(w: W): AnyRef = getter(w).asInstanceOf[AnyRef]
-  def set(w: W, value: Any): Unit = setter(w, fromAny(value))
+  def set(w: W, value: Any): Unit = setter.foreach(_(w, fromAny(value)))
+  def readOnly: Boolean = !setter.isDefined
 }
 
 class ObjectProperty[W](
   _key: PropertyKey,
-  setter: (W, AnyRef) ⇒ Unit,
+  setter: Option[(W, AnyRef) ⇒ Unit],
   getter: W ⇒ AnyRef,
   override val defaultValue: AnyRef = Nobody)
   extends Property(_key, setter, getter, defaultValue) {
@@ -46,7 +47,7 @@ class ObjectProperty[W](
 
 class StringProperty[W](
   _key: PropertyKey,
-  setter: (W, String) ⇒ Unit,
+  setter: Option[(W, String) ⇒ Unit],
   getter: W ⇒ String,
   override val defaultValue: String = "")
   extends Property(_key, setter, getter, defaultValue) {
@@ -56,7 +57,7 @@ class StringProperty[W](
 
 class BooleanProperty[W](
   _key: PropertyKey,
-  setter: (W, Boolean) ⇒ Unit,
+  setter: Option[(W, Boolean) ⇒ Unit],
   getter: W ⇒ Boolean,
   override val defaultValue: Boolean = false)
   extends Property(_key, setter, getter, defaultValue) {
@@ -75,7 +76,7 @@ class BooleanProperty[W](
 
 class IntegerProperty[W](
   _key: PropertyKey,
-  setter: (W, Int) ⇒ Unit,
+  setter: Option[(W, Int) ⇒ Unit],
   getter: W ⇒ Int,
   override val defaultValue: Int = 0)
   extends Property(_key, setter, getter, defaultValue) {
@@ -90,7 +91,7 @@ class IntegerProperty[W](
 
 class DoubleProperty[W](
   _key: PropertyKey,
-  setter: (W, Double) ⇒ Unit,
+  setter: Option[(W, Double) ⇒ Unit],
   getter: W ⇒ Double,
   override val defaultValue: Double = 0d)
   extends Property(_key, setter, getter, defaultValue) {
@@ -104,7 +105,7 @@ class DoubleProperty[W](
 
 class ColorProperty[W](
   _key: PropertyKey,
-  setter: (W, Color) ⇒ Unit,
+  setter: Option[(W, Color) ⇒ Unit],
   getter: W ⇒ Color,
   override val defaultValue: Color = Color.white)
   extends Property(_key, setter, getter, defaultValue) {
@@ -153,7 +154,7 @@ class ColorProperty[W](
 
 class ListProperty[W](
   _key: PropertyKey,
-  setter: (W, LogoList) ⇒ Unit,
+  setter: Option[(W, LogoList) ⇒ Unit],
   getter: W ⇒ LogoList,
   override val defaultValue: LogoList = LogoList.Empty)
   extends Property(_key, setter, getter, defaultValue) {

@@ -53,7 +53,7 @@ class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
   val name = "TEXT-INPUT"
   val defaultProperty = None
   val textProperty = new StringProperty[W]("TEXT",
-    (w, s) ⇒ { w.text = s; w.textField.setText(s) },
+    Some((w, s) ⇒ { w.text = s; w.textField.setText(s) }),
     _.text)
   override def propertySet = (super.propertySet) ++ Set(textProperty)
 }
@@ -75,7 +75,7 @@ class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
   val name = "NUMERIC-INPUT"
   val numberProperty = new DoubleProperty[W](
     "NUMBER",
-    (w, d) ⇒ { w.number = d; w.textField.setText(w.format(w.number)) },
+    Some((w, d) ⇒ { w.number = d; w.textField.setText(w.format(w.number)) }),
     _.number
   )
   val defaultProperty = Some(numberProperty)

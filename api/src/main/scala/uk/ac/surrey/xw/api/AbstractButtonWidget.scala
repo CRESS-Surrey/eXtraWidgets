@@ -6,10 +6,10 @@ import uk.ac.surrey.xw.api.swing.enrichItemSelectable
 abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget with AbstractButton]
   extends JComponentWidgetKind[W] {
   val selectedProperty =
-    new BooleanProperty[W]("SELECTED", _.setSelected(_), _.isSelected)
+    new BooleanProperty[W]("SELECTED", Some(_.setSelected(_)), _.isSelected)
   override def propertySet = super.propertySet ++ Set(
     selectedProperty,
-    new StringProperty[W]("LABEL", _.setText(_), _.getText))
+    new StringProperty[W]("LABEL", Some(_.setText(_)), _.getText))
 }
 
 trait AbstractButtonWidget extends JComponentWidget {

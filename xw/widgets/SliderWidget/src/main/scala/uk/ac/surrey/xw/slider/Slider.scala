@@ -23,17 +23,17 @@ class SliderKind[W <: Slider] extends LabeledPanelWidgetKind[W] {
   override val name = "SLIDER"
   override val newWidget = new Slider(_, _, _)
   val valueProperty = new DoubleProperty[W](
-    "VALUE", _.sliderData.setValue(_), _.sliderData.value, 50)
+    "VALUE", Some(_.sliderData.setValue(_)), _.sliderData.value, 50)
   override val defaultProperty = Some(valueProperty)
   override val propertySet = super.propertySet ++ Set(valueProperty,
     new StringProperty[W]("UNITS",
-      _.setUnits(_), _.units),
+      Some(_.setUnits(_)), _.units),
     new DoubleProperty[W]("MINIMUM",
-      _.sliderData.setMinimum(_), _.sliderData.minimum, 0d),
+      Some(_.sliderData.setMinimum(_)), _.sliderData.minimum, 0d),
     new DoubleProperty[W]("MAXIMUM",
-      _.sliderData.setMaximum(_), _.sliderData.maximum, 100d),
+      Some(_.sliderData.setMaximum(_)), _.sliderData.maximum, 100d),
     new DoubleProperty[W]("INCREMENT",
-      _.sliderData.setIncrement(_), _.sliderData.increment, 1d)
+      Some(_.sliderData.setIncrement(_)), _.sliderData.increment, 1d)
   )
 }
 

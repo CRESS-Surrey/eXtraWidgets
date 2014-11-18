@@ -10,6 +10,7 @@ import uk.ac.surrey.xw.extension.KindInfo
 import uk.ac.surrey.xw.extension.WidgetContextManager
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.api.XWException
+import uk.ac.surrey.xw.api.XWException
 
 class Set(
   writer: Writer,
@@ -22,6 +23,11 @@ class Set(
     val propertyValue = args(1).get
 
     val property = kindInfo.defaultProperty(widgetKey)
+
+    if (property.readOnly) throw XWException(
+      "The " + property.key + " property is read-only " +
+        " for widgets of kind " + kindInfo.kindName(widgetKey) + "."
+    )
 
     /* we call `property.fromAny` here instead even though
      * property.set is also going to call it later because

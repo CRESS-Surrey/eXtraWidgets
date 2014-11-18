@@ -76,27 +76,34 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
     }
 
-    val propertySyntaxes = for {
-      kind ← widgetKinds.values
-      property ← kind.properties.values
-    } yield (property.key, property.inputType, property.outputType)
-
     // When building getters and setters for properties that are
     // multiply defined, we fold their syntactic indications together
     // by using bitwise ORs (.reduce(_ | _))
-    val gettersAndSetters = for {
-      (key, syntaxes) ← propertySyntaxes.groupBy(_._1)
-      (_, inputTypes, outputTypes) = syntaxes.unzip3
-      inputType = inputTypes.reduce(_ | _)
-      setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
-      outputType = outputTypes.reduce(_ | _)
+
+    val outputTypes = for {
+      kind ← widgetKinds.values
+      property ← kind.properties.values
+    } yield (property.key, property.outputType)
+    val getters = for {
+      (key, outputType) ← outputTypes.groupBy(_._1)
+        .mapValues(_.unzip._2.reduce(_ | _))
       getter = new GetProperty(reader, key, outputType, widgetContextManager)
-      (name, prim) ← Seq(("SET-" + key, setter), (key, getter))
-    } yield name -> prim
+    } yield key -> getter
+
+    val inputTypes = for {
+      kind ← widgetKinds.values
+      property ← kind.properties.values
+      if !property.readOnly
+    } yield (property.key, property.inputType)
+    val setters = for {
+      (key, inputType) ← inputTypes.groupBy(_._1)
+        .mapValues(_.unzip._2.reduce(_ | _))
+      setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
+    } yield ("SET-" + key) -> setter
 
     primitives =
       staticPrimitives ++ constructorPrimitives ++
-        kindListPrimitives ++ gettersAndSetters
+        kindListPrimitives ++ getters ++ setters
 
     for (app ← getApp(extensionManager))
       new Manager(app, reader, writer, widgetKinds)

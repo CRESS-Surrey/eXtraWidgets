@@ -27,17 +27,17 @@ class ChooserKind[W <: Chooser] extends LabeledPanelWidgetKind[W] {
 
   val selectedItemProperty = new ObjectProperty[W](
     "SELECTED-ITEM",
-    _.combo.setSelectedItem(_),
+    Some(_.combo.setSelectedItem(_)),
     w ⇒ Option(w.combo.getSelectedItem).getOrElse(Nobody)
   )
 
   val itemsProperty = new ListProperty[W](
     "ITEMS",
-    (w, xs) ⇒ {
+    Some((w, xs) ⇒ {
       w.combo.removeAllItems()
       xs.foreach(w.combo.addItem(_))
       w.combo.setSelectedItem(xs.toVector.headOption.orNull)
-    },
+    }),
     w ⇒ LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt): _*)
   )
 

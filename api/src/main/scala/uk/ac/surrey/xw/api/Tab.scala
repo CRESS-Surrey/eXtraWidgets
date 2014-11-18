@@ -12,13 +12,13 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
   val name = "TAB"
   val defaultProperty = None
   val colorProperty = new ColorProperty[W](
-    "COLOR", _.setBackground(_), _.getBackground, white)
+    "COLOR", Some(_.setBackground(_)), _.getBackground, white)
   val titleProperty = new StringProperty[W](
-    "TITLE", _.setTitle(_), _.getTitle)
+    "TITLE", Some(_.setTitle(_)), _.getTitle)
   val enabledProperty = new BooleanProperty[W](
-    "ENABLED", _.setEnabled(_), _.isEnabled, true)
+    "ENABLED", Some(_.setEnabled(_)), _.isEnabled, true)
   val orderProperty = new DoubleProperty[W](
-    "ORDER", _.setOrder(_), _.getOrder, 0d
+    "ORDER", Some(_.setOrder(_)), _.getOrder, 0d
   )
   override def propertySet = Set(
     titleProperty, colorProperty, enabledProperty, orderProperty
