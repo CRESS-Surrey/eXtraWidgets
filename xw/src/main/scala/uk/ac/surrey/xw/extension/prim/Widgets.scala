@@ -11,7 +11,10 @@ import uk.ac.surrey.xw.state.Reader
 
 class Widgets(reader: Reader) extends DefaultReporter {
   override def getSyntax = reporterSyntax(ListType)
-  def report(args: Array[Argument], context: Context): AnyRef = {
-    LogoList.fromVector(reader.widgetKeyVector)
-  }
+  def report(args: Array[Argument], context: Context): AnyRef =
+    LogoList.fromVector(
+      reader.widgetKeyVector.filter {
+        reader.get(reader.kindPropertyKey, _) != reader.tabPropertyKey
+      }
+    )
 }
