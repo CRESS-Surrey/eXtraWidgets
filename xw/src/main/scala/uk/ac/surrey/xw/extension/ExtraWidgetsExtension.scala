@@ -16,8 +16,6 @@ import uk.ac.surrey.xw.extension.prim.GetProperty
 import uk.ac.surrey.xw.extension.prim.KindList
 import uk.ac.surrey.xw.extension.prim.LoadJSON
 import uk.ac.surrey.xw.extension.prim.Of
-import uk.ac.surrey.xw.extension.prim.Properties
-import uk.ac.surrey.xw.extension.prim.PropertyKeys
 import uk.ac.surrey.xw.extension.prim.Remove
 import uk.ac.surrey.xw.extension.prim.Set
 import uk.ac.surrey.xw.extension.prim.SetProperty
@@ -61,8 +59,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "SET" -> new Set(writer, kindInfo, widgetContextManager),
       "REMOVE" -> new Remove(writer),
       "WIDGETS" -> new Widgets(reader),
-      "PROPERTY-KEYS" -> new PropertyKeys(reader),
-      "PROPERTIES" -> new Properties(reader),
       "CLEAR-ALL" -> new ClearAll(writer),
       "JSON" -> new ToJSON(reader),
       "LOAD-JSON" -> new LoadJSON(writer)
