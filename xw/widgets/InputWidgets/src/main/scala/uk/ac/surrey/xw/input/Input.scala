@@ -51,10 +51,10 @@ trait HasTextField {
 class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
   val newWidget = new TextInput(_, _, _)
   val name = "TEXT-INPUT"
-  val defaultProperty = None
   val textProperty = new StringProperty[W]("TEXT",
     Some((w, s) ⇒ { w.text = s; w.textField.setText(s) }),
     _.text)
+  val defaultProperty = Some(textProperty)
   override def propertySet = super.propertySet ++ Set(textProperty)
 }
 
