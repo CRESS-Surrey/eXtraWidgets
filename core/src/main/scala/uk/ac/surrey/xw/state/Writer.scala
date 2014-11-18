@@ -74,12 +74,14 @@ class Writer(
       (widgetKey, properties) ← widgetMap.toSeq
       kindName ← properties.get(kindPropertyKey)
       if kindName == tabKindName
-      order ← properties.get(orderPropertyKey)
-        .collect { case order: java.lang.Double ⇒ order }
-    } yield (widgetKey, order))
+      order = properties
+        .get(orderPropertyKey)
+        .collect { case order: java.lang.Double ⇒ order.doubleValue }
+        .getOrElse(0.0)
+    } yield (order, widgetKey))
       .sorted
       .lastOption
-      .map(_._1)
+      .map(_._2)
       .getOrElse(throw new XWException("No widget tab has been created yet."))
 
   def remove(widgetKey: WidgetKey): Unit = {
