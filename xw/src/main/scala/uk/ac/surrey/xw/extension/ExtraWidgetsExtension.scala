@@ -111,8 +111,4 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
   override def unload(em: ExtensionManager): Unit = clearAll()
 
-  override def clearAll(): Unit = {
-    widgetContextManager.clear()
-    writer.clearAll()
-  }
 }
