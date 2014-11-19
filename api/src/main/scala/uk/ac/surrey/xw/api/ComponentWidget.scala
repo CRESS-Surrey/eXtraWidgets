@@ -1,10 +1,15 @@
 package uk.ac.surrey.xw.api
 
+import java.awt.Color
 import java.awt.Color.black
+import java.awt.Component
+import java.awt.Container
 
 import org.nlogo.awt.Fonts.adjustDefaultFont
 import org.nlogo.window.InterfaceColors.SLIDER_BACKGROUND
 
+import javax.swing.JCheckBox
+import javax.swing.JLabel
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
 abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
@@ -25,7 +30,7 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val colorProperty = new ColorProperty[W](
     "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
   val textColorProperty = new ColorProperty[W](
-    "TEXT-COLOR", Some(_.setForeground(_)), _.getForeground, black)
+    "TEXT-COLOR", Some(_.setTextColor(_)), _.getTextColor, black)
   override def propertySet = super.propertySet ++ Set(
     tabProperty, xProperty, yProperty,
     widthProperty, heightProperty,
@@ -36,11 +41,14 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
 trait ComponentWidget
   extends ExtraWidget
   with ControlsChildrenEnabling {
+
   adjustDefaultFont(this)
+
   def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
   def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)
   def setWidth(width: Int): Unit = setBounds(getX, getY, width, getHeight)
   def setHeight(height: Int): Unit = setBounds(getX, getY, getWidth, height)
+
   def tab: Option[Tab] = ws.xwTabs.find(_.getComponents.contains(this))
   def getTabKey: PropertyKey = tab
     .getOrElse(throw XWException("Widget " + key + " is not on any tab."))
@@ -57,4 +65,16 @@ trait ComponentWidget
             newTab.add(this)
         }
     }
+
+  private var _textColor: Color = getForeground
+  def getTextColor = _textColor
+  def setTextColor(textColor: Color): Unit = {
+    _textColor = textColor
+    def recurse(component: Component): Unit = component match {
+      case label: JLabel ⇒ label.setForeground(textColor)
+      case checkbox: JCheckBox ⇒ checkbox.setForeground(textColor)
+      case container: Container ⇒ container.getComponents.foreach(recurse)
+    }
+    recurse(this)
+  }
 }
