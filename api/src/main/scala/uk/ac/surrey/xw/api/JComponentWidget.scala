@@ -7,15 +7,14 @@ import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JComponent
 import javax.swing.border.Border
 
-abstract class JComponentWidgetKind[W <: JComponentWidget with JComponent]
+abstract class JComponentWidgetKind[W <: JComponentWidget]
   extends ComponentWidgetKind[W] {
   val opaqueProperty = new BooleanProperty[W](
     "OPAQUE", Some((w, b) ⇒ { w.setOpaque(b); w.updateBorder() }), _.isOpaque, true)
   override def propertySet = super.propertySet ++ Set(opaqueProperty)
 }
 
-trait JComponentWidget extends ComponentWidget {
-  self: JComponent ⇒
+trait JComponentWidget extends JComponent with ComponentWidget {
 
   private val _borderPadding = createEmptyBorder(1, 1, 1, 1)
   def borderPadding: Border = _borderPadding

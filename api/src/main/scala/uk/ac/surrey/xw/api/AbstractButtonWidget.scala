@@ -3,7 +3,7 @@ package uk.ac.surrey.xw.api
 import javax.swing.AbstractButton
 import uk.ac.surrey.xw.api.swing.enrichItemSelectable
 
-abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget with AbstractButton]
+abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget]
   extends JComponentWidgetKind[W] {
   val selectedProperty =
     new BooleanProperty[W]("SELECTED", Some(_.setSelected(_)), _.isSelected)
@@ -12,11 +12,10 @@ abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget with AbstractB
     new StringProperty[W]("LABEL", Some(_.setText(_)), _.getText))
 }
 
-trait AbstractButtonWidget extends JComponentWidget {
-  self: AbstractButton ⇒
+trait AbstractButtonWidget extends AbstractButton with JComponentWidget {
   override val kind: AbstractButtonWidgetKind[this.type]
 
-  self.onItemStateChanged { _ ⇒
+  this.onItemStateChanged { _ ⇒
     updateInState(kind.selectedProperty)
   }
 }
