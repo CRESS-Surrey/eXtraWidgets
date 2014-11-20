@@ -7,13 +7,12 @@ import java.awt.event.FocusEvent
 import java.awt.event.FocusListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
-
 import org.nlogo.api.I18N
-
 import javax.swing.AbstractAction
 import javax.swing.JSlider
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
+import javax.swing.JButton
 
 package object swing {
 
@@ -40,6 +39,12 @@ package object swing {
 
   def newAction[T](f: (ActionEvent) ⇒ T) = new AbstractAction {
     def actionPerformed(evt: ActionEvent) = f(evt)
+  }
+
+  implicit def enrichJButton(b: JButton) = new RichJButton(b)
+  class RichJButton(b: JButton) {
+    def onActionPerformed[T](f: (ActionEvent) ⇒ T) =
+      b.addActionListener(newAction(f))
   }
 
   implicit def enrichComponent(c: Component) = new RichComponent(c)
