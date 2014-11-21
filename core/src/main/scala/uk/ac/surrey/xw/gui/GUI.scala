@@ -1,7 +1,5 @@
 package uk.ac.surrey.xw.gui
 
-import java.awt.Container
-
 import scala.collection.mutable.Publisher
 import scala.collection.mutable.Subscriber
 
@@ -13,12 +11,14 @@ import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
+import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 import uk.ac.surrey.xw.api.Tab
 import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.enrichOption
 import uk.ac.surrey.xw.api.normalizeString
+import uk.ac.surrey.xw.api.swing.enrichComponent
 import uk.ac.surrey.xw.api.toRunnable
 import uk.ac.surrey.xw.state.AddWidget
 import uk.ac.surrey.xw.state.RemoveWidget
@@ -50,18 +50,10 @@ class GUI(
     }
 
   def getWidget(widgetKey: WidgetKey): Option[ExtraWidget] = {
-    def getWidgetsIn(container: Container) =
-      container.getComponents.collect {
-        case w: ExtraWidget ⇒ w
-      }
-    val extraTabs = getWidgetsIn(tabs)
-    extraTabs
-      .find(_.key == widgetKey)
-      .orElse {
-        extraTabs
-          .collect { case t: Container ⇒ t }
-          .flatMap(getWidgetsIn)
-          .find(_.key == widgetKey)
+    val xwTabs = app.workspace.xwTabs
+    (xwTabs ++ xwTabs.flatMap(_.allChildren))
+      .collectFirst {
+        case w: ExtraWidget if w.key == widgetKey ⇒ w
       }
   }
 

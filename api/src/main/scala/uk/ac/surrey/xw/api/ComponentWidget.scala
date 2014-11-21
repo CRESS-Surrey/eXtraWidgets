@@ -2,15 +2,12 @@ package uk.ac.surrey.xw.api
 
 import java.awt.Color
 import java.awt.Color.black
-import java.awt.Component
-import java.awt.Container
 
 import org.nlogo.awt.Fonts.adjustDefaultFont
 import org.nlogo.window.InterfaceColors.SLIDER_BACKGROUND
 
-import javax.swing.JCheckBox
-import javax.swing.JLabel
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
+import uk.ac.surrey.xw.api.swing.enrichComponent
 
 abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val tabProperty = new StringProperty[W](
@@ -38,18 +35,16 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
     colorProperty, textColorProperty)
 }
 
-trait ComponentWidget
-  extends ExtraWidget
-  with ControlsChildrenEnabling {
+trait ComponentWidget extends ExtraWidget {
 
   adjustDefaultFont(this)
 
-  def setX(x: Int): Unit = setBounds(x, getY, getWidth, getHeight)
-  def setY(y: Int): Unit = setBounds(getX, y, getWidth, getHeight)
-  def setWidth(width: Int): Unit = setBounds(getX, getY, width, getHeight)
-  def setHeight(height: Int): Unit = setBounds(getX, getY, getWidth, height)
+  def setX(x: Int): Unit = setLocation(x, getY)
+  def setY(y: Int): Unit = setLocation(getX, y)
+  def setWidth(width: Int): Unit = setSize(width, getHeight)
+  def setHeight(height: Int): Unit = setSize(getWidth, height)
 
-  def tab: Option[Tab] = ws.xwTabs.find(_.getComponents.contains(this))
+  def tab: Option[Tab] = ws.xwTabs.find(_.panel.getComponents.contains(this))
   def getTabKey: PropertyKey = tab
     .getOrElse(throw XWException("Widget " + key + " is not on any tab."))
     .key
@@ -59,10 +54,10 @@ trait ComponentWidget
       case Some(newTab) ⇒
         tab match {
           case None ⇒
-            newTab.add(this)
+            newTab.panel.add(this)
           case Some(oldTab) if oldTab.key != tabKey ⇒
-            oldTab.remove(this)
-            newTab.add(this)
+            oldTab.panel.remove(this)
+            newTab.panel.add(this)
         }
     }
 
@@ -70,11 +65,7 @@ trait ComponentWidget
   def getTextColor = _textColor
   def setTextColor(textColor: Color): Unit = {
     _textColor = textColor
-    def recurse(component: Component): Unit = component match {
-      case label: JLabel ⇒ label.setForeground(textColor)
-      case checkbox: JCheckBox ⇒ checkbox.setForeground(textColor)
-      case container: Container ⇒ container.getComponents.foreach(recurse)
-    }
-    recurse(this)
+    setForeground(_textColor)
+    this.allChildren.foreach(_.setForeground(_textColor))
   }
 }

@@ -16,10 +16,7 @@ class RichWorkspace(ws: GUIWorkspace) {
     .collectFirst { case app: App ⇒ app.tabs }
     .getOrElse(throw new XWException("Can't access application tabs."))
 
-  def xwTabs: Vector[Tab] =
-    tabs.getComponents.collect {
-      case t: Tab ⇒ t
-    }(collection.breakOut)
+  def xwTabs = tabs.getComponents.collect { case t: Tab ⇒ t }
 
   def reorderTabs(): Unit =
     for (tab ← xwTabs.sortBy(t ⇒ (t.getOrder, t.key))) {

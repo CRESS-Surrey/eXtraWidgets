@@ -1,10 +1,12 @@
 package uk.ac.surrey.xw.api
 
+import java.awt.BorderLayout
 import java.awt.Color.white
 
 import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JPanel
+import javax.swing.JScrollPane
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
 class TabKind[W <: Tab] extends WidgetKind[W] {
@@ -12,7 +14,7 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
   val name = "TAB"
   val defaultProperty = None
   val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.setBackground(_)), _.getBackground, white)
+    "COLOR", Some(_.panel.setBackground(_)), _.panel.getBackground, white)
   val titleProperty = new StringProperty[W](
     "TITLE", Some(_.setTitle(_)), _.getTitle)
   val enabledProperty = new BooleanProperty[W](
@@ -31,8 +33,7 @@ class Tab(
   val stateUpdater: StateUpdater,
   val ws: GUIWorkspace)
   extends JPanel
-  with ExtraWidget
-  with ControlsChildrenEnabling {
+  with ExtraWidget {
 
   val kind = new TabKind[this.type]
 
@@ -47,8 +48,19 @@ class Tab(
 
   val tabs = ws.tabs
 
-  setLayout(null) // use absolute layout
   setOpaque(true)
+
+  val panel = new JPanel {
+    setLayout(null)
+    override def getPreferredSize: java.awt.Dimension =
+      if (getComponents.nonEmpty) {
+        val maxX = getComponents.map(c ⇒ c.getLocation.x + c.getSize.width).max
+        val maxY = getComponents.map(c ⇒ c.getLocation.y + c.getSize.height).max
+        new java.awt.Dimension(maxX, maxY)
+      } else new java.awt.Dimension(0, 0)
+  }
+  setLayout(new BorderLayout)
+  add(new JScrollPane(panel), BorderLayout.CENTER)
 
   addToAppTabs()
 
@@ -89,4 +101,5 @@ class Tab(
     tabs.remove(this)
     tabs.removeMenuItem(index)
   }
+
 }

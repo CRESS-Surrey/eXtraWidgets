@@ -1,18 +1,21 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Component
+import java.awt.Container
 import java.awt.ItemSelectable
 import java.awt.event.ActionEvent
 import java.awt.event.FocusEvent
 import java.awt.event.FocusListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
+
 import org.nlogo.api.I18N
+
 import javax.swing.AbstractAction
+import javax.swing.JButton
 import javax.swing.JSlider
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
-import javax.swing.JButton
 
 package object swing {
 
@@ -66,6 +69,12 @@ package object swing {
           msg, Array(I18N.gui.get("common.buttons.ok")))
       }
     }
+    def allChildren: Seq[Component] =
+      c match {
+        case c: Container ⇒
+          c.getComponents ++ c.getComponents.flatMap(_.allChildren)
+        case _ ⇒ Seq()
+      }
   }
 
 }

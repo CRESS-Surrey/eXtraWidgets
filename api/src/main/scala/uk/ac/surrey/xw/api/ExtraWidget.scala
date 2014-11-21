@@ -1,7 +1,10 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Component
+
 import org.nlogo.window.GUIWorkspace
+
+import uk.ac.surrey.xw.api.swing.enrichComponent
 
 trait ExtraWidget extends Component {
 
@@ -23,4 +26,9 @@ trait ExtraWidget extends Component {
 
   def updateInState(property: Property[_, this.type]): Unit =
     stateUpdater.set(property.key, this.key, property.get(this))
+
+  override def setEnabled(b: Boolean) = {
+    super.setEnabled(b)
+    this.allChildren.foreach(_.setEnabled(b))
+  }
 }
