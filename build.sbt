@@ -1,5 +1,5 @@
 lazy val root = (project in file("."))
-  .aggregate(xw, core, api, note, checkbox, slider, chooser, input, button)
+  .aggregate(xw, core, api, note, checkbox, slider, chooser, multichooser, input, button)
 
 lazy val api = project
 
@@ -17,6 +17,9 @@ lazy val slider = (project in file("./xw/widgets/SliderWidget/"))
   .dependsOn(api)
 
 lazy val chooser = (project in file("./xw/widgets/ChooserWidget/"))
+  .dependsOn(api)
+
+lazy val multichooser = (project in file("./xw/widgets/MultiChooserWidget/"))
   .dependsOn(api)
 
 lazy val input = (project in file("./xw/widgets/InputWidgets/"))

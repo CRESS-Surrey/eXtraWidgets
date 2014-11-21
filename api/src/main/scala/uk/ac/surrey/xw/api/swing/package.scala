@@ -13,9 +13,12 @@ import org.nlogo.api.I18N
 
 import javax.swing.AbstractAction
 import javax.swing.JButton
+import javax.swing.JList
 import javax.swing.JSlider
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
+import javax.swing.event.ListSelectionEvent
+import javax.swing.event.ListSelectionListener
 
 package object swing {
 
@@ -38,6 +41,16 @@ package object swing {
   class RichItemSelectable(is: ItemSelectable) {
     def onItemStateChanged[T](f: (ItemEvent) ⇒ T) =
       is.addItemListener(itemListener(f))
+  }
+
+  def listSelectionListener[T](f: (ListSelectionEvent) ⇒ T) =
+    new ListSelectionListener {
+      override def valueChanged(e: ListSelectionEvent) = f(e)
+    }
+  implicit def enrichJList(jl: JList) = new RichJList(jl)
+  class RichJList(jl: JList) {
+    def onValueChanged[T](f: (ListSelectionEvent) ⇒ T) =
+      jl.addListSelectionListener(listSelectionListener(f))
   }
 
   def newAction[T](f: (ActionEvent) ⇒ T) = new AbstractAction {
