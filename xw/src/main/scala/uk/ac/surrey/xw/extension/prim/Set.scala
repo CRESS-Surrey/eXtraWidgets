@@ -29,13 +29,8 @@ class Set(
         " for widgets of kind " + kindInfo.kindName(widgetKey) + "."
     )
 
-    /* we call `property.fromAny` here instead even though
-     * property.set is also going to call it later because
-     * we want it to fail before we actually write the value
-     * to the property map. NP 2014-11-17.
-     */
     val value =
-      try property.fromAny(propertyValue).asInstanceOf[AnyRef]
+      try property.encode(propertyValue)
       catch { case e: IllegalArgumentException ⇒ throw XWException(e.getMessage, e) }
 
     writer.set(property.key, widgetKey, value, true)

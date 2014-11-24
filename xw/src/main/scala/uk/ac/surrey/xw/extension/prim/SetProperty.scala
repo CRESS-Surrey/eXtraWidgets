@@ -29,7 +29,7 @@ class SetProperty(
         " for widgets of kind " + kindInfo.kindName(widgetKey) + "."
     )
 
-    val propertyValue = args(0).get
+    val propertyValue = property.encode(args(0).get)
     writer.set(propertyKey, widgetKey, propertyValue, true)
   }
 }

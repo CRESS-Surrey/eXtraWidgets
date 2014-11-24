@@ -74,24 +74,19 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     // multiply defined, we fold their syntactic indications together
     // by using bitwise ORs (.reduce(_ | _))
 
-    val outputTypes = for {
+    val syntaxTypes = for {
       kind ← widgetKinds.values
       property ← kind.properties.values
-    } yield (property.key, property.outputType)
+    } yield (property.key, property.syntaxType, property.readOnly)
     val getters = for {
-      (key, outputType) ← outputTypes.groupBy(_._1)
-        .mapValues(_.unzip._2.reduce(_ | _))
+      (key, outputType) ← syntaxTypes.groupBy(_._1)
+        .mapValues(_.unzip3._2.reduce(_ | _))
       getter = new GetProperty(writer, key, outputType, widgetContextManager)
     } yield key -> getter
 
-    val inputTypes = for {
-      kind ← widgetKinds.values
-      property ← kind.properties.values
-      if !property.readOnly
-    } yield (property.key, property.inputType)
     val setters = for {
-      (key, inputType) ← inputTypes.groupBy(_._1)
-        .mapValues(_.unzip._2.reduce(_ | _))
+      (key, inputType) ← syntaxTypes.filter(!_._3).groupBy(_._1)
+        .mapValues(_.unzip3._2.reduce(_ | _))
       setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
     } yield ("SET-" + key) -> setter
 

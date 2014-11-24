@@ -13,6 +13,6 @@ abstract class WidgetKind[W <: ExtraWidget] {
   lazy val properties =
     propertySet.map(p ⇒ p.key -> p).toMap
   lazy val defaultValues = properties.mapValues(
-    _.defaultValue.asInstanceOf[AnyRef]
+    p => p.encode(p.defaultValue)
   )
 }
