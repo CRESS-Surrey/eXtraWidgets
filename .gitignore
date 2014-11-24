@@ -1,6 +1,7 @@
 *.class
 *.log
 *.jar
+xw.zip
 
 # sbt specific
 .history
