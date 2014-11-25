@@ -1,13 +1,16 @@
 package uk.ac.surrey.xw.state
 
+import scala.Option.option2Iterable
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.mapAsScalaMapConverter
+
 import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
 import org.nlogo.api.LogoList
-import uk.ac.surrey.xw.api.XWException
 import org.nlogo.api.Nobody
+
+import uk.ac.surrey.xw.api.XWException
 
 class JSONLoader(writer: Writer) {
 
@@ -34,18 +37,24 @@ class JSONLoader(writer: Writer) {
         case e: ClassCastException ⇒ throw XWException(
           "Error parsing JSON input: main value is not a JSON object.", e)
       }
-    val scalaWidgetMap = for {
+    val errors = (for {
       (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
         case (k: String, v) ⇒ k -> convertJSONValue(v)
       }
-    } yield widgetKey -> propertyMap.toMap
-
-    val (tabs, rest) = scalaWidgetMap.partition(
-      _._2.get("KIND") == Some("TAB")
-    )
-    tabs.foreach { case (k, ps) ⇒ writer.add(k, ps) }
-    rest.foreach { case (k, ps) ⇒ writer.add(k, ps) }
+    } yield widgetKey -> propertyMap.toMap)
+      .toSeq
+      .sortBy(_._2.get("KIND") != Some("TAB"))
+      .map {
+        case (k, ps) ⇒
+          try {
+            writer.add(k, ps)
+            Right(Unit)
+          } catch {
+            case e: XWException ⇒ Left(e.getMessage)
+          }
+      }
+      .flatMap(_.left.toOption)
+    if (errors.nonEmpty) throw new XWException(errors.mkString("\n"))
   }
-
 }
