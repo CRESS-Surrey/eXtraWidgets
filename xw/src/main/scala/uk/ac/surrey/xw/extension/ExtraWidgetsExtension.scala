@@ -101,6 +101,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     for ((name, prim) ← primitives)
       primitiveManager.addPrimitive(name, prim)
 
-  override def unload(em: ExtensionManager): Unit = clearAll()
+  override def unload(em: ExtensionManager): Unit = writer.clearAll()
 
 }
