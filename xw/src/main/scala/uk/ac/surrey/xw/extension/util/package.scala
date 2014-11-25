@@ -7,6 +7,7 @@ import org.nlogo.api.LogoList
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.window.GUIWorkspace
+import org.nlogo.workspace.AbstractWorkspace
 
 import uk.ac.surrey.xw.api.PropertyMap
 
@@ -37,10 +38,13 @@ package object util {
     }
   }
 
+  def getWorkspace(extensionManager: ExtensionManager): AbstractWorkspace =
+    extensionManager
+      .asInstanceOf[org.nlogo.workspace.ExtensionManager]
+      .workspace
+
   def getApp(extensionManager: ExtensionManager): Option[App] =
-    Seq(extensionManager)
-      .collect { case em: org.nlogo.workspace.ExtensionManager ⇒ em }
-      .map(_.workspace)
+    Seq(getWorkspace(extensionManager))
       .collect { case ws: GUIWorkspace ⇒ ws }
       .map(_.getFrame)
       .collect { case af: AppFrame ⇒ af }

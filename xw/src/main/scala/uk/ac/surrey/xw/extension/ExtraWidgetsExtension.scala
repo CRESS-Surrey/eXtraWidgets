@@ -18,11 +18,13 @@ import uk.ac.surrey.xw.extension.prim.Import
 import uk.ac.surrey.xw.extension.prim.KindList
 import uk.ac.surrey.xw.extension.prim.Of
 import uk.ac.surrey.xw.extension.prim.Remove
+import uk.ac.surrey.xw.extension.prim.SelectTab
 import uk.ac.surrey.xw.extension.prim.Set
 import uk.ac.surrey.xw.extension.prim.SetProperty
 import uk.ac.surrey.xw.extension.prim.Widgets
 import uk.ac.surrey.xw.extension.prim.With
 import uk.ac.surrey.xw.extension.util.getApp
+import uk.ac.surrey.xw.extension.util.getWorkspace
 import uk.ac.surrey.xw.gui.GUI
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
@@ -56,7 +58,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "WIDGETS" -> new Widgets(writer),
       "CLEAR-ALL" -> new ClearAll(writer),
       "EXPORT" -> new Export(writer),
-      "IMPORT" -> new Import(writer)
+      "IMPORT" -> new Import(writer),
+      "SELECT-TAB" -> new SelectTab(writer, getWorkspace(extensionManager))
     )
 
     val kindListPrimitives = for {
