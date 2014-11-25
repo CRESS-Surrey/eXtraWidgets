@@ -7,22 +7,19 @@ import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
 import org.nlogo.api.LogoList
-
 import uk.ac.surrey.xw.api.XWException
+import org.nlogo.api.Nobody
 
-class JSONLoader(writer:Writer) {
-  /**
-   * Handle the possible values returned by the JSON
-   * parser. Nulls are unsupported for now, and so are
-   * other custom object that could, in theory, be
-   * add (e.g. nobody, extension objects, etc.)
-   */
+class JSONLoader(writer: Writer) {
+
+  // Handle the possible values returned by the JSON parser
   def convertJSONValue(v: Any): AnyRef = try v match {
     case l: java.util.List[_] ⇒
       LogoList(l.asScala.map(convertJSONValue): _*)
     case s: java.lang.String ⇒ s
     case n: java.lang.Number ⇒ Double.box(n.doubleValue)
     case b: java.lang.Boolean ⇒ b
+    case null ⇒ Nobody
   } catch {
     case e: MatchError ⇒ throw XWException(
       "Unsupported value in JSON input: " +
