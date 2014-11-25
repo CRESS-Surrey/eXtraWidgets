@@ -20,7 +20,6 @@ import uk.ac.surrey.xw.extension.prim.Of
 import uk.ac.surrey.xw.extension.prim.Remove
 import uk.ac.surrey.xw.extension.prim.Set
 import uk.ac.surrey.xw.extension.prim.SetProperty
-import uk.ac.surrey.xw.extension.prim.Version
 import uk.ac.surrey.xw.extension.prim.Widgets
 import uk.ac.surrey.xw.extension.prim.With
 import uk.ac.surrey.xw.extension.util.getApp
@@ -48,7 +47,6 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val kindInfo = new KindInfo(writer, widgetKinds)
 
     val staticPrimitives = Seq(
-      "VERSION" -> new Version("0.0.0-wip"),
       "ASK" -> new Ask(widgetContextManager),
       "OF" -> new Of(widgetContextManager),
       "WITH" -> new With(widgetContextManager),
