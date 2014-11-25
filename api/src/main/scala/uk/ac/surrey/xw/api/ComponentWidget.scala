@@ -28,11 +28,14 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
     "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
   val textColorProperty = new ColorProperty[W](
     "TEXT-COLOR", Some(_.setTextColor(_)), _.getTextColor, black)
+  val fontSizeProperty = new IntegerProperty[W](
+    "FONT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
   override def propertySet = super.propertySet ++ Set(
     tabProperty, xProperty, yProperty,
     widthProperty, heightProperty,
     hiddenProperty, enabledProperty,
-    colorProperty, textColorProperty)
+    colorProperty, textColorProperty,
+    fontSizeProperty)
 }
 
 trait ComponentWidget extends ExtraWidget {
@@ -67,5 +70,18 @@ trait ComponentWidget extends ExtraWidget {
     _textColor = textColor
     setForeground(_textColor)
     this.allChildren.foreach(_.setForeground(_textColor))
+  }
+
+  private var _fontSize: Int = 0
+  def fontSize = _fontSize
+  def fontSize_=(size: Int) {
+    if (size < 1) throw new IllegalStateException(
+      "Cannot use a font size smaller than 1" +
+      " for widget " + key + "."
+    )
+    _fontSize = size
+    val newFont = getFont.deriveFont(size.toFloat)
+    setFont(newFont)
+    this.allChildren.foreach(_.setFont(newFont))
   }
 }
