@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Color
-
 import org.nlogo.api.Color.MaxColor
 import org.nlogo.api.Color.getARGBbyPremodulatedColorNumber
 import org.nlogo.api.Color.getClosestColorNumberByARGB
@@ -10,6 +9,7 @@ import org.nlogo.api.Color.modulateDouble
 import org.nlogo.api.Dump
 import org.nlogo.api.I18N
 import org.nlogo.api.LogoList
+import org.nlogo.api.Nobody
 import org.nlogo.api.Syntax.BooleanType
 import org.nlogo.api.Syntax.ListType
 import org.nlogo.api.Syntax.NumberType
