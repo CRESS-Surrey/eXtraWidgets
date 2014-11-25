@@ -11,21 +11,20 @@ import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.extension.prim.Ask
 import uk.ac.surrey.xw.extension.prim.ClearAll
 import uk.ac.surrey.xw.extension.prim.Create
+import uk.ac.surrey.xw.extension.prim.Export
 import uk.ac.surrey.xw.extension.prim.Get
 import uk.ac.surrey.xw.extension.prim.GetProperty
+import uk.ac.surrey.xw.extension.prim.Import
 import uk.ac.surrey.xw.extension.prim.KindList
-import uk.ac.surrey.xw.extension.prim.LoadJSON
 import uk.ac.surrey.xw.extension.prim.Of
 import uk.ac.surrey.xw.extension.prim.Remove
 import uk.ac.surrey.xw.extension.prim.Set
 import uk.ac.surrey.xw.extension.prim.SetProperty
-import uk.ac.surrey.xw.extension.prim.ToJSON
 import uk.ac.surrey.xw.extension.prim.Version
 import uk.ac.surrey.xw.extension.prim.Widgets
 import uk.ac.surrey.xw.extension.prim.With
 import uk.ac.surrey.xw.extension.util.getApp
 import uk.ac.surrey.xw.gui.GUI
-import uk.ac.surrey.xw.state.Reader
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
 
@@ -58,8 +57,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "REMOVE" -> new Remove(writer),
       "WIDGETS" -> new Widgets(writer),
       "CLEAR-ALL" -> new ClearAll(writer),
-      "JSON" -> new ToJSON(writer),
-      "LOAD-JSON" -> new LoadJSON(writer)
+      "EXPORT" -> new Export(writer),
+      "IMPORT" -> new Import(writer)
     )
 
     val kindListPrimitives = for {
