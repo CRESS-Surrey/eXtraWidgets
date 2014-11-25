@@ -2,9 +2,7 @@ package uk.ac.surrey.xw.state
 
 import scala.collection.JavaConverters.asJavaConcurrentMapConverter
 import scala.collection.JavaConverters.mapAsJavaMapConverter
-
 import org.json.simple.JSONObject
-
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
 import uk.ac.surrey.xw.api.PropertyKey
@@ -15,6 +13,8 @@ import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.enrichEither
 import uk.ac.surrey.xw.api.enrichOption
 import uk.ac.surrey.xw.api.normalizeString
+import org.nlogo.api.Nobody
+import org.nlogo.api.LogoList
 
 class Reader(
   widgetMap: MutableWidgetMap) { // reader should never expose any part of this
@@ -70,5 +70,19 @@ class Reader(
   def properties(widgetKey: WidgetKey): Either[XWException, Vector[(PropertyKey, PropertyValue)]] =
     mutablePropertyMap(widgetKey).right.map(Vector() ++ _.iterator)
 
-  def toJSON = new JSONObject(widgetMap.mapValues(_.asJava).asJava).toJSONString
+  def toJSON = {
+    def convert(x: AnyRef): AnyRef = x match {
+      case Nobody ⇒ null
+      case _: java.lang.String ⇒ x
+      case _: java.lang.Number ⇒ x
+      case _: java.lang.Boolean ⇒ x
+      case l: LogoList ⇒ LogoList.fromVector(l.toVector.map(convert))
+      case _ ⇒ x.toString
+    }
+    new JSONObject(
+      widgetMap.mapValues {
+        _.mapValues(convert).asJava
+      }.asJava
+    ).toJSONString
+  }
 }
