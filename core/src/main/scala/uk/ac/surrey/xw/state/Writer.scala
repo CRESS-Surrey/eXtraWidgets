@@ -1,6 +1,5 @@
 package uk.ac.surrey.xw.state
 
-import scala.Option.option2Iterable
 import scala.collection.mutable.Publisher
 
 import uk.ac.surrey.xw.api.KindName
@@ -8,7 +7,6 @@ import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
 import uk.ac.surrey.xw.api.StateUpdater
-import uk.ac.surrey.xw.api.Tab
 import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
@@ -28,15 +26,23 @@ class Writer(
 
   override type Pub = Publisher[StateEvent]
 
+  private var tabStack: Seq[WidgetKey] = Seq.empty
+
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val properties = propertyMap.normalizeKeys
     validateNonEmpty("widget key", widgetKey).rightOrThrow
     validateUnique("widget key", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
-      case _: TabKind[_] ⇒ Map.empty
-      case _ if properties.isDefinedAt(tabPropertyKey) ⇒ Map.empty
-      case _ ⇒ Map(tabPropertyKey -> getLastTabKey)
+      case _: TabKind[_] ⇒
+        tabStack = widgetKey +: tabStack
+        Map.empty
+      case _ if properties.isDefinedAt(tabPropertyKey) ⇒
+        Map.empty
+      case _ ⇒
+        Map(tabPropertyKey -> tabStack.headOption.getOrElse(
+          throw new XWException("There currently are no extra tabs."))
+        )
     }
     val keyProperty = Map(keyPropertyKey -> widgetKey)
     val allProperties = kind.defaultValues ++ properties ++ tabProperty ++ keyProperty
@@ -61,28 +67,14 @@ class Writer(
         "Available kinds are: " + widgetKinds.keys.mkString(", ") + "."))
   }
 
-  def getLastTabKey: WidgetKey =
-    (for {
-      (widgetKey, properties) ← widgetMap.toSeq
-      kindName ← properties.get(kindPropertyKey)
-      if kindName == tabKindName
-      order = properties
-        .get(orderPropertyKey)
-        .collect { case order: java.lang.Double ⇒ order.doubleValue }
-        .getOrElse(0.0)
-    } yield (order, widgetKey))
-      .sorted
-      .lastOption
-      .map(_._2)
-      .getOrElse(throw new XWException("No widget tab has been created yet."))
-
   def remove(widgetKey: WidgetKey): Unit = {
-    // Special case: if we're removing a tab, also
-    // remove the widgets on that tab from the widget map
     if (get(kindPropertyKey, widgetKey) == tabKindName) {
+      // Special case: if we're removing a tab, also
+      // remove the widgets on that tab from the widget map
       widgetMap --= widgetMap.collect {
         case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) ⇒ k
       }
+      tabStack = tabStack.filterNot(_ == widgetKey)
     }
     widgetMap -= widgetKey
     publish(RemoveWidget(widgetKey))
