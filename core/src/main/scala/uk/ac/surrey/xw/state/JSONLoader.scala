@@ -2,7 +2,6 @@ package uk.ac.surrey.xw.state
 
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.mapAsScalaMapConverter
-
 import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
@@ -27,7 +26,7 @@ class JSONLoader(writer: Writer) {
   }
 
   def load(json: String): Unit = {
-    val widgetMap =
+    val javaWidgetMap =
       try new JSONParser().parse(json).asInstanceOf[java.util.Map[_, _]]
       catch {
         case e: ParseException ⇒ throw XWException(
@@ -35,12 +34,18 @@ class JSONLoader(writer: Writer) {
         case e: ClassCastException ⇒ throw XWException(
           "Error parsing JSON input: main value is not a JSON object.", e)
       }
-    for {
-      (widgetKey: String, jMap: java.util.Map[_, _]) ← widgetMap.asScala
+    val scalaWidgetMap = for {
+      (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
         case (k: String, v) ⇒ k -> convertJSONValue(v)
       }
-    } writer.add(widgetKey, propertyMap.toMap)
+    } yield widgetKey -> propertyMap.toMap
+
+    val (tabs, rest) = scalaWidgetMap.partition(
+      _._2.get("KIND") == Some("TAB")
+    )
+    tabs.foreach { case (k, ps) ⇒ writer.add(k, ps) }
+    rest.foreach { case (k, ps) ⇒ writer.add(k, ps) }
   }
 
 }
