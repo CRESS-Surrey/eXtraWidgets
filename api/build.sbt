@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
 
 site.settings
 
-site.includeScaladoc()
+site.includeScaladoc("/")
 
 ghpages.settings
 
