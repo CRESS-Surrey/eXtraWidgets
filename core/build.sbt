@@ -14,6 +14,8 @@ crossPaths := false
 
 fork := true
 
+resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+
 libraryDependencies ++= Seq(
   "org.nlogo" % "NetLogo" % "5.1.0" from
     "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar",
