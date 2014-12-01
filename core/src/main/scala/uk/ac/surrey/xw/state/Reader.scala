@@ -53,7 +53,7 @@ class Reader(
 
   def widgetKeySet: Set[WidgetKey] = widgetMap.keys.toSet
 
-  def widgetKeyVector: Vector[WidgetKey] = Vector() ++ widgetMap.keys
+  def widgetKeyVector: Vector[WidgetKey] = (Vector() ++ widgetMap.keys).sorted
 
   private def mutablePropertyMap(widgetKey: WidgetKey): Either[XWException, MutablePropertyMap] =
     widgetMap.get(widgetKey).orException(
