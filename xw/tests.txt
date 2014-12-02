@@ -8,3 +8,11 @@ colors-are-stored-as-numbers
   xw:sliders xw:with [ xw:color = red ] => ["s1" "s2" "s3"]
   O> xw:ask "s2" [ xw:set-color [215 50 40] ]
   [ xw:color ] xw:of xw:sliders => [15 [215 50 40 255] 15]
+
+sliders-can-be-positionned-relative-to-one-another
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> foreach n-values 5 [ word "s" ? ] xw:create-slider
+  O> (foreach (but-last xw:sliders) (but-first xw:sliders) [ xw:ask ?2 [ xw:set-y [ xw:y + xw:height + 10 ] xw:of ?1 ]])
+  [ xw:y ] xw:of xw:sliders => [0 60 120 180 240]
+
