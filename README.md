@@ -4,6 +4,10 @@ An extension for creating additional interface tabs in the [NetLogo](https://git
 
 [![build status](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets.svg?token=SMhSmaihoAiHTwEPS2Xp)](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets)
 
+### Installing
+
+Assuming that you already have [NetLogo](https://ccl.northwestern.edu/netlogo/download.shtml) installed, just [download the extension from the Releases page](https://github.com/nicolaspayette/eXtraWidgets/releases) and unzip it NetLogo's `extensions/` folder.
+
 ### An Extensible Extension
 
 New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/nicolaspayette/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://nicolaspayette.github.io/eXtraWidgets/) is also a good ressource.
