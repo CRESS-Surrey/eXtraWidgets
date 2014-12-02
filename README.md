@@ -16,5 +16,7 @@ New widgets kinds can be added to the extension just by dropping a JAR in a fold
 
 If you encounter any difficulties, please either [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new) or [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo).
 
+### Licensing
+
 ---
 [![build status](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets.svg?token=SMhSmaihoAiHTwEPS2Xp)](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets)
