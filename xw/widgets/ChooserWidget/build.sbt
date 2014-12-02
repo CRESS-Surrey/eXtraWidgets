@@ -8,8 +8,6 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-encoding", "UTF8")
 
-exportJars := true
-
 val jarName = "ChooserWidget.jar"
 
 artifactName := { (_, _, _) => jarName }

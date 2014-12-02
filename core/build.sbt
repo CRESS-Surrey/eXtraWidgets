@@ -10,8 +10,6 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
-crossPaths := false
-
 fork := true
 
 libraryDependencies ++= Seq(

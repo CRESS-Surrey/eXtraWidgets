@@ -11,6 +11,14 @@ libraryDependencies ++= Seq(
     from "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
 )
 
+libraryDependencies ++= Seq(
+  "org.nlogo" % "NetLogo-tests" % "5.0.5" % "test" from
+    "http://ccl.northwestern.edu/netlogo/5.1/NetLogo-tests.jar",
+  "org.scalatest" % "scalatest_2.9.2" % "1.8" % "test",
+  "org.picocontainer" % "picocontainer" % "2.13.6" % "test",
+  "asm" % "asm-all" % "3.3.1" % "test"
+)
+
 name := "eXtraWidgets-Extension"
 
 val jarName = "xw.jar"
@@ -22,6 +30,11 @@ packageOptions += Package.ManifestAttributes(
   ("Class-Manager", "uk.ac.surrey.xw.extension.ExtraWidgetsExtension"),
   ("NetLogo-Extension-API-Version", "5.0")
 )
+
+test in Test := {
+  val _ = (packageBin in Compile).value
+  (test in Test).value
+}
 
 packageBin in Compile <<= (packageBin in Compile, baseDirectory, dependencyClasspath in Runtime) map {
   (jar, base, classPath) =>

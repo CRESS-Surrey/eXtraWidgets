@@ -1,0 +1,5 @@
+colors-are-stored-as-numbers
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> foreach ["s1" "s2" "s3"] [ xw:create-slider ? [ xw:set-color red ] ]
+  [ xw:color ] xw:of xw:sliders => [15 15 15]
