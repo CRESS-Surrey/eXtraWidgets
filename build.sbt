@@ -5,8 +5,6 @@ lazy val api = project
 
 lazy val core = project.dependsOn(api)
 
-lazy val xw = project.dependsOn(core)
-
 lazy val note = (project in file("./xw/widgets/NoteWidget/"))
   .dependsOn(api)
 
@@ -27,3 +25,19 @@ lazy val input = (project in file("./xw/widgets/InputWidgets/"))
 
 lazy val button = (project in file("./xw/widgets/ButtonWidget/"))
   .dependsOn(api)
+
+lazy val xw = project.dependsOn(core)
+  .settings(
+    (test in Test) := {
+      val _ = Seq(
+        (Keys.`package` in (note, Compile)).value,
+        (Keys.`package` in (checkbox, Compile)).value,
+        (Keys.`package` in (slider, Compile)).value,
+        (Keys.`package` in (chooser, Compile)).value,
+        (Keys.`package` in (multichooser, Compile)).value,
+        (Keys.`package` in (input, Compile)).value,
+        (Keys.`package` in (button, Compile)).value
+      )
+      (test in Test).value
+    }
+  )
