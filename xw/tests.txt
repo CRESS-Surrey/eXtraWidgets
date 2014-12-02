@@ -16,3 +16,46 @@ sliders-can-be-positionned-relative-to-one-another
   O> (foreach (but-last xw:sliders) (but-first xw:sliders) [ xw:ask ?2 [ xw:set-y [ xw:y + xw:height + 10 ] xw:of ?1 ]])
   [ xw:y ] xw:of xw:sliders => [0 60 120 180 240]
 
+all-kinds-can-be-created-queried-and-deleted
+  extensions [xw]
+  xw:tabs => []
+  xw:notes => []
+  xw:checkboxes => []
+  xw:choosers => []
+  xw:multi-choosers => []
+  xw:text-inputs => []
+  xw:numeric-inputs => []
+  xw:buttons => []
+  O> xw:create-tab "t1"
+  O> foreach n-values 5 [ word "s" ? ] xw:create-slider
+  O> foreach n-values 5 [ word "n" ? ] xw:create-note
+  O> foreach n-values 5 [ word "cb" ? ] xw:create-checkbox
+  O> foreach n-values 5 [ word "c" ? ] xw:create-chooser
+  O> foreach n-values 5 [ word "mc" ? ] xw:create-multi-chooser
+  O> foreach n-values 5 [ word "ti" ? ] xw:create-text-input
+  O> foreach n-values 5 [ word "ni" ? ] xw:create-numeric-input
+  O> foreach n-values 5 [ word "b" ? ] xw:create-button
+  xw:tabs => ["t1"]
+  xw:notes => ["n0" "n1" "n2" "n3" "n4"]
+  xw:checkboxes => ["cb0" "cb1" "cb2" "cb3" "cb4"]
+  xw:choosers => ["c0" "c1" "c2" "c3" "c4"]
+  xw:multi-choosers => ["mc0" "mc1" "mc2" "mc3" "mc4"]
+  xw:text-inputs => ["ti0" "ti1" "ti2" "ti3" "ti4"]
+  xw:numeric-inputs => ["ni0" "ni1" "ni2" "ni3" "ni4"]
+  xw:buttons => ["b0" "b1" "b2" "b3" "b4"]
+  xw:widgets => ["b0" "b1" "b2" "b3" "b4" "c0" "c1" "c2" "c3" "c4" "cb0" "cb1" "cb2" "cb3" "cb4" "mc0" "mc1" "mc2" "mc3" "mc4" "n0" "n1" "n2" "n3" "n4" "ni0" "ni1" "ni2" "ni3" "ni4" "s0" "s1" "s2" "s3" "s4" "ti0" "ti1" "ti2" "ti3" "ti4"]
+  O> xw:remove "n0"
+  xw:notes => ["n1" "n2" "n3" "n4"]
+  O> xw:remove "cb1"
+  xw:checkboxes => ["cb0" "cb2" "cb3" "cb4"]
+  O> xw:remove "c4"
+  xw:choosers => ["c0" "c1" "c2" "c3"]
+  O> xw:remove one-of xw:buttons
+  length xw:buttons => 4
+  length xw:widgets => 36
+  O> foreach xw:buttons xw:remove
+  length xw:buttons => 0
+  length xw:widgets => 32
+  O> xw:remove "t1"
+  length xw:notes => 0
+  length xw:widgets => 0
