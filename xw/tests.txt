@@ -3,3 +3,8 @@ colors-are-stored-as-numbers
   O> xw:create-tab "t1"
   O> foreach ["s1" "s2" "s3"] [ xw:create-slider ? [ xw:set-color red ] ]
   [ xw:color ] xw:of xw:sliders => [15 15 15]
+  O> xw:ask one-of xw:sliders [ xw:set-color [215 50 41] ]
+  [ xw:color ] xw:of xw:sliders => [15 15 15]
+  xw:sliders xw:with [ xw:color = red ] => ["s1" "s2" "s3"]
+  O> xw:ask "s2" [ xw:set-color [215 50 40] ]
+  [ xw:color ] xw:of xw:sliders => [15 [215 50 40 255] 15]
