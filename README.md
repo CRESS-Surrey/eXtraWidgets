@@ -19,6 +19,7 @@ Here is an example demonstrating some of the things that you can do with the ext
 ```
 extensions [xw]
 
+
 to startup
   xw:clear-all ; remove all previous extra tabs and widgets, if any
   ; create a new tab to the right of the regular interface tab
@@ -37,14 +38,15 @@ to startup
     xw:set-label "Other shapes to use"
     xw:set-items ["airplane" "arrow" "bug" "butterfly" "turtle"]
     xw:set-selected-items n-of 2 xw:items ; two random shapes by default
-    xw:set-y 70
+    ; set y relative to the bottom of the "population" slider:
+    xw:set-y [ xw:y + xw:height + 10 ] xw:of "population"
     xw:set-height 150
   ]
   ; you can also put buttons on the extra tabs:
   xw:create-button "setup" [
     xw:set-label "Push me!"
     xw:set-commands "setup" ; commands, given as strings, are compiled on execution
-    xw:set-y 230
+    xw:set-y [ xw:y + xw:height + 10 ] xw:of "shapes"
   ]
   ; xw:ask let's you do stuff with multiple widgets at a time
   ; (see also xw:of and xw:with)
