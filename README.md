@@ -29,10 +29,10 @@ to startup
     ; and set its parameters within a command block:
     xw:set-title "Parameters"
   ]
-  ; create a slider on the new tab, similar to a regular slider:
+  ; create a slider on the new tab, similar to a regular slider
+  ; the slider is placed in the upper left corner by default
   xw:create-slider "population" [
     xw:set-label "Population size"
-    xw:set-y 10 ; set the y coordinate (we'll deal with the x later...)
   ]
   ; a "multi-chooser", unlike a regular chooser, lets you select multiple items:
   xw:create-multi-chooser "shapes" [
@@ -53,7 +53,6 @@ to startup
   ; (see also xw:of and xw:with)
   xw:ask xw:widgets [
     let c one-of base-colors
-    xw:set-x 10             ; line up all the widgets in a single column
     xw:set-color c + 3      ; widgets can be any color!
     xw:set-text-color c - 3 ; and you can change their text color as well
   ]
