@@ -28,14 +28,14 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
     "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
   val textColorProperty = new ColorProperty[W](
     "TEXT-COLOR", Some(_.setTextColor(_)), _.getTextColor, black)
-  val fontSizeProperty = new IntegerProperty[W](
-    "FONT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
+  val textSizeProperty = new IntegerProperty[W](
+    "TEXT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
   override def propertySet = super.propertySet ++ Set(
     tabProperty, xProperty, yProperty,
     widthProperty, heightProperty,
     hiddenProperty, enabledProperty,
     colorProperty, textColorProperty,
-    fontSizeProperty)
+    textSizeProperty)
 }
 
 trait ComponentWidget extends ExtraWidget {
