@@ -10,6 +10,52 @@ The extension was developed and tested with NetLogo 5.1.0. There is a good chanc
 
 ### Using
 
+Unlike regular NetLogo widgets, the extra widgets and tabs are created through code. 
+
+```
+extensions [xw]
+
+to startup
+  xw:clear-all
+  xw:create-tab "t1" [
+    xw:set-title "Parameters"
+  ]
+  xw:create-slider "pop" [
+    xw:set-label "Population size"
+    xw:set-y 10
+  ]
+  xw:create-multi-chooser "shapes" [
+    xw:set-label "Other shapes to use"
+    xw:set-items ["airplane" "arrow" "bug" "butterfly" "turtle"]
+    xw:set-selected-items n-of 2 xw:items ; two random shapes by default
+    xw:set-y 70
+    xw:set-height 150
+  ]
+  xw:create-button "setup" [
+    xw:set-label "Push me!"
+    xw:set-commands "setup"
+    xw:set-y 230
+  ]
+  xw:ask xw:widgets [
+    let c one-of base-colors
+    xw:set-x 10
+    xw:set-color c + 3
+    xw:set-text-color c - 3
+  ]
+end
+```
+
+```
+to setup
+  clear-all
+  create-turtles xw:get "pop" [
+    set shape one-of fput "default" xw:get "shapes"
+    fd 10
+    xw:select-tab 1 ; select the regular interface tab
+  ]
+end
+```
+
 ### Extending
 
 This is what we believe to be the first "extensible extension" for NetLogo. New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/nicolaspayette/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://nicolaspayette.github.io/eXtraWidgets/) is also a good ressource.
