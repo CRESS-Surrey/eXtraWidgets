@@ -10,13 +10,21 @@ The extension was developed and tested with NetLogo 5.1.0. There is a good chanc
 
 ### Using
 
-Unlike regular NetLogo widgets, the extra widgets and tabs are created through code. A good place to put that code is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.
+Unlike regular NetLogo widgets, the extra widgets and tabs are created through code. While this may sound daunting at first, it has some advantages:
+
+- You can [create dynamic interfaces](https://github.com/nicolaspayette/eXtraWidgets/wiki/Creating-dynamic-interfaces) that change with the circomstances (a bit like with the [Goo extension](https://github.com/NetLogo/Goo-Extension/), but more powerful.)
+- The extra widgets provided here are a bit more flexible than the regular NetLogo widgets: you have control over colors and font sizes, the widgets can hidden or disabled, their labels are independant from their names, etc.
+- It can provides widget kinds that are unavailable in regular NetLogo. The only one of those at the moment is the [multi-chooser widget](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds#multichooser), but [more could be added](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds).
+- Writing code allows precise positioning: no fiddling with the mouse to get your widgets aligned.
+
+And besides, it's really not that hard: the extension works in such a way that [manipulating widgets is just like manipulating turtles](https://github.com/nicolaspayette/eXtraWidgets/wiki/Widget-contexts)!
 
 To learn more about how to use the extension, take a look at the [wiki](https://github.com/nicolaspayette/eXtraWidgets/wiki), especially the [Primitives](https://github.com/nicolaspayette/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
 
 If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new).
 
-Here is an example demonstrating some of the things that you can do with the extension:
+What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](https://github.com/nicolaspayette/eXtraWidgets/wiki/Creating-your-interface-at-startup) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
+
 
 ```
 extensions [xw]
