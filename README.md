@@ -10,11 +10,13 @@ The extension was developed and tested with NetLogo 5.1.0. There is a good chanc
 
 ### Using
 
-Unlike regular NetLogo widgets, the extra widgets and tabs are created through code.
+Unlike regular NetLogo widgets, the extra widgets and tabs are created through code. A good place to put that code is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.
 
-A good place to put that code is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.
+To learn more about how to use the extension, take a look at the [wiki](https://github.com/nicolaspayette/eXtraWidgets/wiki), especially the [Primitives](https://github.com/nicolaspayette/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
 
-Here is an example demonstrating some of the things that you can do with the extension. To learn more about how to use the extension, take a look at the [wiki](https://github.com/nicolaspayette/eXtraWidgets/wiki), especially the [Primitives](https://github.com/nicolaspayette/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
+If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new).
+
+Here is an example demonstrating some of the things that you can do with the extension:
 
 ```
 extensions [xw]
@@ -80,7 +82,7 @@ end
 
 We believe that eXtraWidgets is the first "extensible extension" for NetLogo. New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/nicolaspayette/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://nicolaspayette.github.io/eXtraWidgets/) is also a good ressource.
 
-If you encounter any difficulties, either [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new) or [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo).
+Just like users, developers encountering any difficulties can either [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new) or [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo).
 
 ### Licensing
 
