@@ -23,12 +23,12 @@ to startup
   xw:clear-all ; remove all previous extra tabs and widgets, if any
   ; create a new tab to the right of the regular interface tab
   ; (tabs and widgets need a "key": a string that identifies them)
-  xw:create-tab "t1" [ ; we "t1" as a key for our new tab
+  xw:create-tab "t1" [ ; we use "t1" as the key for our new tab
     ; and set its parameters within a command block:
     xw:set-title "Parameters"
   ]
   ; create a slider on the new tab, similar to a regular slider:
-  xw:create-slider "pop" [
+  xw:create-slider "population" [
     xw:set-label "Population size"
     xw:set-y 10 ; set the y coordinate (we'll deal with the x later...)
   ]
@@ -57,14 +57,16 @@ to startup
 end
 ```
 
-Here is a possible outcome of this procedure on Linux (it would look slightly different on Mac and Windows):
+Here is a possible outcome of this procedure on Linux (it would look slightly different on Mac or Windows):
 
 ![a screenshot of the result](doc/demo.png)
+
+Now let's use the values from those widgets in your `setup` procedure. As opposed to regular NetLogo widgets, extra widgets don't create global variables. You need to use `xw:get` and `xw:set` to get and set their values. Here is how you could do it in this case:
 
 ```
 to setup
   clear-all
-  create-turtles xw:get "pop" [
+  create-turtles xw:get "population" [
     set shape one-of fput "default" xw:get "shapes"
     fd 10
     xw:select-tab 1 ; select the regular interface tab
