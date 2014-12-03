@@ -20,9 +20,10 @@ Here is an example demonstrating some of the things that you can do with the ext
 extensions [xw]
 
 to startup
-  xw:clear-all
-  ; create a new tab to the right of the regular interface tab:
-  xw:create-tab "t1" [
+  xw:clear-all ; remove all previous extra tabs and widgets, if any
+  ; create a new tab to the right of the regular interface tab
+  ; (tabs and widgets need a "key": a string that identifies them)
+  xw:create-tab "t1" [ ; we "t1" as a key for our new tab
     ; and set its parameters within a command block:
     xw:set-title "Parameters"
   ]
@@ -55,6 +56,10 @@ to startup
   ]
 end
 ```
+
+Here is a possible outcome of this procedure on Linux (it would look slightly different on Mac and Windows):
+
+![a screenshot of the result](doc/demo.png)
 
 ```
 to setup
