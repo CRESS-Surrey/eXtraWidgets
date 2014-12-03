@@ -43,7 +43,7 @@ to startup
   ; you can also put buttons on the extra tabs:
   xw:create-button "setup" [
     xw:set-label "Push me!"
-    xw:set-commands "setup" ; commands are given as strings and only compiled on execution
+    xw:set-commands "setup" ; commands, given as strings, are compiled on execution
     xw:set-y 230
   ]
   ; xw:ask let's you do stuff with multiple widgets at a time
