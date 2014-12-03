@@ -76,7 +76,11 @@ class GUI(
   private def removeWidget(widgetKey: WidgetKey): Unit =
     for (w ← getWidget(widgetKey)) w match {
       case tab: Tab ⇒ tab.removeFromAppTabs()
-      case cw: ComponentWidget ⇒ cw.tab.foreach(_.panel.remove(cw))
+      case cw: ComponentWidget ⇒
+        for (t ← cw.tab) {
+          t.panel.remove(cw)
+          t.panel.repaint()
+        }
     }
 
 }
