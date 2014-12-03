@@ -21,7 +21,6 @@ Here is an example demonstrating some of the things that you can do with the ext
 ```
 extensions [xw]
 
-
 to startup
   xw:clear-all ; remove all previous extra tabs and widgets, if any
   ; create a new tab to the right of the regular interface tab
