@@ -15,9 +15,9 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val enabledProperty = new BooleanProperty[W](
     "ENABLED", Some(_.setEnabled(_)), _.isEnabled, true)
   val xProperty = new IntegerProperty[W](
-    "X", Some(_.setX(_)), _.getX)
+    "X", Some(_.setX(_)), _.getX, 10)
   val yProperty = new IntegerProperty[W](
-    "Y", Some(_.setY(_)), _.getY)
+    "Y", Some(_.setY(_)), _.getY, 10)
   val widthProperty = new IntegerProperty[W](
     "WIDTH", Some(_.setWidth(_)), _.getWidth, 150)
   val heightProperty = new IntegerProperty[W](

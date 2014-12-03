@@ -14,7 +14,7 @@ sliders-can-be-positionned-relative-to-one-another
   O> xw:create-tab "t1"
   O> foreach n-values 5 [ word "s" ? ] xw:create-slider
   O> (foreach (but-last xw:sliders) (but-first xw:sliders) [ xw:ask ?2 [ xw:set-y [ xw:y + xw:height + 10 ] xw:of ?1 ]])
-  [ xw:y ] xw:of xw:sliders => [0 60 120 180 240]
+  [ xw:y ] xw:of xw:sliders => [10 70 130 190 250]
 
 all-kinds-can-be-created-queried-and-deleted
   extensions [xw]
