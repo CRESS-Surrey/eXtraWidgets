@@ -21,13 +21,17 @@ extensions [xw]
 
 to startup
   xw:clear-all
+  ; create a new tab to the right of the regular interface tab:
   xw:create-tab "t1" [
+    ; and set its parameters within a command block:
     xw:set-title "Parameters"
   ]
+  ; create a slider on the new tab, similar to a regular slider:
   xw:create-slider "pop" [
     xw:set-label "Population size"
-    xw:set-y 10
+    xw:set-y 10 ; set the y coordinate (we'll deal with the x later...)
   ]
+  ; a "multi-chooser", unlike a regular chooser, lets you select multiple items:
   xw:create-multi-chooser "shapes" [
     xw:set-label "Other shapes to use"
     xw:set-items ["airplane" "arrow" "bug" "butterfly" "turtle"]
@@ -35,16 +39,19 @@ to startup
     xw:set-y 70
     xw:set-height 150
   ]
+  ; you can also put buttons on the extra tabs:
   xw:create-button "setup" [
     xw:set-label "Push me!"
-    xw:set-commands "setup"
+    xw:set-commands "setup" ; commands are given as strings and only compiled on execution
     xw:set-y 230
   ]
+  ; xw:ask let's you do stuff with multiple widgets at a time
+  ; (see also xw:of and xw:with)
   xw:ask xw:widgets [
     let c one-of base-colors
-    xw:set-x 10
-    xw:set-color c + 3
-    xw:set-text-color c - 3
+    xw:set-x 10             ; line up all the widgets in a single column
+    xw:set-color c + 3      ; widgets can be any color!
+    xw:set-text-color c - 3 ; and you can change their text color as well
   ]
 end
 ```
