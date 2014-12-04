@@ -172,6 +172,21 @@ test-export-import
   glob1 = glob2 => true
   O> file-close-all
 
+import-multiple-files
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> foreach n-values 5 [ word "s" ? ] xw:create-slider
+  O> xw:export "tests/t1.json"
+  O> xw:clear-all
+  O> xw:create-tab "t2"
+  O> foreach n-values 5 [ word "mc" ? ] xw:create-multi-chooser
+  O> xw:export "tests/t2.json"
+  O> xw:clear-all
+  O> xw:import "tests/t1.json"
+  O> xw:import "tests/t2.json"
+  xw:tabs => ["t1" "t2"]
+  xw:widgets => ["mc0" "mc1" "mc2" "mc3" "mc4" "s0" "s1" "s2" "s3" "s4"]
+
 no-duplicate-keys-allowed
   extensions [xw]
   O> xw:create-tab "t1"
