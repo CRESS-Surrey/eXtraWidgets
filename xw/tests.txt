@@ -171,3 +171,15 @@ test-export-import
   O> set glob2 file-read-line
   glob1 = glob2 => true
   O> file-close-all
+
+no-duplicate-keys-allowed
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:create-tab "t1" => ERROR Extension exception: There is already a widget with value "t1" for property "KEY".
+  O> xw:create-note "n1"
+  O> xw:create-note "n1" => ERROR Extension exception: There is already a widget with value "n1" for property "KEY".
+  O> xw:create-tab "t2"
+  O> xw:create-tab "t2" => ERROR Extension exception: There is already a widget with value "t2" for property "KEY".
+  O> xw:create-note "n1" => ERROR Extension exception: There is already a widget with value "n1" for property "KEY".
+  O> xw:create-note "n2"
+  O> xw:create-note "n2" => ERROR Extension exception: There is already a widget with value "n2" for property "KEY".
