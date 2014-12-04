@@ -31,5 +31,6 @@ class SelectTab(reader: Reader, ws: AbstractWorkspace) extends DefaultCommand {
               "Unknown tab key: " + s + "."))
             invokeLater { guiWS.tabs.setSelectedComponent(tab) }
         }
+      case _ ⇒ // we're most likely headless, do nothing...
     }
 }

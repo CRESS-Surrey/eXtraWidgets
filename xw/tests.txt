@@ -198,3 +198,8 @@ no-duplicate-keys-allowed
   O> xw:create-note "n1" => ERROR Extension exception: There is already a widget with value "n1" for property "KEY".
   O> xw:create-note "n2"
   O> xw:create-note "n2" => ERROR Extension exception: There is already a widget with value "n2" for property "KEY".
+
+select-tab-does-not-crash-when-headless
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:select-tab "t1"
