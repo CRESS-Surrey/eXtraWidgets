@@ -30,8 +30,8 @@ class Writer(
 
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val properties = propertyMap.normalizeKeys
-    validateNonEmpty("widget key", widgetKey).rightOrThrow
-    validateUnique("widget key", widgetKey).rightOrThrow
+    validateNonEmpty("KEY", widgetKey).rightOrThrow
+    validateUnique("KEY", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒
