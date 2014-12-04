@@ -121,3 +121,24 @@ widgets-removed-with-tab
   xw:widgets => ["s1" "s2"]
   O> xw:remove "t2"
   xw:widgets => []
+
+test-ask-with-of
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> foreach n-values 5 [ word "s" ? ] xw:create-slider
+  O> foreach n-values 5 [ word "n" ? ] xw:create-note
+  O> foreach n-values 5 [ word "cb" ? ] xw:create-checkbox
+  O> foreach n-values 5 [ word "c" ? ] xw:create-chooser
+  O> foreach n-values 5 [ word "mc" ? ] xw:create-multi-chooser
+  O> foreach n-values 5 [ word "ti" ? ] xw:create-text-input
+  O> foreach n-values 5 [ word "ni" ? ] xw:create-numeric-input
+  O> foreach n-values 5 [ word "b" ? ] xw:create-button
+  length xw:widgets => 40
+  O> xw:ask xw:widgets [ xw:set-color red ]
+  length xw:widgets xw:with [ xw:color = red ] => 40
+  O> xw:ask n-of 10 xw:widgets [ xw:set-color blue ]
+  length xw:widgets xw:with [ xw:color = blue ] => 10
+  O> xw:ask one-of xw:widgets [ xw:set-color green ]
+  length xw:widgets xw:with [ xw:color = green ] => 1
+  xw:widgets xw:with [ xw:color = yellow ] => []
+  sort remove-duplicates [ xw:color ] xw:of xw:widgets => [15 55 105]
