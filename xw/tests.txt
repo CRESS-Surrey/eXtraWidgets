@@ -59,3 +59,33 @@ all-kinds-can-be-created-queried-and-deleted
   O> xw:remove "t1"
   length xw:notes => 0
   length xw:widgets => 0
+
+readme-demo
+  extensions [xw]
+  O> xw:create-tab "t1" [ xw:set-title "Parameters" ]
+  [ xw:title ] xw:of "t1" => "Parameters"
+  O> xw:create-slider "population" [ xw:set-label "Population size" ]
+  [ xw:label ] xw:of "population" => "Population size"
+  O> xw:create-multi-chooser "shapes"
+  O> xw:ask "shapes" [ xw:set-label "Other shapes to use" ]
+  [ xw:label ] xw:of "shapes" => "Other shapes to use"
+  O> xw:ask "shapes" [ xw:set-items ["airplane" "arrow" "bug" "butterfly" "turtle"] ]
+  [ xw:items ] xw:of "shapes" => ["airplane" "arrow" "bug" "butterfly" "turtle"]
+  O> xw:ask "shapes" [ xw:set-selected-items n-of 2 xw:items ]
+  [ length xw:selected-items ] xw:of "shapes" => 2
+  [ reduce and map [ member? ? xw:items ] xw:selected-items ] xw:of "shapes" => true
+  O> xw:ask "shapes" [ xw:set-y [ xw:y + xw:height + 10 ] xw:of "population" ]
+  [ xw:y ] xw:of "shapes" => 70
+  O> xw:ask "shapes" [ xw:set-height 150 ]
+  [ xw:height ] xw:of "shapes" => 150
+  O> xw:create-button "setup"
+  O> xw:ask "setup" [ xw:set-label "Push me!" ]
+  [ xw:label ] xw:of "setup" => "Push me!"
+  O> xw:ask "setup" [ xw:set-commands "setup" ]
+  [ xw:commands ] xw:of "setup" => "setup"
+  O> xw:ask "setup" [ xw:set-y [ xw:y + xw:height + 10 ] xw:of "shapes" ]
+  [ xw:y ] xw:of "setup" => 230
+  O> xw:ask xw:widgets [ set glob1 one-of base-colors xw:set-color glob1 + 3 xw:set-font-color glob1 - 3 ]
+  reduce and [ xw:color - 3 = xw:font-color + 3 ] xw:of xw:widgets => true
+  O> create-turtles xw:get "population"
+  count turtles = [ xw:value ] xw:of "population" => true
