@@ -203,3 +203,14 @@ select-tab-does-not-crash-when-headless
   extensions [xw]
   O> xw:create-tab "t1"
   O> xw:select-tab "t1"
+
+widgets-need-a-tab
+  extensions [xw]
+  O> xw:create-note "n" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-checkbox "cb" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-chooser "c" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-multi-chooser "mc" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-text-input "ti" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-numeric-input "ni" => ERROR Extension exception: There currently are no extra tabs.
+  O> xw:create-button "b" => ERROR Extension exception: There currently are no extra tabs.
+
