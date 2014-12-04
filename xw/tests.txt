@@ -142,3 +142,32 @@ test-ask-with-of
   length xw:widgets xw:with [ xw:color = green ] => 1
   xw:widgets xw:with [ xw:color = yellow ] => []
   sort remove-duplicates [ xw:color ] xw:of xw:widgets => [15 55 105]
+
+test-export-import
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> foreach n-values 5 [ word "s" ? ] xw:create-slider
+  O> foreach n-values 5 [ word "n" ? ] xw:create-note
+  O> foreach n-values 5 [ word "cb" ? ] xw:create-checkbox
+  O> foreach n-values 5 [ word "c" ? ] xw:create-chooser
+  O> xw:create-tab "t2"
+  O> foreach n-values 5 [ word "mc" ? ] xw:create-multi-chooser
+  O> foreach n-values 5 [ word "ti" ? ] xw:create-text-input
+  O> foreach n-values 5 [ word "ni" ? ] xw:create-numeric-input
+  O> foreach n-values 5 [ word "b" ? ] xw:create-button
+  O> set glob1 xw:tabs
+  O> set glob2 xw:widgets
+  O> set glob3 [ xw:tab ] xw:of xw:widgets
+  O> xw:export "tests/test1.json"
+  O> xw:clear-all
+  O> xw:import "tests/test1.json"
+  glob1 = xw:tabs => true
+  glob2 = xw:widgets => true
+  glob3 = [ xw:tab ] xw:of xw:widgets => true
+  O> xw:export "tests/test2.json"
+  O> file-open "tests/test1.json"
+  O> set glob1 file-read-line
+  O> file-open "tests/test2.json"
+  O> set glob2 file-read-line
+  glob1 = glob2 => true
+  O> file-close-all
