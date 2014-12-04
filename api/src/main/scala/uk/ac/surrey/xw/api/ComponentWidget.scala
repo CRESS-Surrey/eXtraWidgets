@@ -26,15 +26,15 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
     "HIDDEN", Some((w, b) ⇒ w.setVisible(!b)), !_.isVisible)
   val colorProperty = new ColorProperty[W](
     "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
-  val textColorProperty = new ColorProperty[W](
-    "TEXT-COLOR", Some(_.setTextColor(_)), _.getTextColor, black)
+  val fontColorProperty = new ColorProperty[W](
+    "FONT-COLOR", Some(_.setFontColor(_)), _.getFontColor, black)
   val textSizeProperty = new IntegerProperty[W](
-    "TEXT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
+    "FONT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
   override def propertySet = super.propertySet ++ Set(
     tabProperty, xProperty, yProperty,
     widthProperty, heightProperty,
     hiddenProperty, enabledProperty,
-    colorProperty, textColorProperty,
+    colorProperty, fontColorProperty,
     textSizeProperty)
 }
 
@@ -64,12 +64,12 @@ trait ComponentWidget extends ExtraWidget {
         }
     }
 
-  private var _textColor: Color = getForeground
-  def getTextColor = _textColor
-  def setTextColor(textColor: Color): Unit = {
-    _textColor = textColor
-    setForeground(_textColor)
-    this.allChildren.foreach(_.setForeground(_textColor))
+  private var _fontColor: Color = getForeground
+  def getFontColor = _fontColor
+  def setFontColor(fontColor: Color): Unit = {
+    _fontColor = fontColor
+    setForeground(_fontColor)
+    this.allChildren.foreach(_.setForeground(_fontColor))
   }
 
   private var _fontSize: Int = 0
