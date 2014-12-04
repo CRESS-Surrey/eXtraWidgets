@@ -214,3 +214,53 @@ widgets-need-a-tab
   O> xw:create-numeric-input "ni" => ERROR Extension exception: There currently are no extra tabs.
   O> xw:create-button "b" => ERROR Extension exception: There currently are no extra tabs.
 
+default-getters-and-setters
+  extensions [xw]
+  O> xw:create-tab "t"
+  O> xw:set "t" nobody => ERROR Extension exception: There is no default property defined for widget kind TAB.
+  xw:get "t" => ERROR Extension exception: There is no default property defined for widget kind TAB.
+  O> xw:create-slider "s" [ xw:set-value 1 ]
+  [ xw:value ] xw:of "s" => 1
+  xw:get "s" => 1
+  O> xw:set "s" 2
+  [ xw:value ] xw:of "s" => 2
+  xw:get "s" => 2
+  O> xw:create-note "n" [ xw:set-text "1" ]
+  [ xw:text ] xw:of "n" => "1"
+  xw:get "n" => "1"
+  O> xw:set "n" "2"
+  [ xw:text ] xw:of "n" => "2"
+  xw:get "n" => "2"
+  O> xw:create-checkbox "cb" [ xw:set-selected? true ]
+  [ xw:selected? ] xw:of "cb" => true
+  xw:get "cb" => true
+  O> xw:set "cb" false
+  [ xw:selected? ] xw:of "cb" => false
+  xw:get "cb" => false
+  O> xw:create-chooser "c" [ xw:set-items [0 1 2 3 4] xw:set-selected-item 1 ]
+  [ xw:selected-item ] xw:of "c" => 1
+  xw:get "c" => 1
+  O> xw:set "c" 2
+  [ xw:selected-item ] xw:of "c" => 2
+  xw:get "c" => 2
+  O> xw:create-multi-chooser "mc" [ xw:set-items [0 1 2 3 4] xw:set-selected-items [1 2] ]
+  [ xw:selected-items ] xw:of "mc" => [1 2]
+  xw:get "mc" => [1 2]
+  O> xw:set "mc" [3 4]
+  [ xw:selected-items ] xw:of "mc" => [3 4]
+  xw:get "mc" => [3 4]
+  O> xw:create-text-input "ti" [ xw:set-text "1" ]
+  [ xw:text ] xw:of "ti" => "1"
+  xw:get "ti" => "1"
+  O> xw:set "ti" "2"
+  [ xw:text ] xw:of "ti" => "2"
+  xw:get "ti" => "2"
+  O> xw:create-numeric-input "ni" [ xw:set-value 1 ]
+  [ xw:value ] xw:of "ni" => 1
+  xw:get "ni" => 1
+  O> xw:set "ni" 2
+  [ xw:value ] xw:of "ni" => 2
+  xw:get "ni" => 2
+  O> xw:create-button "b"
+  O> xw:set "b" nobody => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
+  xw:get "b" => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
