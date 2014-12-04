@@ -105,3 +105,19 @@ widgets-created-on-last-tab
   [ xw:tab ] xw:of "cb1" = "t1" => true
   xw:widgets xw:with [ xw:tab = "t1" ] => ["cb1" "n1"]
   xw:widgets xw:with [ xw:tab = "t2" ] => ["b1" "s1"]
+
+widgets-removed-with-tab
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:create-note "n1"
+  O> xw:create-note "n2"
+  O> xw:create-tab "t2"
+  O> xw:create-slider "s1"
+  O> xw:create-slider "s2"
+  xw:widgets xw:with [ xw:tab = "t1" ] => ["n1" "n2"]
+  xw:widgets xw:with [ xw:tab = "t2" ] => ["s1" "s2"]
+  xw:widgets => ["n1" "n2" "s1" "s2"]
+  O> xw:remove "t1"
+  xw:widgets => ["s1" "s2"]
+  O> xw:remove "t2"
+  xw:widgets => []
