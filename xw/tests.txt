@@ -89,3 +89,19 @@ readme-demo
   reduce and [ xw:color - 3 = xw:font-color + 3 ] xw:of xw:widgets => true
   O> create-turtles xw:get "population"
   count turtles = [ xw:value ] xw:of "population" => true
+
+widgets-created-on-last-tab
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:create-note "n1"
+  [ xw:tab ] xw:of "n1" = "t1" => true
+  O> xw:create-tab "t2"
+  O> xw:create-button "b1"
+  [ xw:tab ] xw:of "b1" = "t2" => true
+  O> xw:ask "t1" [ xw:set-order 2 ]
+  O> xw:create-slider "s1"
+  [ xw:tab ] xw:of "s1" = "t2" => true
+  O> xw:create-checkbox "cb1" [ xw:set-tab "t1" ]
+  [ xw:tab ] xw:of "cb1" = "t1" => true
+  xw:widgets xw:with [ xw:tab = "t1" ] => ["cb1" "n1"]
+  xw:widgets xw:with [ xw:tab = "t2" ] => ["b1" "s1"]
