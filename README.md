@@ -26,6 +26,8 @@ Please note that the extension is not meant to completely replace NetLogo's regu
 What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Creating-your-interface-at-startup) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
 
 ```
+extensions [xw]
+
 to startup
   xw:clear-all ; remove all previous extra tabs and widgets, if any
   ; create a new tab to the right of the regular interface tab
