@@ -30,7 +30,7 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
 
 class Tab(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends JPanel
   with ExtraWidget {
@@ -40,7 +40,7 @@ class Tab(
   private var _order = 0d
   def setOrder(order: Double) = {
     _order = order
-    ws.reorderTabs
+    ws.reorderTabs(state)
   }
   def getOrder = _order
 

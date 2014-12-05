@@ -5,7 +5,7 @@ import org.nlogo.window.GUIWorkspace
 import javax.swing.JCheckBox
 import uk.ac.surrey.xw.api.AbstractButtonWidget
 import uk.ac.surrey.xw.api.AbstractButtonWidgetKind
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.WidgetKey
 
 class CheckboxKind[W <: Checkbox] extends AbstractButtonWidgetKind[W] {
@@ -17,7 +17,7 @@ class CheckboxKind[W <: Checkbox] extends AbstractButtonWidgetKind[W] {
 
 class Checkbox(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends JCheckBox
   with AbstractButtonWidget {

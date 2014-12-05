@@ -9,7 +9,7 @@ import uk.ac.surrey.xw.api.BooleanProperty
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.JComponentWidget
 import uk.ac.surrey.xw.api.JComponentWidgetKind
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 
@@ -27,7 +27,7 @@ class NoteKind[W <: Note] extends JComponentWidgetKind[W] {
 
 class Note(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends JLabel
   with JComponentWidget {

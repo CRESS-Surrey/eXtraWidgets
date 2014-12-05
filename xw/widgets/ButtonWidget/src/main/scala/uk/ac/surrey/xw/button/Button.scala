@@ -11,7 +11,7 @@ import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ComponentWidget
 import uk.ac.surrey.xw.api.ComponentWidgetKind
 import uk.ac.surrey.xw.api.IntegerProperty
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.enrichJButton
@@ -36,7 +36,7 @@ class ButtonKind[W <: Button] extends ComponentWidgetKind[W] {
 
 class Button(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends JButton
   with ComponentWidget {

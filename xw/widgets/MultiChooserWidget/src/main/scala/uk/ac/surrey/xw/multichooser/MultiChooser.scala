@@ -14,7 +14,7 @@ import uk.ac.surrey.xw.api.IntegerProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
 import uk.ac.surrey.xw.api.ListProperty
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.LogoObjectListCellRenderer
 import uk.ac.surrey.xw.api.swing.enrichJList
@@ -58,7 +58,7 @@ class MultiChooserKind[W <: MultiChooser] extends LabeledPanelWidgetKind[W] {
 
 class MultiChooser(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 

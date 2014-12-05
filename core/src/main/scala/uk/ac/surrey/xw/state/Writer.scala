@@ -6,7 +6,7 @@ import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
@@ -22,11 +22,13 @@ class Writer(
   widgetKinds: Map[KindName, WidgetKind[_]])
   extends Reader(widgetMap)
   with Publisher[StateEvent]
-  with StateUpdater {
+  with State {
 
   override type Pub = Publisher[StateEvent]
 
-  private var tabStack: Seq[WidgetKey] = Seq.empty
+  private var tabCreationSeq: Seq[WidgetKey] = Seq.empty
+  override def tabCreationOrder(tabKey: WidgetKey) =
+    tabCreationSeq.indexOf(tabKey)
 
   def add(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit = {
     val properties = propertyMap.normalizeKeys
@@ -35,12 +37,12 @@ class Writer(
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
       case _: TabKind[_] ⇒
-        tabStack = widgetKey +: tabStack
+        tabCreationSeq = tabCreationSeq :+ widgetKey
         Map.empty
       case _ if properties.isDefinedAt(tabPropertyKey) ⇒
         Map.empty
       case _ ⇒
-        Map(tabPropertyKey -> tabStack.headOption.getOrElse(
+        Map(tabPropertyKey -> tabCreationSeq.lastOption.getOrElse(
           throw new XWException("There currently are no extra tabs."))
         )
     }
@@ -74,7 +76,7 @@ class Writer(
       widgetMap --= widgetMap.collect {
         case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) ⇒ k
       }
-      tabStack = tabStack.filterNot(_ == widgetKey)
+      tabCreationSeq = tabCreationSeq.filterNot(_ == widgetKey)
     }
     widgetMap -= widgetKey
     publish(RemoveWidget(widgetKey))

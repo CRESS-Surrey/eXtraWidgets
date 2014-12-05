@@ -11,7 +11,7 @@ trait ExtraWidget extends Component {
 
   val ws: GUIWorkspace
   val key: WidgetKey
-  val stateUpdater: StateUpdater
+  val state: State
 
   val kind: WidgetKind[this.type]
 
@@ -26,7 +26,7 @@ trait ExtraWidget extends Component {
       property.set(this, propertyValue)
 
   def updateInState(property: Property[_, this.type]): Unit =
-    stateUpdater.set(property.key, this.key, property.get(this))
+    state.set(property.key, this.key, property.get(this))
 
   override def setEnabled(b: Boolean) = {
     super.setEnabled(b)

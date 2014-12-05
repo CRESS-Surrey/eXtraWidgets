@@ -14,7 +14,7 @@ import javax.swing.KeyStroke.getKeyStroke
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
-import uk.ac.surrey.xw.api.StateUpdater
+import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.enrichComponent
@@ -60,7 +60,7 @@ class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
 
 class TextInput(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends LabeledPanelWidget
   with HasTextField {
@@ -84,7 +84,7 @@ class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
 
 class NumericInput(
   val key: WidgetKey,
-  val stateUpdater: StateUpdater,
+  val state: State,
   val ws: GUIWorkspace)
   extends LabeledPanelWidget
   with HasTextField {

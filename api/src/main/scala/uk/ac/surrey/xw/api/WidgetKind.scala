@@ -3,7 +3,7 @@ package uk.ac.surrey.xw.api
 import org.nlogo.window.GUIWorkspace
 
 abstract class WidgetKind[W <: ExtraWidget] {
-  val newWidget: (WidgetKey, StateUpdater, GUIWorkspace) ⇒ ExtraWidget
+  val newWidget: (WidgetKey, State, GUIWorkspace) ⇒ ExtraWidget
   val name: String
   def pluralName = name + "S"
   def defaultProperty: Option[Property[Any, W]]
