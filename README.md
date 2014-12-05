@@ -17,7 +17,7 @@ Unlike regular NetLogo widgets, the extra widgets and tabs are created through c
 
 And besides, it's really not that hard: the extension works in such a way that [manipulating widgets is just like manipulating turtles](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Widget-contexts)!
 
-To learn more about how to use the extension, take a look at the [wiki](https://github.com/CRESS-Surrey/eXtraWidgets/wiki), especially the [Primitives](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
+To learn more about how to use the extension, take a look at the [wiki](https://github.com/CRESS-Surrey/eXtraWidgets/wiki), especially the [Primitives](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Kinds) pages.
 
 If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/CRESS-Surrey/eXtraWidgets/issues/new).
 
