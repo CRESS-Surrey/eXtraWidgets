@@ -57,9 +57,8 @@ to startup
   ; xw:ask let's you do stuff with multiple widgets at a time
   ; (see also xw:of and xw:with)
   xw:ask xw:widgets [
-    let c one-of base-colors
-    xw:set-color c + 3      ; widgets can be any color!
-    xw:set-font-color c - 3 ; and you can change their text color as well
+    xw:set-color one-of base-colors + 3 ; widgets can be any color!
+    xw:set-font-color xw:color - 6 ; and you can change their text color as well
   ]
   xw:select-tab 2 ; show our newly created tab
 end
