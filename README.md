@@ -31,7 +31,7 @@ to startup
   ; create a new tab to the right of the regular interface tab
   ; (tabs and widgets need a "key": a string that identifies them)
   xw:create-tab "t1" [ ; we use "t1" as the key for our new tab
-    ; and set its parameters within a command block:
+    ; and set its properties within a command block:
     xw:set-title "Parameters"
   ]
   ; create a slider on the new tab, similar to a regular slider
