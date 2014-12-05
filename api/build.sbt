@@ -21,4 +21,4 @@ site.includeScaladoc("/")
 
 ghpages.settings
 
-git.remoteRepo := "git@github.com:nicolaspayette/eXtraWidgets.git"
+git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"
