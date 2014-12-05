@@ -264,3 +264,11 @@ default-getters-and-setters
   O> xw:create-button "b"
   O> xw:set "b" nobody => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
   xw:get "b" => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
+
+disabling-tab-leaves-enabled-property-of-widgets-alone
+  extensions [xw]
+  O> xw:create-tab "t"
+  O> xw:create-slider "enabled-slider"
+  O> xw:create-slider "disabled-slider" [ xw:set-enabled? false ]
+  O> xw:ask "t" [ xw:set-enabled? false ]
+  [ list xw:key xw:enabled? ] xw:of xw:widgets => [["disabled-slider" false] ["enabled-slider" true]]
