@@ -4,26 +4,26 @@ An extension for creating additional interface tabs in the [NetLogo](https://git
 
 ### Installing
 
-To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.1.0](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/nicolaspayette/eXtraWidgets/releases/latest) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
+To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.1.0](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/latest) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
 
 ### Using
 
 Unlike regular NetLogo widgets, the extra widgets and tabs are created through code. While this may sound daunting at first, it has some advantages:
 
-- You can [create dynamic interfaces](https://github.com/nicolaspayette/eXtraWidgets/wiki/Creating-dynamic-interfaces) that change with the circumstances (a bit like with the [Goo extension](https://github.com/NetLogo/Goo-Extension/), but more powerful.)
+- You can [create dynamic interfaces](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Creating-dynamic-interfaces) that change with the circumstances (a bit like with the [Goo extension](https://github.com/NetLogo/Goo-Extension/), but more powerful.)
 - The extra widgets provided here are a bit more flexible than the regular NetLogo widgets: you have control over colors and font sizes, the widgets can hidden or disabled, their labels are independant from their names, etc.
-- It can provides widget kinds that are unavailable in regular NetLogo. The only one of those at the moment is the [multi-chooser widget](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds#multichooser), but [more could be added](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds).
+- It can provides widget kinds that are unavailable in regular NetLogo. The only one of those at the moment is the [multi-chooser widget](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Bundled-Widget-Kinds#multichooser), but [more could be added](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds).
 - Writing code allows precise positioning: no fiddling with the mouse to get your widgets aligned.
 
-And besides, it's really not that hard: the extension works in such a way that [manipulating widgets is just like manipulating turtles](https://github.com/nicolaspayette/eXtraWidgets/wiki/Widget-contexts)!
+And besides, it's really not that hard: the extension works in such a way that [manipulating widgets is just like manipulating turtles](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Widget-contexts)!
 
-To learn more about how to use the extension, take a look at the [wiki](https://github.com/nicolaspayette/eXtraWidgets/wiki), especially the [Primitives](https://github.com/nicolaspayette/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/nicolaspayette/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
+To learn more about how to use the extension, take a look at the [wiki](https://github.com/CRESS-Surrey/eXtraWidgets/wiki), especially the [Primitives](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Primitives) and [Bundled Widget Kinds](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Bundled-Widget-Kinds) pages.
 
-If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new).
+If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/CRESS-Surrey/eXtraWidgets/issues/new).
 
 Please note that the extension is not meant to completely replace NetLogo's regular interface tab: output widgets like monitors and plots and, more importantly, the view, are not available in extra tabs and probably won't be any time soon.
 
-What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](https://github.com/nicolaspayette/eXtraWidgets/wiki/Creating-your-interface-at-startup) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
+What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Creating-your-interface-at-startup) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
 
 ```
 to startup
@@ -84,9 +84,9 @@ end
 
 ### Extending
 
-We believe that eXtraWidgets is the first "extensible extension" for NetLogo. New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/nicolaspayette/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/nicolaspayette/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://nicolaspayette.github.io/eXtraWidgets/) is also a good ressource.
+We believe that eXtraWidgets is the first "extensible extension" for NetLogo. New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/CRESS-Surrey/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://CRESS-Surrey.github.io/eXtraWidgets/) is also a good ressource.
 
-Just like users, developers encountering any difficulties can either [open a new issue](https://github.com/nicolaspayette/eXtraWidgets/issues/new) or [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo).
+Just like users, developers encountering any difficulties can either [open a new issue](https://github.com/CRESS-Surrey/eXtraWidgets/issues/new) or [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo).
 
 ### Licensing
 
