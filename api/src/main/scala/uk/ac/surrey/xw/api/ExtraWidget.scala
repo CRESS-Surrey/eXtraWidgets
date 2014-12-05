@@ -1,5 +1,6 @@
 package uk.ac.surrey.xw.api
 
+import java.awt.Color.gray
 import java.awt.Component
 
 import org.nlogo.window.GUIWorkspace
@@ -29,6 +30,10 @@ trait ExtraWidget extends Component {
 
   override def setEnabled(b: Boolean) = {
     super.setEnabled(b)
+    Some(this).collect {
+      case comp: ComponentWidget ⇒
+        comp.setForeground(if (b) comp.getFontColor else gray)
+    }
     this.allChildren.foreach(_.setEnabled(b))
   }
 }
