@@ -97,4 +97,4 @@ The extension is distributed under the [MIT License](LICENSE.txt).
 [NetLogo](http://ccl.northwestern.edu) itself is authored by [Uri Wilensky](http://ccl.northwestern.edu/uri/) and [distributed under the GPL](http://ccl.northwestern.edu/netlogo/docs/copyright.html).
 
 ---
-[![build status](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets.svg?token=SMhSmaihoAiHTwEPS2Xp)](https://magnum.travis-ci.com/nicolaspayette/eXtraWidgets)
+[![Build Status](https://travis-ci.org/CRESS-Surrey/eXtraWidgets.svg)](https://travis-ci.org/CRESS-Surrey/eXtraWidgets)
