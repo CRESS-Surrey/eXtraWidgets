@@ -134,17 +134,13 @@ class ColorProperty[W](
             Vector(c.getRed, c.getGreen, c.getBlue, c.getAlpha).map(Double.box(_))
           )
       }
-      case n: java.lang.Number ⇒ Double.box(n.doubleValue)
+      case n: java.lang.Number ⇒ Double.box(modulateDouble(n.doubleValue))
       case ll: LogoList ⇒ encode(decode(ll))
       case _ ⇒ super.encode(x)
     }
   override def decode(x: AnyRef): java.awt.Color = {
     x match {
-      case c: java.lang.Double ⇒
-        getColor(
-          if (c >= 0 || c < MaxColor) c
-          else Double.box(modulateDouble(c))
-        )
+      case c: java.lang.Double ⇒ getColor(Double.box(modulateDouble(c)))
       case ll: LogoList ⇒ getColor(validRGBList(ll.toVector))
       case _ ⇒ super.decode(x)
     }

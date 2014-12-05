@@ -272,3 +272,9 @@ disabling-tab-leaves-enabled-property-of-widgets-alone
   O> xw:create-slider "disabled-slider" [ xw:set-enabled? false ]
   O> xw:ask "t" [ xw:set-enabled? false ]
   [ list xw:key xw:enabled? ] xw:of xw:widgets => [["disabled-slider" false] ["enabled-slider" true]]
+
+negative-color-values-are-modulated-when-stored
+  extensions [xw]
+  O> xw:create-tab "t"
+  O> xw:create-slider "s" [ xw:set-color -1 ]
+  [ xw:color ] xw:of "s" => 139
