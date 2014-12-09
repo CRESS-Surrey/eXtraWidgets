@@ -10,6 +10,10 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
+artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+  artifact.name + "." + artifact.extension
+}
+
 libraryDependencies ++= Seq(
   "org.nlogo" % "NetLogo" % "5.1.0" from
     "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
