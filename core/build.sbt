@@ -10,10 +10,6 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
-artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-  artifact.name + "." + artifact.extension
-}
-
 fork := true
 
 libraryDependencies ++= Seq(
