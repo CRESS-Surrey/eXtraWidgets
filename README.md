@@ -2,6 +2,8 @@
 
 An extension for creating additional interface tabs in the [NetLogo](https://github.com/NetLogo/NetLogo) GUI and putting custom widgets on them.
 
+[[Download](https://ccl.northwestern.edu/netlogo/download.shtml)] [[Documentation](https://github.com/CRESS-Surrey/eXtraWidgets/wiki)]
+
 ### Installing
 
 To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.1.0](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/latest) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
