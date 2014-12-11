@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>uk.ac.surrey.xw.api.StateUpdater</title>
+          <title>uk.ac.surrey.xw.api.State</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../../../lib/template.css" />
@@ -16,7 +16,7 @@
       <div id="definition">
         <img src="../../../../../lib/trait_big.png" />
         <p id="owner"><a name="uk" class="extype" href="../../../../package.html">uk</a>.<a name="uk.ac" class="extype" href="../../../package.html">ac</a>.<a name="uk.ac.surrey" class="extype" href="../../package.html">surrey</a>.<a name="uk.ac.surrey.xw" class="extype" href="../package.html">xw</a>.<a name="uk.ac.surrey.xw.api" class="extype" href="package.html">api</a></p>
-        <h1>StateUpdater</h1>
+        <h1>State</h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -25,7 +25,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">StateUpdater</span><span class="result"> extends AnyRef</span>
+        <span class="name">State</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
@@ -45,7 +45,7 @@
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="uk.ac.surrey.xw.api.StateUpdater" class="in"><span>StateUpdater</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="uk.ac.surrey.xw.api.State" class="in"><span>State</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -61,7 +61,7 @@
 
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
-              <ol><li visbl="pub" name="uk.ac.surrey.xw.api.StateUpdater#set" data-isabs="true">
+              <ol><li visbl="pub" name="uk.ac.surrey.xw.api.State#set" data-isabs="true">
       <a id="set(PropertyKey,WidgetKey,PropertyValue):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -70,6 +70,18 @@
       </span>
       <span class="symbol">
         <span class="name">set</span><span class="params">(<span name="propertyKey">propertyKey: PropertyKey</span>, <span name="widgetKey">widgetKey: WidgetKey</span>, <span name="propertyValue">propertyValue: PropertyValue</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="uk.ac.surrey.xw.api.State#tabCreationOrder" data-isabs="true">
+      <a id="tabCreationOrder(WidgetKey):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tabCreationOrder</span><span class="params">(<span name="tabKey">tabKey: WidgetKey</span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       
