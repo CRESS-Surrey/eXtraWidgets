@@ -42,7 +42,10 @@ class Button(
   with ComponentWidget {
   val kind = new ButtonKind[this.type]
   var commands = ""
-  val owner = new SimpleJobOwner(key, ws.world.mainRNG, classOf[Observer])
+  val owner = new SimpleJobOwner(key, ws.world.mainRNG, classOf[Observer]) {
+    override def isButton = true
+    override def ownsPrimaryJobs = true
+  }
   this.onActionPerformed { _ ⇒
     try ws.evaluateCommands(owner, commands, ws.world.observers, false)
     catch { case e: CompilerException ⇒ ws.warningMessage(e.getMessage) }
