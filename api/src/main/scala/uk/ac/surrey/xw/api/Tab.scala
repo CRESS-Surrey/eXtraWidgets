@@ -98,8 +98,8 @@ class Tab(
   }
 
   def removeFromAppTabs(): Unit = {
-    tabs.remove(this)
     tabs.removeMenuItem(index)
+    tabs.remove(this)
   }
 
 }
