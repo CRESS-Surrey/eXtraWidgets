@@ -33,6 +33,6 @@ class Set(
       try property.encode(propertyValue)
       catch { case e: IllegalArgumentException ⇒ throw XWException(e.getMessage, e) }
 
-    writer.set(property.key, widgetKey, value, true)
+    writer.set(property.key, widgetKey, value, fromUI = false)
   }
 }

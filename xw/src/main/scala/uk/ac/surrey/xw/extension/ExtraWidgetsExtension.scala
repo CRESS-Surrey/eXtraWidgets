@@ -8,21 +8,7 @@ import org.nlogo.api.PrimitiveManager
 import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.WidgetKind
-import uk.ac.surrey.xw.extension.prim.Ask
-import uk.ac.surrey.xw.extension.prim.ClearAll
-import uk.ac.surrey.xw.extension.prim.Create
-import uk.ac.surrey.xw.extension.prim.Export
-import uk.ac.surrey.xw.extension.prim.Get
-import uk.ac.surrey.xw.extension.prim.GetProperty
-import uk.ac.surrey.xw.extension.prim.Import
-import uk.ac.surrey.xw.extension.prim.KindList
-import uk.ac.surrey.xw.extension.prim.Of
-import uk.ac.surrey.xw.extension.prim.Remove
-import uk.ac.surrey.xw.extension.prim.SelectTab
-import uk.ac.surrey.xw.extension.prim.Set
-import uk.ac.surrey.xw.extension.prim.SetProperty
-import uk.ac.surrey.xw.extension.prim.Widgets
-import uk.ac.surrey.xw.extension.prim.With
+import uk.ac.surrey.xw.extension.prim._
 import uk.ac.surrey.xw.extension.util.getApp
 import uk.ac.surrey.xw.extension.util.getWorkspace
 import uk.ac.surrey.xw.gui.GUI
@@ -59,7 +45,8 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "CLEAR-ALL" -> new ClearAll(writer),
       "EXPORT" -> new Export(writer),
       "IMPORT" -> new Import(writer),
-      "SELECT-TAB" -> new SelectTab(writer, getWorkspace(extensionManager))
+      "SELECT-TAB" -> new SelectTab(writer, getWorkspace(extensionManager)),
+      "ON-CHANGE" -> new OnChange(writer, kindInfo, widgetContextManager)
     )
 
     val kindListPrimitives = for {
@@ -90,9 +77,15 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
     } yield ("SET-" + key) -> setter
 
+    val changeSubscribers = for {
+      (key, inputType) ← syntaxTypes.filter(!_._3).groupBy(_._1)
+        .mapValues(_.unzip3._2.reduce(_ | _))
+      onChange = new OnChangeProperty(writer, key, widgetContextManager)
+    } yield ("ON-" + key + "-CHANGE") -> onChange
+
     primitives =
       staticPrimitives ++ constructorPrimitives ++
-        kindListPrimitives ++ getters ++ setters
+        kindListPrimitives ++ getters ++ setters ++ changeSubscribers
 
     for (app ← getApp(extensionManager))
       new GUI(app, writer, widgetKinds)
