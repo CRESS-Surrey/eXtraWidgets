@@ -3,25 +3,29 @@ package uk.ac.surrey.xw.extension.prim
 import org.nlogo.api.{Argument, Context, DefaultCommand}
 import org.nlogo.api.Syntax.{StringType, commandSyntax, CommandBlockType}
 import org.nlogo.nvm.{AssemblerAssistant, ExtensionContext, CustomAssembled, Context => NvmContext}
+import org.nlogo.workspace.AbstractWorkspace
 import uk.ac.surrey.xw.api.{PropertyKey, WidgetKey}
 import uk.ac.surrey.xw.extension.{KindInfo, WidgetContextManager}
-import uk.ac.surrey.xw.state.{StateEvent, Writer, SetProperty => SetPropEvent}
+import uk.ac.surrey.xw.state.{SetProperty => SetPropEvent, RemoveWidget, StateEvent, Writer}
 
-import scala.collection.mutable.{Publisher, Subscriber, Map => MutableMap}
+import scala.collection.mutable.{Publisher, Subscriber}
+import scala.collection.parallel.mutable.ParMap
 
 case class ChangeListener(func: StateEvent => Unit)  extends Subscriber[StateEvent, Publisher[StateEvent]] {
   def notify(pub: Publisher[StateEvent], event: StateEvent): Unit = func(event)
 }
 
 object OnChange {
-  val listeners = MutableMap.empty[(WidgetKey, PropertyKey), ChangeListener]
+  val listeners = ParMap.empty[(WidgetKey, PropertyKey), Seq[ChangeListener]]
+  def removeListeners(writer: Writer, wk: WidgetKey, pk: PropertyKey) =
+    listeners.get((wk, pk)).foreach(_.foreach(writer.removeSubscription))
 }
 
 abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends DefaultCommand with CustomAssembled {
 
   def addListener(context: Context, widgetKey: WidgetKey, propertyKey: PropertyKey): Unit = {
     val extContext = context.asInstanceOf[ExtensionContext]
-    val ws = extContext.workspace
+    val ws = extContext.workspace.asInstanceOf[AbstractWorkspace]
     val agentSet = ws.world.observers
     // The ip of the block is relative to the ip at *this* point in time. Since the listeners will activate later on,
     // after this Context has changed, the ip will be lost. Thus, we need to compute the block's ip now. This
@@ -30,19 +34,29 @@ abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends D
     val childContext = new NvmContext(extContext.nvmContext, extContext.workspace.world.observer)
     childContext.agent = ws.world.observer
 
+    OnChange.removeListeners(writer, widgetKey, propertyKey)
+
     val listener = ChangeListener { _ =>
+      // Can run on AWT event thread, so we have explicitly submit job to JobThread. BCH 4/21/2015
       childContext.ip = ip
-      ws.addJobFromJobThread(childContext.makeConcurrentJob(agentSet))
+      ws.jobManager.addJob(childContext.makeConcurrentJob(agentSet), waitForCompletion = false)
     }
 
-    OnChange.listeners.get((widgetKey, propertyKey)).foreach(writer.removeSubscription)
+    val removalListener: ChangeListener = ChangeListener { _ =>
+      OnChange.removeListeners(writer, widgetKey, propertyKey)
+    }
 
     writer.subscribe(listener, {
       case SetPropEvent(`widgetKey`, `propertyKey`, _, true) => true
       case _ => false
     })
 
-    OnChange.listeners((widgetKey, propertyKey)) = listener
+    writer.subscribe(removalListener, {
+      case RemoveWidget(`widgetKey`) => true
+      case _ => false
+    })
+
+    OnChange.listeners += ((widgetKey, propertyKey), Seq(listener, removalListener))
   }
 
   def assemble(a: AssemblerAssistant) {
