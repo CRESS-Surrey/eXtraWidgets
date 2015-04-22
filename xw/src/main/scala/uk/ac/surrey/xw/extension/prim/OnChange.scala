@@ -1,8 +1,8 @@
 package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.{Argument, Context, DefaultCommand}
-import org.nlogo.api.Syntax.{StringType, commandSyntax, CommandBlockType}
-import org.nlogo.nvm.{AssemblerAssistant, ExtensionContext, CustomAssembled, Context => NvmContext}
+import org.nlogo.api.Syntax.{StringType, commandSyntax, CommandBlockType, CommandTaskType}
+import org.nlogo.nvm.{Context => NvmContext, _}
 import org.nlogo.workspace.AbstractWorkspace
 import uk.ac.surrey.xw.api.{PropertyKey, WidgetKey}
 import uk.ac.surrey.xw.extension.{KindInfo, WidgetContextManager}
@@ -21,25 +21,17 @@ object OnChange {
     listeners.get((wk, pk)).foreach(_.foreach(writer.removeSubscription))
 }
 
-abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends DefaultCommand with CustomAssembled {
+abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends DefaultCommand {
 
-  def addListener(context: Context, widgetKey: WidgetKey, propertyKey: PropertyKey): Unit = {
+  def addListener(context: Context, widgetKey: WidgetKey, propertyKey: PropertyKey, task: CommandTask): Unit = {
     val extContext = context.asInstanceOf[ExtensionContext]
     val ws = extContext.workspace.asInstanceOf[AbstractWorkspace]
-    val agentSet = ws.world.observers
-    // The ip of the block is relative to the ip at *this* point in time. Since the listeners will activate later on,
-    // after this Context has changed, the ip will be lost. Thus, we need to compute the block's ip now. This
-    // prevents us from using HasCommandBlock to run the blocks. BCH 4/19/2015
-    val ip = extContext.nvmContext.ip
-    val childContext = new NvmContext(extContext.nvmContext, extContext.workspace.world.observer)
-    childContext.agent = ws.world.observer
-
     OnChange.removeListeners(writer, widgetKey, propertyKey)
 
-    val listener = ChangeListener { _ =>
+    val listener = ChangeListener {
       // Can run on AWT event thread, so we have explicitly submit job to JobThread. BCH 4/21/2015
-      childContext.ip = ip
-      ws.jobManager.addJob(childContext.makeConcurrentJob(agentSet), waitForCompletion = false)
+      case SetPropEvent(_, _, v, _) => runTask(ws, extContext.nvmContext, task, Array(widgetKey, v))
+      case _ =>
     }
 
     val removalListener: ChangeListener = ChangeListener { _ =>
@@ -59,29 +51,36 @@ abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends D
     OnChange.listeners += ((widgetKey, propertyKey), Seq(listener, removalListener))
   }
 
-  def assemble(a: AssemblerAssistant) {
-    a.block()
-    a.done()
+  def runTask(workspace: AbstractWorkspace, context: NvmContext, task: CommandTask, args: Array[AnyRef]): Unit = {
+    val childContext = new NvmContext(context, workspace.world.observers)
+    childContext.letBindings = task.lets
+    task.bindArgs(childContext, args)
+    childContext.activation = new Activation(task.procedure, childContext.activation, 0)
+    childContext.activation.args = task.locals
+    childContext.ip = -1 // makeConcurrentJob increments the ip and we want to start at 0
+    // Since this has to be run as a top level job, we use ConcurrentJob. BCH 4/22/2015
+    workspace.jobManager.addJob(childContext.makeConcurrentJob(workspace.world.observers), waitForCompletion = false)
   }
 }
 
 class OnChange(writer: Writer, kindInfo: KindInfo, wcm: WidgetContextManager) extends OnChangePrim(writer, wcm) {
 
-  override def getSyntax = commandSyntax(Array(StringType, CommandBlockType))
+  override def getSyntax = commandSyntax(Array(StringType, CommandTaskType))
 
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey: WidgetKey = args(0).getString
     val propertyKey: PropertyKey = kindInfo.defaultProperty(widgetKey).key
-    addListener(context, widgetKey, propertyKey)
+    addListener(context, widgetKey, propertyKey, args(1).getCommandTask.asInstanceOf[CommandTask])
   }
 }
 
 class OnChangeProperty(writer: Writer, propertyKey: PropertyKey, wcm: WidgetContextManager)
   extends OnChangePrim(writer, wcm) {
 
-  override def getSyntax = commandSyntax(Array(CommandBlockType))
+  override def getSyntax = commandSyntax(Array(CommandTaskType))
 
   def perform(args: Array[Argument], context: Context): Unit = {
-    addListener(context, wcm.currentContext, propertyKey)
+    addListener(context, wcm.currentContext, propertyKey, args(0).getCommandTask.asInstanceOf[CommandTask])
   }
 }
+
