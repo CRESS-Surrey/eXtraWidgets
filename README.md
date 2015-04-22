@@ -6,6 +6,8 @@ An extension for creating additional interface tabs in the [NetLogo](https://git
 
 ### Installing
 
+[![Join the chat at https://gitter.im/CRESS-Surrey/eXtraWidgets](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CRESS-Surrey/eXtraWidgets?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.1.0](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/latest) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
 
 ### Using
