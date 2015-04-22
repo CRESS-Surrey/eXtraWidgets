@@ -25,6 +25,8 @@ To learn more about how to use the extension, take a look at the [documentation 
 
 If you encounter any difficulties, [ask a question on StackOverflow](http://stackoverflow.com/questions/tagged/netlogo). If you believe you have found a bug (or would like to request a feature) [open a new issue](https://github.com/CRESS-Surrey/eXtraWidgets/issues/new).
 
+Or we can chat: [![Join the chat at https://gitter.im/CRESS-Surrey/eXtraWidgets](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CRESS-Surrey/eXtraWidgets?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### Extending
 
 We believe that eXtraWidgets is the first "extensible extension" for NetLogo. New widgets kinds can be added to the extension just by dropping a JAR in a folder under `xw/widgets`. [Developer documentation](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Developing-Extra-Widget-Kinds) is scarce at the moment, so your best bet is probably to [take a look at the source code of existing widgets](https://github.com/CRESS-Surrey/eXtraWidgets/tree/master/xw/widgets). The [ScalaDoc for the API](https://CRESS-Surrey.github.io/eXtraWidgets/) is also a good ressource.
