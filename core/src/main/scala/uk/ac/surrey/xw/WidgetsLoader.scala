@@ -17,10 +17,10 @@ import uk.ac.surrey.xw.api.ExtraWidget
 
 object WidgetsLoader {
 
-  def loadWidgetKinds(): Map[String, WidgetKind[_]] = {
+  def loadWidgetKinds(extensionFolder: File): Map[String, WidgetKind[_]] = {
     val widgetKinds =
       for {
-        folder ← getWidgetsFolder.listFiles
+        folder ← getWidgetsFolder(extensionFolder).listFiles
         if folder.isDirectory
         file ← folder.listFiles
         if file.getName.toUpperCase == (folder.getName + ".jar").toUpperCase
@@ -73,24 +73,12 @@ object WidgetsLoader {
       .right.map(_.getMainAttributes)
   }
 
-  def getWidgetsFolder: File =
-    getXWFolder
+  def getWidgetsFolder(extensionFolder: File): File =
+    extensionFolder
       .listFiles
       .filter(_.isDirectory)
       .find(_.getName == "widgets")
       .getOrElse(throw new XWException("Can't find extra widgets folder below extension folder."))
-
-  def getXWFolder: File = {
-    val possibleLocations = Seq(
-      "extensions" + separator + "xw", // path from NetLogo
-      "../xw" // path if we're running from the core tests
-    )
-    possibleLocations
-      .map(new File(_).getCanonicalFile)
-      .filter(_.isDirectory)
-      .find(_.listFiles.map(_.getName).contains("xw.jar"))
-      .getOrElse(throw new XWException("Can't find \"xw\" extension folder."))
-  }
 
   def newClassLoader(jarFile: File, parentLoader: ClassLoader): URLClassLoader = {
     val jarURLs = addCompanionJars(jarFile).map(_.toURI.toURL)

@@ -1,5 +1,8 @@
 package uk.ac.surrey.xw.extension
 
+import java.io.File
+import java.net.URI
+
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.Primitive
@@ -36,9 +39,12 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   private var primitives: Seq[(String, Primitive)] = null
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
+    // Note that new File(new URI(extensionManager.resolvePathAsURL("xw")) does not work with
+    // folders with spaces.
+    val xwFolder = new File(extensionManager.resolvePathAsURL("xw").replaceAll("file:", ""))
 
     val widgetKinds: Map[KindName, WidgetKind[_]] =
-      WidgetsLoader.loadWidgetKinds
+      WidgetsLoader.loadWidgetKinds(xwFolder)
 
     locally {
       val widgetMap = newMutableWidgetMap
