@@ -2,8 +2,8 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.{Argument, Context, DefaultCommand}
 import org.nlogo.api.Syntax.{StringType, commandSyntax, CommandBlockType, CommandTaskType}
-import org.nlogo.nvm.{CommandTask, ExtensionContext}
-import org.nlogo.workspace.AbstractWorkspace
+import org.nlogo.nvm.{Activation, Reporter, CommandTask, ExtensionContext}
+import org.nlogo.workspace.{AbstractWorkspaceScala, AbstractWorkspace}
 import uk.ac.surrey.xw.api.{PropertyKey, WidgetKey}
 import uk.ac.surrey.xw.extension.{KindInfo, WidgetContextManager}
 import uk.ac.surrey.xw.extension.util.runTask
@@ -29,10 +29,14 @@ abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends D
     val ws = extContext.workspace.asInstanceOf[AbstractWorkspace]
     OnChange.removeListeners(writer, widgetKey, propertyKey)
 
+    val proc = ws.compileForRun("task [ xw:ask ?1 [ (run ?2 ?3) ] ]", extContext.nvmContext, true)
+    val activation = new Activation(proc, extContext.nvmContext.activation, 0)
+    val askTask = extContext.nvmContext.callReporterProcedure(activation).asInstanceOf[CommandTask]
+
     val listener = ChangeListener {
       // Can run on AWT event thread, so we have to explicitly submit job to JobThread. BCH 4/21/2015
       case SetPropEvent(`widgetKey`, `propertyKey`, v, _) =>
-        runTask(ws, extContext.nvmContext, task, Array(widgetKey, v))
+        runTask(ws, extContext.nvmContext, askTask, Array(widgetKey, task, v))
       case RemoveWidget(`widgetKey`) => OnChange.removeListeners(writer, widgetKey, propertyKey)
       case _ =>
     }
