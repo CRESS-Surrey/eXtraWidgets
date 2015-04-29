@@ -6,6 +6,7 @@ import org.nlogo.api.ExtensionManager
 import org.nlogo.api.LogoList
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
+import org.nlogo.nvm.{Activation, CommandTask, Context}
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.workspace.AbstractWorkspace
 
@@ -51,4 +52,15 @@ package object util {
       .flatMap(_.getLinkChildren)
       .collect { case app: App ⇒ app }
       .headOption
+
+  def runTask(workspace: AbstractWorkspace, context: Context, task: CommandTask, args: Array[AnyRef]): Unit = {
+    val childContext = new Context(context, workspace.world.observers)
+    childContext.letBindings = task.lets
+    task.bindArgs(childContext, args)
+    childContext.activation = new Activation(task.procedure, childContext.activation, 0)
+    childContext.activation.args = task.locals
+    childContext.ip = -1 // makeConcurrentJob increments the ip and we want to start at 0
+    // Since this has to be run as a top level job, we use ConcurrentJob. BCH 4/22/2015
+    workspace.jobManager.addJob(childContext.makeConcurrentJob(workspace.world.observers), waitForCompletion = false)
+  }
 }

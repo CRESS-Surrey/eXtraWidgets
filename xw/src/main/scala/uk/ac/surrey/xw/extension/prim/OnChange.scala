@@ -2,10 +2,11 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.{Argument, Context, DefaultCommand}
 import org.nlogo.api.Syntax.{StringType, commandSyntax, CommandBlockType, CommandTaskType}
-import org.nlogo.nvm.{Context => NvmContext, _}
+import org.nlogo.nvm.{CommandTask, ExtensionContext}
 import org.nlogo.workspace.AbstractWorkspace
 import uk.ac.surrey.xw.api.{PropertyKey, WidgetKey}
 import uk.ac.surrey.xw.extension.{KindInfo, WidgetContextManager}
+import uk.ac.surrey.xw.extension.util.runTask
 import uk.ac.surrey.xw.state.{SetProperty => SetPropEvent, RemoveWidget, StateEvent, Writer}
 
 import scala.collection.mutable.{Publisher, Subscriber}
@@ -16,9 +17,9 @@ case class ChangeListener(func: StateEvent => Unit)  extends Subscriber[StateEve
 }
 
 object OnChange {
-  val listeners = ParMap.empty[(WidgetKey, PropertyKey), Seq[ChangeListener]]
+  val listeners = ParMap.empty[(WidgetKey, PropertyKey), ChangeListener]
   def removeListeners(writer: Writer, wk: WidgetKey, pk: PropertyKey) =
-    listeners.get((wk, pk)).foreach(_.foreach(writer.removeSubscription))
+    listeners.get((wk, pk)).foreach(writer.removeSubscription)
 }
 
 abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends DefaultCommand {
@@ -29,37 +30,16 @@ abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends D
     OnChange.removeListeners(writer, widgetKey, propertyKey)
 
     val listener = ChangeListener {
-      // Can run on AWT event thread, so we have explicitly submit job to JobThread. BCH 4/21/2015
-      case SetPropEvent(_, _, v, _) => runTask(ws, extContext.nvmContext, task, Array(widgetKey, v))
+      // Can run on AWT event thread, so we have to explicitly submit job to JobThread. BCH 4/21/2015
+      case SetPropEvent(`widgetKey`, `propertyKey`, v, _) =>
+        runTask(ws, extContext.nvmContext, task, Array(widgetKey, v))
+      case RemoveWidget(`widgetKey`) => OnChange.removeListeners(writer, widgetKey, propertyKey)
       case _ =>
     }
 
-    val removalListener: ChangeListener = ChangeListener { _ =>
-      OnChange.removeListeners(writer, widgetKey, propertyKey)
-    }
+    writer.subscribe(listener)
 
-    writer.subscribe(listener, {
-      case SetPropEvent(`widgetKey`, `propertyKey`, _, true) => true
-      case _ => false
-    })
-
-    writer.subscribe(removalListener, {
-      case RemoveWidget(`widgetKey`) => true
-      case _ => false
-    })
-
-    OnChange.listeners += ((widgetKey, propertyKey), Seq(listener, removalListener))
-  }
-
-  def runTask(workspace: AbstractWorkspace, context: NvmContext, task: CommandTask, args: Array[AnyRef]): Unit = {
-    val childContext = new NvmContext(context, workspace.world.observers)
-    childContext.letBindings = task.lets
-    task.bindArgs(childContext, args)
-    childContext.activation = new Activation(task.procedure, childContext.activation, 0)
-    childContext.activation.args = task.locals
-    childContext.ip = -1 // makeConcurrentJob increments the ip and we want to start at 0
-    // Since this has to be run as a top level job, we use ConcurrentJob. BCH 4/22/2015
-    workspace.jobManager.addJob(childContext.makeConcurrentJob(workspace.world.observers), waitForCompletion = false)
+    OnChange.listeners += ((widgetKey, propertyKey), listener)
   }
 }
 
