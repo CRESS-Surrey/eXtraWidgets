@@ -14,7 +14,7 @@ import uk.ac.surrey.xw.api.IntegerProperty
 import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
-import uk.ac.surrey.xw.api.swing.enrichJButton
+import uk.ac.surrey.xw.api.swing.enrichAbstractButton
 
 class ButtonKind[W <: Button] extends ComponentWidgetKind[W] {
   override val name = "BUTTON"
