@@ -30,6 +30,6 @@ class SetProperty(
     )
 
     val propertyValue = property.encode(args(0).get)
-    writer.set(propertyKey, widgetKey, propertyValue, true)
+    writer.set(propertyKey, widgetKey, propertyValue, fromUI = false)
   }
 }

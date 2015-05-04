@@ -15,7 +15,8 @@ case class AddWidget(
 case class SetProperty(
   val widgetKey: WidgetKey,
   val propertyKey: PropertyKey,
-  val propertyValue: PropertyValue)
+  val propertyValue: PropertyValue,
+  val fromUI: Boolean)
   extends StateEvent
 
 case class RemoveWidget(

@@ -32,7 +32,10 @@ class GUI(
   val widgetKinds: Map[String, WidgetKind[_]])
   extends Subscriber[StateEvent, Publisher[StateEvent]] {
 
-  writer.subscribe(this)
+  writer.subscribe(this, {
+    case SetProperty(_,_,_,fromUI) => !fromUI
+    case _ => true
+  })
 
   val tabs = app.tabs
   val tabPropertyKey = new TabKind[Tab].name
@@ -42,7 +45,7 @@ class GUI(
       event match {
         case AddWidget(widgetKey, propertyMap) ⇒
           addWidget(widgetKey, propertyMap)
-        case SetProperty(widgetKey, propertyKey, propertyValue) ⇒
+        case SetProperty(widgetKey, propertyKey, propertyValue, _) ⇒
           setProperty(widgetKey, propertyKey, propertyValue)
         case RemoveWidget(widgetKey) ⇒
           removeWidget(widgetKey)

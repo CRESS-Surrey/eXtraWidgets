@@ -86,13 +86,13 @@ class Writer(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
     propertyValue: PropertyValue): Unit =
-    set(propertyKey, widgetKey, propertyValue, false)
+    set(propertyKey, widgetKey, propertyValue, fromUI = true)
 
   def set(
     propertyKey: PropertyKey,
     widgetKey: WidgetKey,
     propertyValue: PropertyValue,
-    publishEvent: Boolean): Unit = {
+    fromUI: Boolean): Unit = {
 
     val propertyMap = widgetMap.getOrElse(widgetKey,
       throw XWException("Widget " + widgetKey + " does not exist."))
@@ -100,7 +100,7 @@ class Writer(
     val oldValue = propertyMap.get(pKey)
     if (Some(propertyValue) != oldValue) {
       propertyMap += pKey -> propertyValue
-      if (publishEvent) publish(SetProperty(widgetKey, pKey, propertyValue))
+      publish(SetProperty(widgetKey, pKey, propertyValue, fromUI))
     }
   }
 
