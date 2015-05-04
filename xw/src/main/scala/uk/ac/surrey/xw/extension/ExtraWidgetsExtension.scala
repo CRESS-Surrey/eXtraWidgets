@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw.extension
 
 import java.io.File
-import java.net.URI
 
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
@@ -10,6 +9,7 @@ import org.nlogo.api.PrimitiveManager
 
 import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.api.KindName
+import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.extension.prim._
 import uk.ac.surrey.xw.extension.util.getApp
@@ -66,26 +66,29 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     // When building getters and setters for properties that are
     // multiply defined, we fold their syntactic indications together
     // by using bitwise ORs (.reduce(_ | _))
+    def reduceProperties(includeReadOnly: Boolean): Map[PropertyKey, Int] = {
+      val syntaxTypes = for {
+        kind <- widgetKinds.values
+        property <- kind.properties.values
+        if includeReadOnly || !property.readOnly
+      } yield (property.key, property.syntaxType)
+      syntaxTypes
+        .groupBy(_._1) // group by property key
+        .mapValues(_.map(_._2).reduce(_ | _)) // and reduce the syntaxType constant
+    }
 
-    val syntaxTypes = for {
-      kind ← widgetKinds.values
-      property ← kind.properties.values
-    } yield (property.key, property.syntaxType, property.readOnly)
     val getters = for {
-      (key, outputType) ← syntaxTypes.groupBy(_._1)
-        .mapValues(_.unzip3._2.reduce(_ | _))
+      (key, outputType) ← reduceProperties(includeReadOnly = true)
       getter = new GetProperty(writer, key, outputType, widgetContextManager)
     } yield key -> getter
 
     val setters = for {
-      (key, inputType) ← syntaxTypes.filter(!_._3).groupBy(_._1)
-        .mapValues(_.unzip3._2.reduce(_ | _))
+      (key, inputType) ← reduceProperties(includeReadOnly = false)
       setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
     } yield ("SET-" + key) -> setter
 
     val changeSubscribers = for {
-      (key, inputType) ← syntaxTypes.filter(!_._3).groupBy(_._1)
-        .mapValues(_.unzip3._2.reduce(_ | _))
+      (key, _) ← reduceProperties(includeReadOnly = false)
       onChange = new OnChangeProperty(writer, key, widgetContextManager)
     } yield ("ON-" + key + "-CHANGE") -> onChange
 
