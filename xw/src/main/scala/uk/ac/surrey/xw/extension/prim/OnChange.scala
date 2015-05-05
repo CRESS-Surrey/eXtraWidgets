@@ -29,7 +29,8 @@ abstract class OnChangePrim(writer: Writer, wcm: WidgetContextManager) extends D
     val ws = extContext.workspace.asInstanceOf[AbstractWorkspace]
     OnChange.removeListeners(writer, widgetKey, propertyKey)
 
-    val proc = ws.compileForRun("task [ xw:ask ?1 [ (run ?2 ?3) ] ]", extContext.nvmContext, true)
+    val proc = ws.compileForRun("task [ if member? ?1 xw:widgets [ xw:ask ?1 [ (run ?2 ?3) ] ] ]",
+      extContext.nvmContext, true)
     val activation = new Activation(proc, extContext.nvmContext.activation, 0)
     val askTask = extContext.nvmContext.callReporterProcedure(activation).asInstanceOf[CommandTask]
 

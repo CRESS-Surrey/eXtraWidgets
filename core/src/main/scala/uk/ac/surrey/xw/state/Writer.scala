@@ -94,13 +94,18 @@ class Writer(
     propertyValue: PropertyValue,
     fromUI: Boolean): Unit = {
 
-    val propertyMap = widgetMap.getOrElse(widgetKey,
-      throw XWException("Widget " + widgetKey + " does not exist."))
-    val pKey = normalizeString(propertyKey)
-    val oldValue = propertyMap.get(pKey)
-    if (Some(propertyValue) != oldValue) {
-      propertyMap += pKey -> propertyValue
-      publish(SetProperty(widgetKey, pKey, propertyValue, fromUI))
+    widgetMap.get(widgetKey).orElse {
+      if (!fromUI)
+        throw XWException("Widget " + widgetKey + " does not exist.")
+      else
+        None
+    }.foreach { propertyMap =>
+      val pKey = normalizeString(propertyKey)
+      val oldValue = propertyMap.get(pKey)
+      if (Some(propertyValue) != oldValue) {
+        propertyMap += pKey -> propertyValue
+        publish(SetProperty(widgetKey, pKey, propertyValue, fromUI))
+      }
     }
   }
 
