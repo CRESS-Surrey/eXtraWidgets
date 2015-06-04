@@ -37,7 +37,7 @@ Just like users, developers encountering any difficulties can either [open a new
 
 The extension was developed by [Nicolas Payette](https://github.com/nicolaspayette) at the [Centre for Research in Social Simulation (CRESS)](http://cress.soc.surrey.ac.uk/), under the supervision of [Nigel Gilbert](http://cress.soc.surrey.ac.uk/web/people/director-cress) and [Jen Badham](http://cress.soc.surrey.ac.uk/web/people/researchers/76-jen-Badham). Its first use case was for a model that is part of the [TELL ME project](http://www.tellmeproject.eu/).
 
-[Bryan Head](https://github.com/qiemem), from them [NetLogo](https://github.com/NetLogo) team, made some significant contributions.
+[Bryan Head](https://github.com/qiemem), from the [NetLogo](https://github.com/NetLogo) team, made some significant contributions.
 
 The extension is distributed under the [MIT License](LICENSE.txt).
 
