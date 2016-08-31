@@ -19,10 +19,10 @@ libraryDependencies ++= Seq(
     "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
 )
 
-site.settings
+//site.settings
 
-site.includeScaladoc("/")
+//site.includeScaladoc("/")
 
-ghpages.settings
+//ghpages.settings
 
-git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"
+//git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"
