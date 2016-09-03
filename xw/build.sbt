@@ -22,6 +22,12 @@ netLogoTarget :=
 
 netLogoVersion := "6.0.0-BETA1"
 
+libraryDependencies ++= Seq(
+  "org.ow2.asm" % "asm-all" % "5.0.4",
+  "org.picocontainer" % "picocontainer" % "2.13.6",
+  "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+)
+
 test in Test := {
   val _ = (packageBin in Compile).value
   (test in Test).value

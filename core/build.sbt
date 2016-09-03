@@ -18,6 +18,5 @@ artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test."
 fork := true
 
 libraryDependencies ++= Seq(
-  "org.nlogo" % "netlogo" % "6.0.0-BETA1" intransitive,
   "com.googlecode.json-simple" % "json-simple" % "1.1.1"
 )
