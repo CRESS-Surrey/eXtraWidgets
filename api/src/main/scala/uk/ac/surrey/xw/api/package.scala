@@ -2,9 +2,14 @@ package uk.ac.surrey.xw
 
 import java.util.Locale.ENGLISH
 
+import scala.Left
+import scala.Right
 import scala.collection.immutable
+import scala.language.implicitConversions
 
-import org.nlogo.api.LogoList
+import org.nlogo.core.LogoList
+
+import uk.ac.surrey.xw.api.XWException
 
 package object api {
 

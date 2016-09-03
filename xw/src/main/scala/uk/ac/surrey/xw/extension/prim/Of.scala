@@ -2,30 +2,30 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultReporter
+import org.nlogo.api.Reporter
 import org.nlogo.api.Dump
-import org.nlogo.api.LogoList
-import org.nlogo.api.Syntax
-import org.nlogo.api.Syntax.ListType
-import org.nlogo.api.Syntax.NormalPrecedence
-import org.nlogo.api.Syntax.ReporterTaskType
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.WildcardType
+import org.nlogo.core.LogoList
+import org.nlogo.core.Syntax
+import org.nlogo.core.Syntax.ListType
+import org.nlogo.core.Syntax.NormalPrecedence
+import org.nlogo.core.Syntax.ReporterType
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.WildcardType
 
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.extension.WidgetContextManager
 
-class Of(wcm: WidgetContextManager) extends DefaultReporter {
+class Of(wcm: WidgetContextManager) extends Reporter {
   override def getSyntax =
     Syntax.reporterSyntax(
-      ReporterTaskType,
-      Array(StringType | ListType),
-      WildcardType,
-      NormalPrecedence + 1,
-      true)
+      left = ReporterType,
+      right = List(StringType | ListType),
+      ret = WildcardType,
+      precedence = NormalPrecedence + 1,
+      isRightAssociative = true)
   override def report(args: Array[Argument], context: Context): AnyRef = {
-    val task = args(0).getReporterTask
+    val task = args(0).getReporter
     def reportFor(key: WidgetKey) =
       wcm.withContext(key) { () ⇒ task.report(context, Array[AnyRef]()) }
     args(1).get match {

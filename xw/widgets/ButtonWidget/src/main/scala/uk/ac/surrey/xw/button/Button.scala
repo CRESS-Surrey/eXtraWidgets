@@ -1,8 +1,8 @@
 package uk.ac.surrey.xw.button
 
-import org.nlogo.api.CompilerException
-import org.nlogo.api.Observer
 import org.nlogo.api.SimpleJobOwner
+import org.nlogo.core.AgentKind.Observer
+import org.nlogo.core.CompilerException
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.window.InterfaceColors.BUTTON_BACKGROUND
 
@@ -42,7 +42,7 @@ class Button(
   with ComponentWidget {
   val kind = new ButtonKind[this.type]
   var commands = ""
-  val owner = new SimpleJobOwner(key, ws.world.mainRNG, classOf[Observer]) {
+  val owner = new SimpleJobOwner(key, ws.world.mainRNG, Observer) {
     override def isButton = true
     override def ownsPrimaryJobs = true
   }

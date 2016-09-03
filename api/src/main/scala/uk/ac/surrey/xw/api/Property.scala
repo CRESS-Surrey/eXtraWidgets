@@ -1,20 +1,22 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Color
-import org.nlogo.api.Color.MaxColor
+
+import scala.Vector
+
 import org.nlogo.api.Color.getARGBbyPremodulatedColorNumber
 import org.nlogo.api.Color.getClosestColorNumberByARGB
 import org.nlogo.api.Color.getColor
 import org.nlogo.api.Color.modulateDouble
 import org.nlogo.api.Dump
-import org.nlogo.api.I18N
-import org.nlogo.api.LogoList
-import org.nlogo.api.Nobody
-import org.nlogo.api.Syntax.BooleanType
-import org.nlogo.api.Syntax.ListType
-import org.nlogo.api.Syntax.NumberType
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.WildcardType
+import org.nlogo.core.I18N
+import org.nlogo.core.LogoList
+import org.nlogo.core.Nobody
+import org.nlogo.core.Syntax.BooleanType
+import org.nlogo.core.Syntax.ListType
+import org.nlogo.core.Syntax.NumberType
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.WildcardType
 
 abstract class Property[+T, W](
   _key: PropertyKey,
@@ -24,9 +26,9 @@ abstract class Property[+T, W](
   val syntaxType: Int
   val key = makeKey(_key)
   private def checkType(x: Any) = {
-    if (!m.erasure.isAssignableFrom(x.getClass))
+    if (!m.runtimeClass.isAssignableFrom(x.getClass))
       throw new IllegalArgumentException(
-        "Expected a " + Dump.typeName(m.erasure) + " but got " +
+        "Expected a " + Dump.typeName(m.runtimeClass) + " but got " +
           Dump.logoObject(x.asInstanceOf[AnyRef], true, false) +
           " instead.")
     x

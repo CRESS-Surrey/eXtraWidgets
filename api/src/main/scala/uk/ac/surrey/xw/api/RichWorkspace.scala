@@ -1,5 +1,7 @@
 package uk.ac.surrey.xw.api
 
+import scala.language.implicitConversions
+
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
 import org.nlogo.app.Tabs

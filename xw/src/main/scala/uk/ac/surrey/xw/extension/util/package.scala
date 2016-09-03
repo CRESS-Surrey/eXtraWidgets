@@ -3,14 +3,17 @@ package uk.ac.surrey.xw.extension
 import org.nlogo.api.Dump
 import org.nlogo.api.ExtensionException
 import org.nlogo.api.ExtensionManager
-import org.nlogo.api.LogoList
+import org.nlogo.nvm.AnonymousCommand
+import org.nlogo.core.LogoList
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
-import org.nlogo.nvm.{Activation, CommandTask, Context}
+import org.nlogo.nvm.{Activation, Context}
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.workspace.AbstractWorkspace
 
 import uk.ac.surrey.xw.api.PropertyMap
+
+import scala.language.implicitConversions
 
 package object util {
 
@@ -43,6 +46,7 @@ package object util {
     extensionManager
       .asInstanceOf[org.nlogo.workspace.ExtensionManager]
       .workspace
+      .asInstanceOf[AbstractWorkspace]
 
   def getApp(extensionManager: ExtensionManager): Option[App] =
     Seq(getWorkspace(extensionManager))
@@ -53,7 +57,7 @@ package object util {
       .collect { case app: App ⇒ app }
       .headOption
 
-  def runTask(workspace: AbstractWorkspace, context: Context, task: CommandTask, args: Array[AnyRef]): Unit = {
+  def runTask(workspace: AbstractWorkspace, context: Context, task: AnonymousCommand, args: Array[AnyRef]): Unit = {
     val childContext = new Context(context, workspace.world.observers)
     childContext.letBindings = task.lets
     task.bindArgs(childContext, args)

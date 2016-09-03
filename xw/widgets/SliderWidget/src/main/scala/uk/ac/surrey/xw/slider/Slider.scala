@@ -18,6 +18,8 @@ import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.enrichSlider
+import org.nlogo.api.MultiErrorHandler
+import scala.language.reflectiveCalls
 
 class SliderKind[W <: Slider] extends LabeledPanelWidgetKind[W] {
   override val name = "SLIDER"
@@ -45,7 +47,7 @@ class Slider(
 
   override val kind = new SliderKind[this.type]
 
-  class Data extends SliderData {
+  class Data extends SliderData(new MultiErrorHandler {}) {
     def toTicks(v: Double): Int = math.round((v - minimum) / increment).toInt
     def fromTicks(ticks: Int): Double = minimum + (ticks * increment)
     def update(v: Double): Boolean = valueSetter(coerceValue(v))

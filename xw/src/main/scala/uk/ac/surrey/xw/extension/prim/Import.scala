@@ -4,17 +4,17 @@ import scala.io.Source
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultCommand
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.commandSyntax
+import org.nlogo.api.Command
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.commandSyntax
 import org.nlogo.nvm.ExtensionContext
 
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.state.JSONLoader
 import uk.ac.surrey.xw.state.Writer
 
-class Import(writer: Writer) extends DefaultCommand {
-  override def getSyntax = commandSyntax(Array(StringType))
+class Import(writer: Writer) extends Command {
+  override def getSyntax = commandSyntax(List(StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
     val ws = context.asInstanceOf[ExtensionContext].workspace
     val filePath = args(0).getString

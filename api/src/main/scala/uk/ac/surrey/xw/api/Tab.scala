@@ -81,7 +81,7 @@ class Tab(
     (0 until tabs.getTabCount)
       .find { i ⇒
         tabs.getComponentAt(i) match {
-          case _: org.nlogo.app.InterfaceTab ⇒ false
+          case _: org.nlogo.app.interfacetab.InterfaceTab ⇒ false
           case _: Tab ⇒ false
           case _ ⇒ true
         }

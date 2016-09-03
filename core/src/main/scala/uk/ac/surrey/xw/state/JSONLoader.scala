@@ -7,8 +7,8 @@ import scala.collection.JavaConverters.mapAsScalaMapConverter
 import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
-import org.nlogo.api.LogoList
-import org.nlogo.api.Nobody
+import org.nlogo.core.LogoList
+import org.nlogo.core.Nobody
 
 import uk.ac.surrey.xw.api.XWException
 

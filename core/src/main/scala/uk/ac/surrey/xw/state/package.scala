@@ -2,8 +2,10 @@ package uk.ac.surrey.xw
 
 import java.util.concurrent.ConcurrentSkipListMap
 
-import scala.collection.JavaConverters.asScalaConcurrentMapConverter
-import scala.collection.mutable.ConcurrentMap
+import scala.collection.JavaConverters.mapAsScalaConcurrentMapConverter
+import scala.collection.concurrent
+
+import scala.language.implicitConversions
 
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.SimpleChangeEventPublisher
@@ -18,8 +20,8 @@ import uk.ac.surrey.xw.state.Writer
 
 package object state {
 
-  type MutablePropertyMap = ConcurrentMap[PropertyKey, PropertyValue]
-  type MutableWidgetMap = ConcurrentMap[WidgetKey, MutablePropertyMap]
+  type MutablePropertyMap = concurrent.Map[PropertyKey, PropertyValue]
+  type MutableWidgetMap = concurrent.Map[WidgetKey, MutablePropertyMap]
 
   // Note: we use ConcurrentSkipListMap instead of ConcurrentHashMap
   // to ensure reproducibility of runs across architectures. It's also

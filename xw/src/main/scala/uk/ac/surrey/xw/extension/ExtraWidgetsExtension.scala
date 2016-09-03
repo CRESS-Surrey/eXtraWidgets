@@ -4,8 +4,8 @@ import java.io.File
 
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.ExtensionManager
-import org.nlogo.api.Primitive
 import org.nlogo.api.PrimitiveManager
+import org.nlogo.core.Primitive
 
 import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.api.KindName
@@ -17,17 +17,23 @@ import uk.ac.surrey.xw.extension.util.getWorkspace
 import uk.ac.surrey.xw.gui.GUI
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
+import org.nlogo.workspace.JarLoader
+import org.nlogo.api.ExtensionException
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
   private var widgetContextManager: WidgetContextManager = null
   private var writer: Writer = null
-  private var primitives: Seq[(String, Primitive)] = null
+  private var primitives: Iterable[(String, Primitive)] = null
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
-    // Note that new File(new URI(extensionManager.resolvePathAsURL("xw")) does not work with
-    // folders with spaces.
-    val xwFolder = new File(extensionManager.resolvePathAsURL("xw").replaceAll("file:", ""))
+
+    val xwFolder = {
+      val xwJarURL = new JarLoader(getWorkspace(extensionManager))
+        .locateExtension("xw")
+        .getOrElse(throw new ExtensionException("Can't locate xw extension folder."))
+      new File(xwJarURL.toURI).getParentFile
+    }
 
     val widgetKinds: Map[KindName, WidgetKind[_]] =
       WidgetsLoader.loadWidgetKinds(xwFolder)
@@ -40,7 +46,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
     val kindInfo = new KindInfo(writer, widgetKinds)
 
-    val staticPrimitives = Seq(
+    val staticPrimitives: Iterable[(String, Primitive)] = Seq(
       "ASK" -> new Ask(widgetContextManager),
       "OF" -> new Of(widgetContextManager),
       "WITH" -> new With(widgetContextManager),
@@ -52,16 +58,17 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "EXPORT" -> new Export(writer),
       "IMPORT" -> new Import(writer),
       "SELECT-TAB" -> new SelectTab(writer, getWorkspace(extensionManager)),
-      "ON-CHANGE" -> new OnChange(writer, kindInfo, widgetContextManager)
-    )
+      "ON-CHANGE" -> new OnChange(writer, kindInfo, widgetContextManager))
 
-    val kindListPrimitives = for {
-      (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
-    } yield pluralName -> new KindList(kindName, writer)
+    val kindListPrimitives: Iterable[(String, Primitive)] =
+      for {
+        (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
+      } yield pluralName -> new KindList(kindName, writer)
 
-    val constructorPrimitives = widgetKinds.keys.map { kindName ⇒
-      ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
-    }
+    val constructorPrimitives: Iterable[(String, Primitive)] =
+      widgetKinds.keys.map { kindName ⇒
+        ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
+      }
 
     // When building getters and setters for properties that are
     // multiply defined, we fold their syntactic indications together
@@ -77,17 +84,17 @@ class ExtraWidgetsExtension extends DefaultClassManager {
         .mapValues(_.map(_._2).reduce(_ | _)) // and reduce the syntaxType constant
     }
 
-    val getters = for {
+    val getters: Iterable[(String, Primitive)] = for {
       (key, outputType) ← reduceProperties(includeReadOnly = true)
       getter = new GetProperty(writer, key, outputType, widgetContextManager)
     } yield key -> getter
 
-    val setters = for {
+    val setters: Iterable[(String, Primitive)] = for {
       (key, inputType) ← reduceProperties(includeReadOnly = false)
       setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
     } yield ("SET-" + key) -> setter
 
-    val changeSubscribers = for {
+    val changeSubscribers: Iterable[(String, Primitive)] = for {
       (key, _) ← reduceProperties(includeReadOnly = false)
       onChange = new OnChangeProperty(writer, key, widgetContextManager)
     } yield ("ON-" + key + "-CHANGE") -> onChange

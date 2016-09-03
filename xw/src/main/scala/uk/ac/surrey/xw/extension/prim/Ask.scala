@@ -2,23 +2,23 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultCommand
+import org.nlogo.api.Command
 import org.nlogo.api.Dump
-import org.nlogo.api.LogoList
-import org.nlogo.api.LogoList.toIterator
-import org.nlogo.api.Syntax.CommandBlockType
-import org.nlogo.api.Syntax.ListType
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.commandSyntax
+import org.nlogo.core.LogoList
+import org.nlogo.core.LogoList.toIterator
+import org.nlogo.core.Syntax.CommandBlockType
+import org.nlogo.core.Syntax.ListType
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.commandSyntax
 
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.extension.WidgetContextManager
 
 class Ask(wcm: WidgetContextManager)
-  extends DefaultCommand
+  extends Command
   with HasCommandBlock {
-  override def getSyntax = commandSyntax(Array(
+  override def getSyntax = commandSyntax(List(
     StringType | ListType, CommandBlockType
   ))
   def perform(args: Array[Argument], context: Context): Unit = {

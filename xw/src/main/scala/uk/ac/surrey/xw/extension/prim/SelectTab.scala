@@ -2,10 +2,10 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultCommand
-import org.nlogo.api.Syntax.NumberType
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.commandSyntax
+import org.nlogo.api.Command
+import org.nlogo.core.Syntax.NumberType
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.commandSyntax
 import org.nlogo.awt.EventQueue.invokeLater
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.workspace.AbstractWorkspace
@@ -15,8 +15,8 @@ import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.toRunnable
 import uk.ac.surrey.xw.state.Reader
 
-class SelectTab(reader: Reader, ws: AbstractWorkspace) extends DefaultCommand {
-  override def getSyntax = commandSyntax(Array(NumberType | StringType))
+class SelectTab(reader: Reader, ws: AbstractWorkspace) extends Command {
+  override def getSyntax = commandSyntax(right = List(NumberType | StringType))
   def perform(args: Array[Argument], context: Context): Unit =
     ws match {
       case guiWS: GUIWorkspace ⇒

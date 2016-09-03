@@ -6,16 +6,16 @@ import java.io.PrintWriter
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultCommand
-import org.nlogo.api.Syntax.StringType
-import org.nlogo.api.Syntax.commandSyntax
+import org.nlogo.api.Command
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.commandSyntax
 import org.nlogo.nvm.ExtensionContext
 
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.state.Reader
 
-class Export(reader: Reader) extends DefaultCommand {
-  override def getSyntax = commandSyntax(Array(StringType))
+class Export(reader: Reader) extends Command {
+  override def getSyntax = commandSyntax(List(StringType))
   def perform(args: Array[Argument], context: Context): Unit = {
     val ws = context.asInstanceOf[ExtensionContext].workspace
     val filePath = args(0).getString

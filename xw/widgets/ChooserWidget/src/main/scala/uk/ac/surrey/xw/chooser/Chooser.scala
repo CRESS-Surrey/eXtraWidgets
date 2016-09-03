@@ -3,9 +3,9 @@ package uk.ac.surrey.xw.chooser
 import java.awt.BorderLayout.CENTER
 import java.awt.event.ItemEvent.SELECTED
 
-import org.nlogo.api.LogoList
-import org.nlogo.api.LogoList.toIterator
-import org.nlogo.api.Nobody
+import org.nlogo.core.LogoList
+import org.nlogo.core.LogoList.toIterator
+import org.nlogo.core.Nobody
 import org.nlogo.window.GUIWorkspace
 
 import javax.swing.JComboBox
@@ -54,7 +54,7 @@ class Chooser(
 
   override val kind = new ChooserKind[this.type]
 
-  val combo = new JComboBox()
+  val combo = new JComboBox[AnyRef]()
   add(combo, CENTER)
 
   /* Use a custom renderer so Dump.logoObject is used instead of toString */

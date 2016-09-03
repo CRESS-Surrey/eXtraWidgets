@@ -9,7 +9,9 @@ import java.awt.event.FocusListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 
-import org.nlogo.api.I18N
+import scala.language.implicitConversions
+
+import org.nlogo.core.I18N
 
 import javax.swing.AbstractAction
 import javax.swing.AbstractButton
@@ -47,8 +49,8 @@ package object swing {
     new ListSelectionListener {
       override def valueChanged(e: ListSelectionEvent) = f(e)
     }
-  implicit def enrichJList(jl: JList) = new RichJList(jl)
-  class RichJList(jl: JList) {
+  implicit def enrichJList[T](jl: JList[T]) = new RichJList(jl)
+  class RichJList[T](jl: JList[T]) {
     def onValueChanged[T](f: (ListSelectionEvent) ⇒ T) =
       jl.addListSelectionListener(listSelectionListener(f))
   }
