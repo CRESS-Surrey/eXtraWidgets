@@ -19,10 +19,10 @@ libraryDependencies ++= Seq(
   "org.nlogo" % "netlogo" % "6.0.0-BETA1" intransitive
 )
 
-//site.settings
+site.settings
 
-//site.includeScaladoc("/")
+site.includeScaladoc("/")
 
-//ghpages.settings
+ghpages.settings
 
-//git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"
+git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"

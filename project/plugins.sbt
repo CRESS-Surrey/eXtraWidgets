@@ -1,4 +1,4 @@
-//addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4") // TODO: re-enable
+addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")
 
 resolvers += Resolver.url(
   "NetLogo-JVM",
