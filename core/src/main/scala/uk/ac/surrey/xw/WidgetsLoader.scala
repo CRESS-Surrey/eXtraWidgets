@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw
 
 import java.io.File
-import java.io.File.separator
 import java.lang.reflect.Modifier.isAbstract
 import java.lang.reflect.Modifier.isPublic
 import java.net.JarURLConnection
@@ -9,11 +8,13 @@ import java.net.URL
 import java.net.URLClassLoader
 import java.util.jar.Attributes
 import java.util.jar.JarFile
+
 import scala.collection.JavaConverters.enumerationAsScalaIteratorConverter
+
+import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
-import uk.ac.surrey.xw.api.ExtraWidget
 
 object WidgetsLoader {
 

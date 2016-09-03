@@ -3,22 +3,38 @@ package uk.ac.surrey.xw.extension
 import java.io.File
 
 import org.nlogo.api.DefaultClassManager
+import org.nlogo.api.ExtensionException
 import org.nlogo.api.ExtensionManager
 import org.nlogo.api.PrimitiveManager
 import org.nlogo.core.Primitive
+import org.nlogo.workspace.JarLoader
 
 import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.WidgetKind
-import uk.ac.surrey.xw.extension.prim._
+import uk.ac.surrey.xw.extension.prim.Ask
+import uk.ac.surrey.xw.extension.prim.ClearAll
+import uk.ac.surrey.xw.extension.prim.Create
+import uk.ac.surrey.xw.extension.prim.Export
+import uk.ac.surrey.xw.extension.prim.Get
+import uk.ac.surrey.xw.extension.prim.GetProperty
+import uk.ac.surrey.xw.extension.prim.Import
+import uk.ac.surrey.xw.extension.prim.KindList
+import uk.ac.surrey.xw.extension.prim.Of
+import uk.ac.surrey.xw.extension.prim.OnChange
+import uk.ac.surrey.xw.extension.prim.OnChangeProperty
+import uk.ac.surrey.xw.extension.prim.Remove
+import uk.ac.surrey.xw.extension.prim.SelectTab
+import uk.ac.surrey.xw.extension.prim.Set
+import uk.ac.surrey.xw.extension.prim.SetProperty
+import uk.ac.surrey.xw.extension.prim.Widgets
+import uk.ac.surrey.xw.extension.prim.With
 import uk.ac.surrey.xw.extension.util.getApp
 import uk.ac.surrey.xw.extension.util.getWorkspace
 import uk.ac.surrey.xw.gui.GUI
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
-import org.nlogo.workspace.JarLoader
-import org.nlogo.api.ExtensionException
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 

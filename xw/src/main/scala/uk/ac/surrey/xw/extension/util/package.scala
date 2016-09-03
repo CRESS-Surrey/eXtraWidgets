@@ -1,19 +1,20 @@
 package uk.ac.surrey.xw.extension
 
+import scala.language.implicitConversions
+
 import org.nlogo.api.Dump
 import org.nlogo.api.ExtensionException
 import org.nlogo.api.ExtensionManager
-import org.nlogo.nvm.AnonymousCommand
-import org.nlogo.core.LogoList
 import org.nlogo.app.App
 import org.nlogo.app.AppFrame
-import org.nlogo.nvm.{Activation, Context}
+import org.nlogo.core.LogoList
+import org.nlogo.nvm.Activation
+import org.nlogo.nvm.AnonymousCommand
+import org.nlogo.nvm.Context
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.workspace.AbstractWorkspace
 
 import uk.ac.surrey.xw.api.PropertyMap
-
-import scala.language.implicitConversions
 
 package object util {
 

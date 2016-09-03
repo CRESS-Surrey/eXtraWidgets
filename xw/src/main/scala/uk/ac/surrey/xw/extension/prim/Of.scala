@@ -2,8 +2,8 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.Reporter
 import org.nlogo.api.Dump
+import org.nlogo.api.Reporter
 import org.nlogo.core.LogoList
 import org.nlogo.core.Syntax
 import org.nlogo.core.Syntax.ListType

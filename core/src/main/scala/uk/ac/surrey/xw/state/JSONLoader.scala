@@ -1,16 +1,19 @@
 package uk.ac.surrey.xw.state
 
+import scala.Left
 import scala.Option.option2Iterable
+import scala.Right
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 
-import org.json.simple.parser.JSONParser
-import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
 import org.nlogo.core.LogoList
 import org.nlogo.core.Nobody
 
 import uk.ac.surrey.xw.api.XWException
+
+import org.json.simple.parser.JSONParser
+import org.json.simple.parser.ParseException
 
 class JSONLoader(writer: Writer) {
 

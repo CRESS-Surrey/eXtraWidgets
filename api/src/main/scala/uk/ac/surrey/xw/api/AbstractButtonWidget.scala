@@ -1,6 +1,7 @@
 package uk.ac.surrey.xw.api
 
 import javax.swing.AbstractButton
+
 import uk.ac.surrey.xw.api.swing.enrichItemSelectable
 
 abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget]

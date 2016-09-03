@@ -1,17 +1,29 @@
 package uk.ac.surrey.xw.extension.prim
 
-import org.nlogo.api.{Argument, Context, Command}
-import org.nlogo.core.Syntax.{StringType, commandSyntax, CommandBlockType, CommandType}
-import org.nlogo.nvm.{Activation, Reporter, ExtensionContext}
-import org.nlogo.workspace.{AbstractWorkspaceScala, AbstractWorkspace}
-import uk.ac.surrey.xw.api.{PropertyKey, WidgetKey}
-import uk.ac.surrey.xw.extension.{KindInfo, WidgetContextManager}
-import uk.ac.surrey.xw.extension.util.runTask
-import uk.ac.surrey.xw.state.{SetProperty => SetPropEvent, RemoveWidget, StateEvent, Writer}
-
-import scala.collection.mutable.{Publisher, Subscriber}
+import scala.collection.mutable.Publisher
+import scala.collection.mutable.Subscriber
 import scala.collection.parallel.mutable.ParMap
+
+import org.nlogo.api.Argument
+import org.nlogo.api.Command
+import org.nlogo.api.Context
+import org.nlogo.core.Syntax.CommandType
+import org.nlogo.core.Syntax.StringType
+import org.nlogo.core.Syntax.commandSyntax
 import org.nlogo.nvm
+import org.nlogo.nvm.Activation
+import org.nlogo.nvm.ExtensionContext
+import org.nlogo.workspace.AbstractWorkspace
+
+import uk.ac.surrey.xw.api.PropertyKey
+import uk.ac.surrey.xw.api.WidgetKey
+import uk.ac.surrey.xw.extension.KindInfo
+import uk.ac.surrey.xw.extension.WidgetContextManager
+import uk.ac.surrey.xw.extension.util.runTask
+import uk.ac.surrey.xw.state.RemoveWidget
+import uk.ac.surrey.xw.state.{ SetProperty => SetPropEvent }
+import uk.ac.surrey.xw.state.StateEvent
+import uk.ac.surrey.xw.state.Writer
 
 case class ChangeListener(func: StateEvent => Unit)  extends Subscriber[StateEvent, Publisher[StateEvent]] {
   def notify(pub: Publisher[StateEvent], event: StateEvent): Unit = func(event)

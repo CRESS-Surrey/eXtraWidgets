@@ -9,10 +9,6 @@ import java.awt.event.FocusListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 
-import scala.language.implicitConversions
-
-import org.nlogo.core.I18N
-
 import javax.swing.AbstractAction
 import javax.swing.AbstractButton
 import javax.swing.JList
@@ -21,6 +17,10 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
+
+import scala.language.implicitConversions
+
+import org.nlogo.core.I18N
 
 package object swing {
 

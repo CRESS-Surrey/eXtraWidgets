@@ -3,12 +3,12 @@ package uk.ac.surrey.xw.chooser
 import java.awt.BorderLayout.CENTER
 import java.awt.event.ItemEvent.SELECTED
 
+import javax.swing.JComboBox
+
 import org.nlogo.core.LogoList
-import org.nlogo.core.LogoList.toIterator
 import org.nlogo.core.Nobody
 import org.nlogo.window.GUIWorkspace
 
-import javax.swing.JComboBox
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
 import uk.ac.surrey.xw.api.ListProperty

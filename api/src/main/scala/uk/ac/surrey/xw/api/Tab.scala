@@ -3,10 +3,11 @@ package uk.ac.surrey.xw.api
 import java.awt.BorderLayout
 import java.awt.Color.white
 
-import org.nlogo.window.GUIWorkspace
-
 import javax.swing.JPanel
 import javax.swing.JScrollPane
+
+import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 
 class TabKind[W <: Tab] extends WidgetKind[W] {

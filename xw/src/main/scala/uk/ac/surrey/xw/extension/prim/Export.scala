@@ -5,8 +5,8 @@ import java.io.FileWriter
 import java.io.PrintWriter
 
 import org.nlogo.api.Argument
-import org.nlogo.api.Context
 import org.nlogo.api.Command
+import org.nlogo.api.Context
 import org.nlogo.core.Syntax.StringType
 import org.nlogo.core.Syntax.commandSyntax
 import org.nlogo.nvm.ExtensionContext

@@ -2,14 +2,14 @@ package uk.ac.surrey.xw.multichooser
 
 import java.awt.BorderLayout.CENTER
 
-import org.nlogo.core.LogoList
-import org.nlogo.core.LogoList.toIterator
-import org.nlogo.window.GUIWorkspace
-
 import javax.swing.BorderFactory
 import javax.swing.JList
 import javax.swing.JScrollPane
 import javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
+
+import org.nlogo.core.LogoList
+import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.xw.api.IntegerProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind

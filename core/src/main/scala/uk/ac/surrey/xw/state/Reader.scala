@@ -1,10 +1,11 @@
 package uk.ac.surrey.xw.state
 
-import scala.collection.JavaConverters.mapAsJavaConcurrentMapConverter
+import scala.Vector
 import scala.collection.JavaConverters.mapAsJavaMapConverter
-import org.json.simple.JSONObject
-import Strings.propertyMustBeNonEmpty
-import Strings.propertyMustBeUnique
+
+import org.nlogo.core.LogoList
+import org.nlogo.core.Nobody
+
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
@@ -13,8 +14,10 @@ import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.enrichEither
 import uk.ac.surrey.xw.api.enrichOption
 import uk.ac.surrey.xw.api.normalizeString
-import org.nlogo.core.Nobody
-import org.nlogo.core.LogoList
+
+import Strings.propertyMustBeNonEmpty
+import Strings.propertyMustBeUnique
+import org.json.simple.JSONObject
 
 class Reader(
   widgetMap: MutableWidgetMap) { // reader should never expose any part of this

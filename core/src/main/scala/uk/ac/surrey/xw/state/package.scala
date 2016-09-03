@@ -4,19 +4,13 @@ import java.util.concurrent.ConcurrentSkipListMap
 
 import scala.collection.JavaConverters.mapAsScalaConcurrentMapConverter
 import scala.collection.concurrent
-
 import scala.language.implicitConversions
-
-import org.nlogo.api.ExtensionManager
-import org.nlogo.api.SimpleChangeEventPublisher
 
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.normalizeString
-import uk.ac.surrey.xw.state.Reader
-import uk.ac.surrey.xw.state.Writer
 
 package object state {
 

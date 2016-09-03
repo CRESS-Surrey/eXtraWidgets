@@ -2,9 +2,10 @@ package uk.ac.surrey.xw.note
 
 import java.awt.Color.white
 
+import javax.swing.JLabel
+
 import org.nlogo.window.GUIWorkspace
 
-import javax.swing.JLabel
 import uk.ac.surrey.xw.api.BooleanProperty
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.JComponentWidget

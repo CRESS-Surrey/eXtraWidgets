@@ -4,13 +4,17 @@ import java.awt.BorderLayout.CENTER
 import java.awt.BorderLayout.EAST
 import java.awt.BorderLayout.NORTH
 
-import org.nlogo.api.Dump
-import org.nlogo.window.GUIWorkspace
-import org.nlogo.window.SliderData
-
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JSlider
+
+import scala.language.reflectiveCalls
+
+import org.nlogo.api.Dump
+import org.nlogo.api.MultiErrorHandler
+import org.nlogo.window.GUIWorkspace
+import org.nlogo.window.SliderData
+
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
@@ -18,8 +22,6 @@ import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.enrichSlider
-import org.nlogo.api.MultiErrorHandler
-import scala.language.reflectiveCalls
 
 class SliderKind[W <: Slider] extends LabeledPanelWidgetKind[W] {
   override val name = "SLIDER"

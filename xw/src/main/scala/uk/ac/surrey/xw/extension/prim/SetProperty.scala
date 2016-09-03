@@ -1,15 +1,14 @@
 package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
-import org.nlogo.api.Context
 import org.nlogo.api.Command
-import org.nlogo.core.Syntax.StringType
-import org.nlogo.core.Syntax.WildcardType
+import org.nlogo.api.Context
 import org.nlogo.core.Syntax.commandSyntax
-import uk.ac.surrey.xw.state.Writer
-import uk.ac.surrey.xw.extension.WidgetContextManager
-import uk.ac.surrey.xw.extension.KindInfo
+
 import uk.ac.surrey.xw.api.XWException
+import uk.ac.surrey.xw.extension.KindInfo
+import uk.ac.surrey.xw.extension.WidgetContextManager
+import uk.ac.surrey.xw.state.Writer
 
 class SetProperty(
   writer: Writer,

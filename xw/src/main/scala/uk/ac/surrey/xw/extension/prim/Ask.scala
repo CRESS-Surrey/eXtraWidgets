@@ -1,11 +1,10 @@
 package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
-import org.nlogo.api.Context
 import org.nlogo.api.Command
+import org.nlogo.api.Context
 import org.nlogo.api.Dump
 import org.nlogo.core.LogoList
-import org.nlogo.core.LogoList.toIterator
 import org.nlogo.core.Syntax.CommandBlockType
 import org.nlogo.core.Syntax.ListType
 import org.nlogo.core.Syntax.StringType

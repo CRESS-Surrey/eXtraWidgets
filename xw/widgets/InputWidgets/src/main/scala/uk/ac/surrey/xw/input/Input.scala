@@ -4,13 +4,17 @@ import java.awt.BorderLayout.CENTER
 import java.awt.event.KeyEvent.VK_ENTER
 import java.awt.event.KeyEvent.VK_ESCAPE
 
+import javax.swing.JTextField
+import javax.swing.KeyStroke.getKeyStroke
+
+import scala.Left
+import scala.Right
+
 import org.nlogo.api.Dump
 import org.nlogo.api.NumberParser
 import org.nlogo.awt.EventQueue.invokeLater
 import org.nlogo.window.GUIWorkspace
 
-import javax.swing.JTextField
-import javax.swing.KeyStroke.getKeyStroke
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind

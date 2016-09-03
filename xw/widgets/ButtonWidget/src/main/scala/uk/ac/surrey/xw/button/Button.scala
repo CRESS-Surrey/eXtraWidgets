@@ -1,12 +1,13 @@
 package uk.ac.surrey.xw.button
 
+import javax.swing.JButton
+
 import org.nlogo.api.SimpleJobOwner
 import org.nlogo.core.AgentKind.Observer
 import org.nlogo.core.CompilerException
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.window.InterfaceColors.BUTTON_BACKGROUND
 
-import javax.swing.JButton
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ComponentWidget
 import uk.ac.surrey.xw.api.ComponentWidgetKind
