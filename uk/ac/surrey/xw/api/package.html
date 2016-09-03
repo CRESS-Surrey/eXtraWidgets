@@ -1,25 +1,43 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>uk.ac.surrey.xw.api</title>
+          <title>api - uk.ac.surrey.xw.api</title>
+          <meta name="description" content="api - uk.ac.surrey.xw.api" />
+          <meta name="keywords" content="api uk.ac.surrey.xw.api" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../../../lib/template.css" />
-      <script type="text/javascript" src="../../../../../lib/jquery.js"></script>
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'uk.ac.surrey.xw.api.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
-        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/package_big.png" />
-        <p id="owner"><a name="uk" class="extype" href="../../../../package.html">uk</a>.<a name="uk.ac" class="extype" href="../../../package.html">ac</a>.<a name="uk.ac.surrey" class="extype" href="../../package.html">surrey</a>.<a name="uk.ac.surrey.xw" class="extype" href="../package.html">xw</a></p>
-        <h1>api</h1>
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="uk">uk</a>.<a href="../../../package.html" class="extype" name="uk.ac">ac</a>.<a href="../../package.html" class="extype" name="uk.ac.surrey">surrey</a>.<a href="../package.html" class="extype" name="uk.ac.surrey.xw">xw</a></p>
+        <h1>api</h1><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
-      <h4 class="signature" id="signature">
+      <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
@@ -29,13 +47,35 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"></div>
-    
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-        
-        
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="uk.ac.surrey.xw.api"><span>api</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
             <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -46,9 +86,10 @@
         <div id="allMembers">
         
 
-        <div class="types members" id="types">
+        <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="uk.ac.surrey.xw.api.AbstractButtonWidget" data-isabs="true">
+              <ol><li name="uk.ac.surrey.xw.api.AbstractButtonWidget" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractButtonWidgetextendsAbstractButtonwithJComponentWidget"></a>
       <a id="AbstractButtonWidget:AbstractButtonWidget"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -56,47 +97,67 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="AbstractButtonWidget.html"><span class="name">AbstractButtonWidget</span></a><span class="result"> extends AbstractButton with JComponentWidget</span>
+        <a href="AbstractButtonWidget.html"><span class="name">AbstractButtonWidget</span></a><span class="result"> extends <span class="extype" name="javax.swing.AbstractButton">AbstractButton</span> with <a href="JComponentWidget.html" class="extype" name="uk.ac.surrey.xw.api.JComponentWidget">JComponentWidget</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@AbstractButtonWidgetextendsAbstractButtonwithJComponentWidget" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.AbstractButtonWidgetKind" data-isabs="true">
-      <a id="AbstractButtonWidgetKind:AbstractButtonWidgetKind[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.AbstractButtonWidgetKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractButtonWidgetKind[W&lt;:uk.ac.surrey.xw.api.AbstractButtonWidget]extendsJComponentWidgetKind[W]"></a>
+      <a id="AbstractButtonWidgetKind[W&lt;:AbstractButtonWidget]:AbstractButtonWidgetKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="AbstractButtonWidgetKind.html"><span class="name">AbstractButtonWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: AbstractButtonWidget</span>]</span><span class="result"> extends JComponentWidgetKind[W]</span>
+        <a href="AbstractButtonWidgetKind.html"><span class="name">AbstractButtonWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="AbstractButtonWidget.html" class="extype" name="uk.ac.surrey.xw.api.AbstractButtonWidget">AbstractButtonWidget</a></span>]</span><span class="result"> extends <a href="JComponentWidgetKind.html" class="extype" name="uk.ac.surrey.xw.api.JComponentWidgetKind">JComponentWidgetKind</a>[<span class="extype" name="uk.ac.surrey.xw.api.AbstractButtonWidgetKind.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@AbstractButtonWidgetKind[W&lt;:uk.ac.surrey.xw.api.AbstractButtonWidget]extendsJComponentWidgetKind[W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.BooleanProperty" data-isabs="false">
-      <a id="BooleanProperty:BooleanProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.BooleanProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BooleanProperty[W]extendsProperty[Boolean,W]"></a>
+      <a id="BooleanProperty[W]:BooleanProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="BooleanProperty.html"><span class="name">BooleanProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[Boolean, W]</span>
+        <a href="BooleanProperty.html"><span class="name">BooleanProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="uk.ac.surrey.xw.api.BooleanProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@BooleanProperty[W]extendsProperty[Boolean,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ColorProperty" data-isabs="false">
-      <a id="ColorProperty:ColorProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.ColorProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ColorProperty[W]extendsProperty[java.awt.Color,W]"></a>
+      <a id="ColorProperty[W]:ColorProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ColorProperty.html"><span class="name">ColorProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[Color, W]</span>
+        <a href="ColorProperty.html"><span class="name">ColorProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="java.awt.Color">Color</span>, <span class="extype" name="uk.ac.surrey.xw.api.ColorProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ColorProperty[W]extendsProperty[java.awt.Color,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ComponentWidget" data-isabs="true">
+    </li><li name="uk.ac.surrey.xw.api.ComponentWidget" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComponentWidgetextendsComponentwithExtraWidget"></a>
       <a id="ComponentWidget:ComponentWidget"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -104,35 +165,50 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ComponentWidget.html"><span class="name">ComponentWidget</span></a><span class="result"> extends Component with ExtraWidget</span>
+        <a href="ComponentWidget.html"><span class="name">ComponentWidget</span></a><span class="result"> extends <span class="extype" name="java.awt.Component">Component</span> with <a href="ExtraWidget.html" class="extype" name="uk.ac.surrey.xw.api.ExtraWidget">ExtraWidget</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ComponentWidgetextendsComponentwithExtraWidget" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ComponentWidgetKind" data-isabs="true">
-      <a id="ComponentWidgetKind:ComponentWidgetKind[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.ComponentWidgetKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComponentWidgetKind[W&lt;:uk.ac.surrey.xw.api.ComponentWidget]extendsWidgetKind[W]"></a>
+      <a id="ComponentWidgetKind[W&lt;:ComponentWidget]:ComponentWidgetKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ComponentWidgetKind.html"><span class="name">ComponentWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: ComponentWidget</span>]</span><span class="result"> extends WidgetKind[W]</span>
+        <a href="ComponentWidgetKind.html"><span class="name">ComponentWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="ComponentWidget.html" class="extype" name="uk.ac.surrey.xw.api.ComponentWidget">ComponentWidget</a></span>]</span><span class="result"> extends <a href="WidgetKind.html" class="extype" name="uk.ac.surrey.xw.api.WidgetKind">WidgetKind</a>[<span class="extype" name="uk.ac.surrey.xw.api.ComponentWidgetKind.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ComponentWidgetKind[W&lt;:uk.ac.surrey.xw.api.ComponentWidget]extendsWidgetKind[W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.DoubleProperty" data-isabs="false">
-      <a id="DoubleProperty:DoubleProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.DoubleProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoubleProperty[W]extendsProperty[Double,W]withNumberEncoder[Double,W]"></a>
+      <a id="DoubleProperty[W]:DoubleProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="DoubleProperty.html"><span class="name">DoubleProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[Double, W] with NumberEncoder[Double, W]</span>
+        <a href="DoubleProperty.html"><span class="name">DoubleProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="uk.ac.surrey.xw.api.DoubleProperty.W">W</span>] with <a href="NumberEncoder.html" class="extype" name="uk.ac.surrey.xw.api.NumberEncoder">NumberEncoder</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="uk.ac.surrey.xw.api.DoubleProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@DoubleProperty[W]extendsProperty[Double,W]withNumberEncoder[Double,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ExtraWidget" data-isabs="true">
+    </li><li name="uk.ac.surrey.xw.api.ExtraWidget" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExtraWidgetextendsComponent"></a>
       <a id="ExtraWidget:ExtraWidget"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -140,23 +216,33 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ExtraWidget.html"><span class="name">ExtraWidget</span></a><span class="result"> extends Component</span>
+        <a href="ExtraWidget.html"><span class="name">ExtraWidget</span></a><span class="result"> extends <span class="extype" name="java.awt.Component">Component</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ExtraWidgetextendsComponent" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.IntegerProperty" data-isabs="false">
-      <a id="IntegerProperty:IntegerProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.IntegerProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntegerProperty[W]extendsProperty[Int,W]withNumberEncoder[Int,W]"></a>
+      <a id="IntegerProperty[W]:IntegerProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="IntegerProperty.html"><span class="name">IntegerProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[Int, W] with NumberEncoder[Int, W]</span>
+        <a href="IntegerProperty.html"><span class="name">IntegerProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="uk.ac.surrey.xw.api.IntegerProperty.W">W</span>] with <a href="NumberEncoder.html" class="extype" name="uk.ac.surrey.xw.api.NumberEncoder">NumberEncoder</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="uk.ac.surrey.xw.api.IntegerProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@IntegerProperty[W]extendsProperty[Int,W]withNumberEncoder[Int,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.JComponentWidget" data-isabs="true">
+    </li><li name="uk.ac.surrey.xw.api.JComponentWidget" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JComponentWidgetextendsJComponentwithComponentWidget"></a>
       <a id="JComponentWidget:JComponentWidget"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -164,23 +250,33 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="JComponentWidget.html"><span class="name">JComponentWidget</span></a><span class="result"> extends JComponent with ComponentWidget</span>
+        <a href="JComponentWidget.html"><span class="name">JComponentWidget</span></a><span class="result"> extends <span class="extype" name="javax.swing.JComponent">JComponent</span> with <a href="ComponentWidget.html" class="extype" name="uk.ac.surrey.xw.api.ComponentWidget">ComponentWidget</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@JComponentWidgetextendsJComponentwithComponentWidget" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.JComponentWidgetKind" data-isabs="true">
-      <a id="JComponentWidgetKind:JComponentWidgetKind[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.JComponentWidgetKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JComponentWidgetKind[W&lt;:uk.ac.surrey.xw.api.JComponentWidget]extendsComponentWidgetKind[W]"></a>
+      <a id="JComponentWidgetKind[W&lt;:JComponentWidget]:JComponentWidgetKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="JComponentWidgetKind.html"><span class="name">JComponentWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: JComponentWidget</span>]</span><span class="result"> extends ComponentWidgetKind[W]</span>
+        <a href="JComponentWidgetKind.html"><span class="name">JComponentWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="JComponentWidget.html" class="extype" name="uk.ac.surrey.xw.api.JComponentWidget">JComponentWidget</a></span>]</span><span class="result"> extends <a href="ComponentWidgetKind.html" class="extype" name="uk.ac.surrey.xw.api.ComponentWidgetKind">ComponentWidgetKind</a>[<span class="extype" name="uk.ac.surrey.xw.api.JComponentWidgetKind.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@JComponentWidgetKind[W&lt;:uk.ac.surrey.xw.api.JComponentWidget]extendsComponentWidgetKind[W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#Key" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.Key" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Key=String"></a>
       <a id="Key:Key"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -188,11 +284,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Key</span><span class="result"> = <span name="java.lang.String" class="extype">String</span></span>
+        <span class="name">Key</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#KindName" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@Key=String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.KindName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KindName=String"></a>
       <a id="KindName:KindName"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -200,11 +301,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">KindName</span><span class="result"> = <span name="java.lang.String" class="extype">String</span></span>
+        <span class="name">KindName</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.LabeledPanelWidget" data-isabs="true">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@KindName=String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.LabeledPanelWidget" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LabeledPanelWidgetextendsJPanelwithJComponentWidget"></a>
       <a id="LabeledPanelWidget:LabeledPanelWidget"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -212,71 +318,101 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="LabeledPanelWidget.html"><span class="name">LabeledPanelWidget</span></a><span class="result"> extends JPanel with JComponentWidget</span>
+        <a href="LabeledPanelWidget.html"><span class="name">LabeledPanelWidget</span></a><span class="result"> extends <span class="extype" name="javax.swing.JPanel">JPanel</span> with <a href="JComponentWidget.html" class="extype" name="uk.ac.surrey.xw.api.JComponentWidget">JComponentWidget</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@LabeledPanelWidgetextendsJPanelwithJComponentWidget" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.LabeledPanelWidgetKind" data-isabs="true">
-      <a id="LabeledPanelWidgetKind:LabeledPanelWidgetKind[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.LabeledPanelWidgetKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LabeledPanelWidgetKind[W&lt;:uk.ac.surrey.xw.api.LabeledPanelWidget]extendsJComponentWidgetKind[W]"></a>
+      <a id="LabeledPanelWidgetKind[W&lt;:LabeledPanelWidget]:LabeledPanelWidgetKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="LabeledPanelWidgetKind.html"><span class="name">LabeledPanelWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: LabeledPanelWidget</span>]</span><span class="result"> extends JComponentWidgetKind[W]</span>
+        <a href="LabeledPanelWidgetKind.html"><span class="name">LabeledPanelWidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="LabeledPanelWidget.html" class="extype" name="uk.ac.surrey.xw.api.LabeledPanelWidget">LabeledPanelWidget</a></span>]</span><span class="result"> extends <a href="JComponentWidgetKind.html" class="extype" name="uk.ac.surrey.xw.api.JComponentWidgetKind">JComponentWidgetKind</a>[<span class="extype" name="uk.ac.surrey.xw.api.LabeledPanelWidgetKind.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@LabeledPanelWidgetKind[W&lt;:uk.ac.surrey.xw.api.LabeledPanelWidget]extendsJComponentWidgetKind[W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ListProperty" data-isabs="false">
-      <a id="ListProperty:ListProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.ListProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ListProperty[W]extendsProperty[org.nlogo.core.LogoList,W]"></a>
+      <a id="ListProperty[W]:ListProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ListProperty.html"><span class="name">ListProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[LogoList, W]</span>
+        <a href="ListProperty.html"><span class="name">ListProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="org.nlogo.core.LogoList">LogoList</span>, <span class="extype" name="uk.ac.surrey.xw.api.ListProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ListProperty[W]extendsProperty[org.nlogo.core.LogoList,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.NumberEncoder" data-isabs="true">
-      <a id="NumberEncoder:NumberEncoder[T, W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.NumberEncoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NumberEncoder[T,W]extendsProperty[T,W]"></a>
+      <a id="NumberEncoder[T,W]:NumberEncoder[T,W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="NumberEncoder.html"><span class="name">NumberEncoder</span></a><span class="tparams">[<span name="T">T</span>, <span name="W">W</span>]</span><span class="result"> extends Property[T, W]</span>
+        <a href="NumberEncoder.html"><span class="name">NumberEncoder</span></a><span class="tparams">[<span name="T">T</span>, <span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="uk.ac.surrey.xw.api.NumberEncoder.T">T</span>, <span class="extype" name="uk.ac.surrey.xw.api.NumberEncoder.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@NumberEncoder[T,W]extendsProperty[T,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.ObjectProperty" data-isabs="false">
-      <a id="ObjectProperty:ObjectProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.ObjectProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ObjectProperty[W]extendsProperty[AnyRef,W]"></a>
+      <a id="ObjectProperty[W]:ObjectProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ObjectProperty.html"><span class="name">ObjectProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[AnyRef, W]</span>
+        <a href="ObjectProperty.html"><span class="name">ObjectProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="uk.ac.surrey.xw.api.ObjectProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@ObjectProperty[W]extendsProperty[AnyRef,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.Property" data-isabs="true">
-      <a id="Property:Property[T, W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.Property" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Property[+T,W]extendsAnyRef"></a>
+      <a id="Property[+T,W]:Property[T,W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Property.html"><span class="name">Property</span></a><span class="tparams">[<span name="T">+T</span>, <span name="W">W</span>]</span><span class="result"> extends AnyRef</span>
+        <a href="Property.html"><span class="name">Property</span></a><span class="tparams">[<span name="T">+T</span>, <span name="W">W</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@Property[+T,W]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#PropertyKey" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.PropertyKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PropertyKey=uk.ac.surrey.xw.api.package.Key"></a>
       <a id="PropertyKey:PropertyKey"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -284,11 +420,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">PropertyKey</span><span class="result"> = <span name="java.lang.String" class="extype">String</span></span>
+        <span class="name">PropertyKey</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#PropertyMap" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@PropertyKey=uk.ac.surrey.xw.api.package.Key" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.PropertyMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PropertyMap=scala.collection.immutable.Map[uk.ac.surrey.xw.api.package.PropertyKey,uk.ac.surrey.xw.api.package.PropertyValue]"></a>
       <a id="PropertyMap:PropertyMap"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -296,11 +437,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">PropertyMap</span><span class="result"> = <span name="scala.collection.immutable.Map" class="extype">Map</span>[PropertyKey, PropertyValue]</span>
+        <span class="name">PropertyMap</span><span class="result"> = <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="#PropertyKey=uk.ac.surrey.xw.api.package.Key" class="extmbr" name="uk.ac.surrey.xw.api.PropertyKey">PropertyKey</a>, <a href="#PropertyValue=AnyRef" class="extmbr" name="uk.ac.surrey.xw.api.PropertyValue">PropertyValue</a>]</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#PropertyValue" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@PropertyMap=scala.collection.immutable.Map[uk.ac.surrey.xw.api.package.PropertyKey,uk.ac.surrey.xw.api.package.PropertyValue]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.PropertyValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PropertyValue=AnyRef"></a>
       <a id="PropertyValue:PropertyValue"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -308,35 +454,50 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">PropertyValue</span><span class="result"> = AnyRef</span>
+        <span class="name">PropertyValue</span><span class="result"> = <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package.RichEither" data-isabs="false">
-      <a id="RichEither:RichEither[L, R]"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@PropertyValue=AnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.RichEither" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichEither[L,R]extendsAnyRef"></a>
+      <a id="RichEither[L,R]:RichEither[L,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="package$$RichEither.html"><span class="name">RichEither</span></a><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <a href="package$$RichEither.html"><span class="name">RichEither</span></a><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@RichEither[L,R]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package.RichOption" data-isabs="false">
-      <a id="RichOption:RichOption[A]"></a>
+    </li><li name="uk.ac.surrey.xw.api.RichOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichOption[A]extendsAnyRef"></a>
+      <a id="RichOption[A]:RichOption[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="package$$RichOption.html"><span class="name">RichOption</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends AnyRef</span>
+        <a href="package$$RichOption.html"><span class="name">RichOption</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@RichOption[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.RichWorkspace" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.RichWorkspace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichWorkspaceextendsAnyRef"></a>
       <a id="RichWorkspace:RichWorkspace"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -344,11 +505,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="RichWorkspace.html"><span class="name">RichWorkspace</span></a><span class="result"> extends AnyRef</span>
+        <a href="RichWorkspace.html"><span class="name">RichWorkspace</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@RichWorkspaceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.State" data-isabs="true">
+    </li><li name="uk.ac.surrey.xw.api.State" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StateextendsAnyRef"></a>
       <a id="State:State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -356,23 +522,33 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="State.html"><span class="name">State</span></a><span class="result"> extends AnyRef</span>
+        <a href="State.html"><span class="name">State</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@StateextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.StringProperty" data-isabs="false">
-      <a id="StringProperty:StringProperty[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.StringProperty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringProperty[W]extendsProperty[String,W]"></a>
+      <a id="StringProperty[W]:StringProperty[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="StringProperty.html"><span class="name">StringProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends Property[String, W]</span>
+        <a href="StringProperty.html"><span class="name">StringProperty</span></a><span class="tparams">[<span name="W">W</span>]</span><span class="result"> extends <a href="Property.html" class="extype" name="uk.ac.surrey.xw.api.Property">Property</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="uk.ac.surrey.xw.api.StringProperty.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@StringProperty[W]extendsProperty[String,W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.Tab" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.Tab" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TabextendsJPanelwithExtraWidget"></a>
       <a id="Tab:Tab"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -380,23 +556,33 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Tab.html"><span class="name">Tab</span></a><span class="result"> extends JPanel with ExtraWidget</span>
+        <a href="Tab.html"><span class="name">Tab</span></a><span class="result"> extends <span class="extype" name="javax.swing.JPanel">JPanel</span> with <a href="ExtraWidget.html" class="extype" name="uk.ac.surrey.xw.api.ExtraWidget">ExtraWidget</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@TabextendsJPanelwithExtraWidget" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.TabKind" data-isabs="false">
-      <a id="TabKind:TabKind[W]"></a>
+    </li><li name="uk.ac.surrey.xw.api.TabKind" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TabKind[W&lt;:uk.ac.surrey.xw.api.Tab]extendsWidgetKind[W]"></a>
+      <a id="TabKind[W&lt;:Tab]:TabKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TabKind.html"><span class="name">TabKind</span></a><span class="tparams">[<span name="W">W &lt;: Tab</span>]</span><span class="result"> extends WidgetKind[W]</span>
+        <a href="TabKind.html"><span class="name">TabKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="Tab.html" class="extype" name="uk.ac.surrey.xw.api.Tab">Tab</a></span>]</span><span class="result"> extends <a href="WidgetKind.html" class="extype" name="uk.ac.surrey.xw.api.WidgetKind">WidgetKind</a>[<span class="extype" name="uk.ac.surrey.xw.api.TabKind.W">W</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@TabKind[W&lt;:uk.ac.surrey.xw.api.Tab]extendsWidgetKind[W]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#WidgetKey" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.WidgetKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WidgetKey=uk.ac.surrey.xw.api.package.Key"></a>
       <a id="WidgetKey:WidgetKey"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -404,23 +590,33 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">WidgetKey</span><span class="result"> = <span name="java.lang.String" class="extype">String</span></span>
+        <span class="name">WidgetKey</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.WidgetKind" data-isabs="true">
-      <a id="WidgetKind:WidgetKind[W]"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@WidgetKey=uk.ac.surrey.xw.api.package.Key" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.WidgetKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WidgetKind[W&lt;:uk.ac.surrey.xw.api.ExtraWidget]extendsAnyRef"></a>
+      <a id="WidgetKind[W&lt;:ExtraWidget]:WidgetKind[W]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="WidgetKind.html"><span class="name">WidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: ExtraWidget</span>]</span><span class="result"> extends AnyRef</span>
+        <a href="WidgetKind.html"><span class="name">WidgetKind</span></a><span class="tparams">[<span name="W">W &lt;: <a href="ExtraWidget.html" class="extype" name="uk.ac.surrey.xw.api.ExtraWidget">ExtraWidget</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@WidgetKind[W&lt;:uk.ac.surrey.xw.api.ExtraWidget]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#WidgetMap" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api.WidgetMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WidgetMap=scala.collection.immutable.Map[uk.ac.surrey.xw.api.package.WidgetKey,uk.ac.surrey.xw.api.package.PropertyMap]"></a>
       <a id="WidgetMap:WidgetMap"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -428,11 +624,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">WidgetMap</span><span class="result"> = <span name="scala.collection.immutable.Map" class="extype">Map</span>[WidgetKey, PropertyMap]</span>
+        <span class="name">WidgetMap</span><span class="result"> = <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="#WidgetKey=uk.ac.surrey.xw.api.package.Key" class="extmbr" name="uk.ac.surrey.xw.api.WidgetKey">WidgetKey</a>, <a href="#PropertyMap=scala.collection.immutable.Map[uk.ac.surrey.xw.api.package.PropertyKey,uk.ac.surrey.xw.api.package.PropertyValue]" class="extmbr" name="uk.ac.surrey.xw.api.PropertyMap">PropertyMap</a>]</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.XWException" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@WidgetMap=scala.collection.immutable.Map[uk.ac.surrey.xw.api.package.WidgetKey,uk.ac.surrey.xw.api.package.PropertyMap]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.XWException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XWExceptionextendsExtensionExceptionwithProductwithSerializable"></a>
       <a id="XWException:XWException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -440,18 +641,23 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="XWException.html"><span class="name">XWException</span></a><span class="params">(<span name="message">message: String</span>, <span name="cause">cause: Exception</span>)</span><span class="result"> extends ExtensionException with Product with Serializable</span>
+        <a href="XWException.html"><span class="name">XWException</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Exception">Exception</span> = <span class="symbol">null</span></span>)</span><span class="result"> extends <span class="extype" name="org.nlogo.api.ExtensionException">ExtensionException</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@XWExceptionextendsExtensionExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
 
         
 
-        <div class="values members" id="values">
+        <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="uk.ac.surrey.xw.api.RichWorkspace" data-isabs="false">
+              <ol><li name="uk.ac.surrey.xw.api.RichWorkspace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichWorkspace"></a>
       <a id="RichWorkspace:RichWorkspace"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -459,11 +665,16 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="RichWorkspace$.html"><span class="name">RichWorkspace</span></a><span class="result"> extends AnyRef</span>
+        <a href="RichWorkspace$.html"><span class="name">RichWorkspace</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@RichWorkspace" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#colorToLogoList" data-isabs="false">
+    </li><li name="uk.ac.surrey.xw.api#colorToLogoList" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="colorToLogoList(c:java.awt.Color):org.nlogo.core.LogoList"></a>
       <a id="colorToLogoList(Color):LogoList"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -471,35 +682,50 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">colorToLogoList</span><span class="params">(<span name="c">c: <span name="java.awt.Color" class="extype">Color</span></span>)</span><span class="result">: <span name="org.nlogo.api.LogoList" class="extype">LogoList</span></span>
+        <span class="name">colorToLogoList</span><span class="params">(<span name="c">c: <span class="extype" name="java.awt.Color">Color</span></span>)</span><span class="result">: <span class="extype" name="org.nlogo.core.LogoList">LogoList</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#const" data-isabs="false">
-      <a id="const[T](T):() ⇒ T"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@colorToLogoList(c:java.awt.Color):org.nlogo.core.LogoList" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#const" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="const[T](v:T):()=&gt;T"></a>
+      <a id="const[T](T):()⇒T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">const</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="v">v: T</span>)</span><span class="result">: () ⇒ T</span>
+        <span class="name">const</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="v">v: <span class="extype" name="uk.ac.surrey.xw.api.const.T">T</span></span>)</span><span class="result">: () ⇒ <span class="extype" name="uk.ac.surrey.xw.api.const.T">T</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#enrichEither" data-isabs="false">
-      <a id="enrichEither[L, R](Either[L, R]):RichEither[L, R]"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@const[T](v:T):()=&gt;T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#enrichEither" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="enrichEither[L,R](either:Either[L,R]):uk.ac.surrey.xw.api.package.RichEither[L,R]"></a>
+      <a id="enrichEither[L,R](Either[L,R]):RichEither[L,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">enrichEither</span><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="params">(<span name="either">either: <span name="scala.Either" class="extype">Either</span>[L, R]</span>)</span><span class="result">: <a name="uk.ac.surrey.xw.api.package.RichEither" class="extype" href="package$$RichEither.html">RichEither</a>[L, R]</span>
+        <span class="name">enrichEither</span><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="params">(<span name="either">either: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="uk.ac.surrey.xw.api.enrichEither.L">L</span>, <span class="extype" name="uk.ac.surrey.xw.api.enrichEither.R">R</span>]</span>)</span><span class="result">: <a href="package$$RichEither.html" class="extype" name="uk.ac.surrey.xw.api.RichEither">RichEither</a>[<span class="extype" name="uk.ac.surrey.xw.api.enrichEither.L">L</span>, <span class="extype" name="uk.ac.surrey.xw.api.enrichEither.R">R</span>]</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#enrichOption" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@enrichEither[L,R](either:Either[L,R]):uk.ac.surrey.xw.api.package.RichEither[L,R]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#enrichOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="enrichOption[A](o:Option[A]):uk.ac.surrey.xw.api.package.RichOption[A]"></a>
       <a id="enrichOption[A](Option[A]):RichOption[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -507,11 +733,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">enrichOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="o">o: <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="result">: <a name="uk.ac.surrey.xw.api.package.RichOption" class="extype" href="package$$RichOption.html">RichOption</a>[A]</span>
+        <span class="name">enrichOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="o">o: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="uk.ac.surrey.xw.api.enrichOption.A">A</span>]</span>)</span><span class="result">: <a href="package$$RichOption.html" class="extype" name="uk.ac.surrey.xw.api.RichOption">RichOption</a>[<span class="extype" name="uk.ac.surrey.xw.api.enrichOption.A">A</span>]</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#makeKey" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@enrichOption[A](o:Option[A]):uk.ac.surrey.xw.api.package.RichOption[A]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#makeKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="makeKey(s:String):uk.ac.surrey.xw.api.package.Key"></a>
       <a id="makeKey(String):Key"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -519,11 +750,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">makeKey</span><span class="params">(<span name="s">s: String</span>)</span><span class="result">: Key</span>
+        <span class="name">makeKey</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Key=String" class="extmbr" name="uk.ac.surrey.xw.api.Key">Key</a></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#normalizeString" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@makeKey(s:String):uk.ac.surrey.xw.api.package.Key" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#normalizeString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="normalizeString(s:String):String"></a>
       <a id="normalizeString(String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -531,11 +767,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">normalizeString</span><span class="params">(<span name="s">s: String</span>)</span><span class="result">: String</span>
+        <span class="name">normalizeString</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.swing" data-isabs="false">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@normalizeString(s:String):String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api.swing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="swing"></a>
       <a id="swing:swing"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -545,40 +786,68 @@
       <span class="symbol">
         <a href="swing/package.html"><span class="name">swing</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@swing" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#toRunnable" data-isabs="false">
-      <a id="toRunnable[T](⇒ T):Runnable"></a>
+    </li><li name="uk.ac.surrey.xw.api#toRunnable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toRunnable[T](block:=&gt;T):Runnable"></a>
+      <a id="toRunnable[T](⇒T):Runnable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toRunnable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="block">block: ⇒ T</span>)</span><span class="result">: <span name="java.lang.Runnable" class="extype">Runnable</span></span>
+        <span class="name">toRunnable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="block">block: ⇒ <span class="extype" name="uk.ac.surrey.xw.api.toRunnable.T">T</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Runnable">Runnable</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="uk.ac.surrey.xw.api.package#tryTo" data-isabs="false">
-      <a id="tryTo[A](⇒ A,String):Either[XWException, A]"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@toRunnable[T](block:=&gt;T):Runnable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="uk.ac.surrey.xw.api#tryTo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tryTo[A](f:=&gt;A,failureMessage:String):Either[uk.ac.surrey.xw.api.XWException,A]"></a>
+      <a id="tryTo[A](⇒A,String):Either[XWException,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tryTo</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: ⇒ A</span>, <span name="failureMessage">failureMessage: String</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="uk.ac.surrey.xw.api.XWException" class="extype" href="XWException.html">XWException</a>, A]</span>
+        <span class="name">tryTo</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="uk.ac.surrey.xw.api.tryTo.A">A</span></span>, <span name="failureMessage">failureMessage: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="XWException.html" class="extype" name="uk.ac.surrey.xw.api.XWException">XWException</a>, <span class="extype" name="uk.ac.surrey.xw.api.tryTo.A">A</span>]</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="uk.ac.surrey.xw.api.package" class="extype" href="package$.html">package</a></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#uk.ac.surrey.xw.api.package@tryTo[A](f:=&gt;A,failureMessage:String):Either[uk.ac.surrey.xw.api.XWException,A]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
+
+        
 
         
         </div>
 
         <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
         
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
         </div>
 
       </div>
