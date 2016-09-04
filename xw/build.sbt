@@ -38,13 +38,7 @@ val jarName = "xw.jar"
 packageBin in Compile <<= (packageBin in Compile, baseDirectory, dependencyClasspath in Runtime) map {
   (jar, base, classPath) =>
     IO.copyFile(jar, base / jarName)
-    val jarFiles = for {
-      file <- classPath.files
-      fileName = file.getName
-      if fileName.endsWith(".jar")
-      if !fileName.startsWith("scala-library")
-      if !fileName.startsWith("NetLogo")
-    } yield file
+    val jarFiles = classPath.files.filter { _.getName matches "extrawidgets-(.*).jar" }
     jarFiles.foreach(file => IO.copyFile(file, base / file.getName))
     // copy everything thing we need for distribution in a
     // temp "xw" directory, which we will zip before deleting it.
