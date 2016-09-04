@@ -15,6 +15,8 @@ artifactName in Compile := { (_, _, artifact: Artifact) => artifact.name + "." +
 
 artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
 
+resolvers += Resolver.bintrayRepo("netlogo", "NetLogo-JVM")
+
 libraryDependencies ++= Seq(
   "org.nlogo" % "netlogo" % "6.0.0-BETA1" intransitive
 )
