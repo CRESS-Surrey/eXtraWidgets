@@ -3,10 +3,10 @@
 After [installing the extension](https://github.com/CRESS-Surrey/eXtraWidgets#installing) the best way to learn how to use it is probably to follow a sequence like this:
 
 - First try [the simple example below](#getting-your-feet-wet);
-- Then, the one important concept to understand is [how widget contexts work](Widget-contexts);
-- After that, learning [how to create a dynamic interface](Creating-dynamic-interfaces) will help you take things a step further;
-- Once you've done all that, it's mostly a matter of getting to know all the [primitives](Primitives), [widget kinds](Kinds) and [properties](#Properties).
-- Finally, if you are planning to perform experiments on your model, you should read the section on [how to use the extension with BehaviorSpace](Using-the-extension-with-BehaviorSpace).
+- Then, the one important concept to understand is [how widget contexts work](Widget-contexts.md);
+- After that, learning [how to create a dynamic interface](Creating-dynamic-interfaces.md) will help you take things a step further;
+- Once you've done all that, it's mostly a matter of getting to know all the [primitives](Primitives.md), [widget kinds](Kinds.md) and [properties](Properties.md).
+- Finally, if you are planning to perform experiments on your model, you should read the section on [how to use the extension with BehaviorSpace](Using-the-extension-with-BehaviorSpace.md).
 
 # Getting Help
 
@@ -16,7 +16,7 @@ Please note that the extension is not meant to completely replace NetLogo's regu
 
 # Getting your feet wet
 
-What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](https://github.com/CRESS-Surrey/eXtraWidgets/wiki/Creating-your-interface-at-startup) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
+What follows is an example demonstrating some of the things that you can do with the extension. (Note that a [good place to put your interface code](Creating your interface at startup.md) is in the  [`startup`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#startup) procedure, which runs automatically when your model is opened.)
 
 ```
 extensions [xw]
@@ -64,7 +64,7 @@ end
 
 Here is a possible outcome of this procedure on Linux (it would look slightly different on Mac or Windows):
 
-![a screenshot of the result](https://github.com/CRESS-Surrey/eXtraWidgets/raw/master/doc/demo.png)
+![a screenshot of the result](img/demo.png)
 
 Now let's use the values from those widgets in your `setup` procedure. As opposed to regular NetLogo widgets, extra widgets don't create global variables. You need to use `xw:get` and `xw:set` to get and set their values. Here is how you could do it in this case:
 
