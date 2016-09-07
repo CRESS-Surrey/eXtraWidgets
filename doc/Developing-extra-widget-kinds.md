@@ -6,7 +6,7 @@ The eXtraWidget architecture is fairly modular. Complete understanding of it is 
 
 Here is the dependency diagram:
 
-![](doc/img/dependencies.png)
+![](img/dependencies.png)
 
 It is basically a summary of the information contained in the main [`build.sbt`](../build.sbt). Each module is a separate sbt sub-project and compiles to its own JAR.
 
