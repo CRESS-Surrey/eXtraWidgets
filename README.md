@@ -2,13 +2,13 @@
 
 An extension for creating additional interface tabs in the [NetLogo](https://github.com/NetLogo/NetLogo) GUI and putting custom widgets on them.
 
-[[Download](https://github.com/CRESS-Surrey/eXtraWidgets/releases/latest)] [[Documentation](https://github.com/CRESS-Surrey/eXtraWidgets/wiki)]
+[[Download](https://github.com/CRESS-Surrey/eXtraWidgets/releases/tag/v1.0.0)] [[Documentation](https://github.com/CRESS-Surrey/eXtraWidgets/wiki)]
 
 ### Installing
 
-To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.3.1](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/latest) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
+To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.3.1](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/tag/v1.0.0) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
 
-(The extension has [not yet been upgraded to NetLogo 6.0](https://github.com/CRESS-Surrey/eXtraWidgets/issues/155).)
+(There now exists [a NetLogo 6.0 version of this extension](https://github.com/CRESS-Surrey/eXtraWidgets/blob/hexy/README.md).)
 
 ### Using
 
