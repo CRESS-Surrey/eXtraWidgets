@@ -60,10 +60,9 @@ package object util {
 
   def runTask(workspace: AbstractWorkspace, context: Context, task: AnonymousCommand, args: Array[AnyRef]): Unit = {
     val childContext = new Context(context, workspace.world.observers)
-    childContext.letBindings = task.lets
-    task.bindArgs(childContext, args)
-    childContext.activation = new Activation(task.procedure, childContext.activation, 0)
-    childContext.activation.args = task.locals
+   context.activation = new Activation(
+      task.procedure, childContext.activation, task.locals, 0,
+      task.binding.enterScope(task.formals, args))
     childContext.ip = -1 // makeConcurrentJob increments the ip and we want to start at 0
     // Since this has to be run as a top level job, we use ConcurrentJob. BCH 4/22/2015
     workspace.jobManager.addJob(childContext.makeConcurrentJob(workspace.world.observers), waitForCompletion = false)

@@ -80,7 +80,7 @@ package object swing {
     def showMessage(msg: String) {
       val frame = org.nlogo.awt.Hierarchy.getFrame(c)
       if (frame != null) {
-        org.nlogo.swing.OptionDialog.show(frame, msg,
+        org.nlogo.swing.OptionDialog.showMessage(frame, msg,
           msg, Array(I18N.gui.get("common.buttons.ok")))
       }
     }

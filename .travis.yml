@@ -6,4 +6,4 @@ cache:
   - $HOME/.sbt/launchers
 jdk: oraclejdk8
 language: scala
-scala: 2.11.8
+scala: 2.12.0

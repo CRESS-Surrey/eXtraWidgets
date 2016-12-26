@@ -11,7 +11,7 @@ trait HasCommandBlock extends CustomAssembled {
     val extContext = context.asInstanceOf[ExtensionContext]
     val nvmContext = extContext.nvmContext
     val agent = nvmContext.agent
-    val agentSet = new ArrayAgentSet(agent.kind, Array(agent))
+    val agentSet = new ArrayAgentSet(agent.kind, null, Array(agent))
     nvmContext.runExclusiveJob(agentSet, nvmContext.ip + 1)
   }
   def assemble(a: AssemblerAssistant) {

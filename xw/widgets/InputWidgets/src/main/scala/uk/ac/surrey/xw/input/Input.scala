@@ -11,8 +11,8 @@ import scala.Left
 import scala.Right
 
 import org.nlogo.api.Dump
-import org.nlogo.api.NumberParser
 import org.nlogo.awt.EventQueue.invokeLater
+import org.nlogo.core.NumberParser
 import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.xw.api.DoubleProperty

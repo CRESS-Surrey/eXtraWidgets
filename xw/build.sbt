@@ -1,4 +1,4 @@
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 
 enablePlugins(org.nlogo.build.NetLogoExtension)
 
@@ -20,12 +20,13 @@ netLogoZipSources := false
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
-netLogoVersion := "6.0.0-BETA1"
+netLogoVersion := "6.0.2"
 
 libraryDependencies ++= Seq(
   "org.ow2.asm" % "asm-all" % "5.0.4",
   "org.picocontainer" % "picocontainer" % "2.13.6",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test",
+  "commons-codec" % "commons-codec" % "1.9" % "test"
 )
 
 test in Test := {

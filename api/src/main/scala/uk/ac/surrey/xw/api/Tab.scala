@@ -6,6 +6,7 @@ import java.awt.Color.white
 import javax.swing.JPanel
 import javax.swing.JScrollPane
 
+import org.nlogo.app.App
 import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
@@ -48,6 +49,7 @@ class Tab(
   override def isOptimizedDrawingEnabled = false
 
   val tabs = ws.tabs
+  val tabsMenu = App.app.menuBar.tabsMenu
 
   setOpaque(true)
 
@@ -74,7 +76,7 @@ class Tab(
   def setTitle(title: String): Unit = {
     _title = title
     tabs.setTitleAt(index, title)
-    tabs.tabsMenu.getItem(index).setText(title)
+    tabsMenu.getItem(index).setText(title)
   }
   def getTitle: String = _title
 
@@ -93,7 +95,7 @@ class Tab(
       }
 
   private def rebuildTabsMenu(): Unit = {
-    tabs.tabsMenu.removeAll()
+    tabsMenu.removeAll()
     for (i ← 0 until tabs.getTabCount)
       tabs.addMenuItem(i, tabs.getTitleAt(i))
   }

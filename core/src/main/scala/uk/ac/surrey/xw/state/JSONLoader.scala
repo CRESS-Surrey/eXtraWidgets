@@ -44,6 +44,7 @@ class JSONLoader(writer: Writer) {
       (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
         case (k: String, v) ⇒ k -> convertJSONValue(v)
+        case (k, v) => throw new XWException("Key " + k + " is not a string")
       }
     } yield widgetKey -> propertyMap.toMap)
       .toSeq

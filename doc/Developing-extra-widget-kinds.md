@@ -20,7 +20,7 @@ The state of the extension (i.e., widgets and the values of their properties) is
 
 ## A note about versions
 
-Since the extension is built to work with NetLogo 6.x, [you need to use Scala 2.11.x and Java 8](https://github.com/NetLogo/NetLogo/wiki/Building#tools).
+Since the extension is built to work with NetLogo 6.x, [you need to use Scala 2.12.x and Java 8](https://github.com/NetLogo/NetLogo/wiki/Building#tools).
 
 ## Widget Kinds
 
@@ -111,7 +111,7 @@ class Slider(
 
 Notice how the class extends `LabeledPanelWidget` (which in turn extends `JComponentWidget` and so on until we reach `ExtraWidget` as the root class).
 
-The actual content of the class will vary a lot from one widget to another. 
+The actual content of the class will vary a lot from one widget to another.
 
 - A bunch of getters and setters to be used by [properties](#properties).
 - A [swing event listener](http://docs.oracle.com/javase/tutorial/uiswing/events/) that will update the state of the extension using the `ExtraWidget.updateInState` method.
