@@ -8,7 +8,7 @@ An extension for creating additional interface tabs in the [NetLogo](https://git
 
 To install the eXtraWidgets extension, assuming that you already have [NetLogo 5.3.1](https://ccl.northwestern.edu/netlogo/download.shtml) installed, [**download** the extension](https://github.com/CRESS-Surrey/eXtraWidgets/releases/tag/v1.0.0) and unzip it NetLogo's `extensions/` folder, like you would for any other [NetLogo extension](http://ccl.northwestern.edu/netlogo/docs/extensions.html).
 
-(There now exists [a NetLogo 6.0 version of this extension](https://github.com/CRESS-Surrey/eXtraWidgets/blob/hexy/README.md).)
+(A [version of this extension for NetLogo 6.0-BETA1](https://github.com/CRESS-Surrey/eXtraWidgets/releases/tag/v2.0.0-BETA1) is available. Work to get the extension running with NetLogo 6.0.2 is underway.)
 
 ### Using
 
