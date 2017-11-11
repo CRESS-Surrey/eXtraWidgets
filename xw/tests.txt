@@ -174,6 +174,32 @@ test-export-import
   glob1 = glob2 => true
   O> file-close-all
 
+export-import-preserves-values
+  extensions [xw]
+  O> xw:clear-all
+  O> xw:create-tab "t1"
+  O> xw:create-slider "s1" [ xw:set-value 10 ]
+  O> xw:create-chooser "c1" [ xw:set-items ["a" "b" "c" "d"] xw:set-selected-item "b" ]
+  O> xw:create-chooser "c2" [ xw:set-items [1 2 3 4] xw:set-selected-item 2 ]
+  O> xw:create-note "n" [ xw:set-text "a" ]
+  O> xw:create-checkbox "cb" [ xw:set-enabled? false ]
+  O> xw:create-multi-chooser "mc" [ xw:set-items [ "a" "b" "c" "d"] xw:set-selected-items ["b" "c"] ]
+  O> xw:create-text-input "ti" [ xw:set-text "a" ]
+  O> xw:create-numeric-input "ni" [ xw:set-value 10 ]
+  O> xw:create-button "b" [ xw:set-commands "print \"hello world\"" ]
+  O> xw:export "tests/export-import-preserves-values.json"
+  O> xw:clear-all
+  O> xw:import "tests/export-import-preserves-values.json"
+  xw:get "s1" => 10
+  xw:get "c1" => "b"
+  xw:get "c2" => 2
+  xw:get "n" => "a"
+  xw:get "cb" => false
+  xw:get "mc" => ["b" "c"]
+  xw:get "ti" => "a"
+  xw:get "ni" => 10
+  [ xw:commands ] xw:of "b" => "print \"hello world\""
+
 import-multiple-files
   extensions [xw]
   O> xw:create-tab "t1"
