@@ -23,10 +23,10 @@ netLogoTarget :=
 netLogoVersion := "6.0.2"
 
 libraryDependencies ++= Seq(
-  "org.ow2.asm" % "asm-all" % "5.0.4",
-  "org.picocontainer" % "picocontainer" % "2.13.6",
+  "org.ow2.asm" % "asm-all" % "5.0.4" % "test",
+  "org.picocontainer" % "picocontainer" % "2.13.6" % "test",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-  "commons-codec" % "commons-codec" % "1.9" % "test"
+  "commons-codec" % "commons-codec" % "1.10" % "test"
 )
 
 test in Test := {
