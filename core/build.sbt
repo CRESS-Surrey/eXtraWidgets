@@ -18,5 +18,5 @@ artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test."
 fork := true
 
 libraryDependencies ++= Seq(
-  "com.googlecode.json-simple" % "json-simple" % "1.1.1"
+  "com.github.cliftonlabs" % "json-simple" % "2.3.0"
 )

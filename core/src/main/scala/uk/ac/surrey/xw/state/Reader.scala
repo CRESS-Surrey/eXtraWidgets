@@ -2,6 +2,7 @@ package uk.ac.surrey.xw.state
 
 import scala.Vector
 import scala.collection.JavaConverters.mapAsJavaMapConverter
+import scala.collection.JavaConverters.asJavaCollectionConverter
 
 import org.nlogo.core.LogoList
 import org.nlogo.core.Nobody
@@ -17,7 +18,8 @@ import uk.ac.surrey.xw.api.normalizeString
 
 import Strings.propertyMustBeNonEmpty
 import Strings.propertyMustBeUnique
-import org.json.simple.JSONObject
+import org.json.simple.Jsoner
+import org.json.simple.JsonObject
 
 class Reader(
   widgetMap: MutableWidgetMap) { // reader should never expose any part of this
@@ -79,13 +81,13 @@ class Reader(
       case _: java.lang.String ⇒ x
       case _: java.lang.Number ⇒ x
       case _: java.lang.Boolean ⇒ x
-      case l: LogoList ⇒ LogoList.fromVector(l.toVector.map(convert))
+      case l: LogoList ⇒ l.toVector.map(convert).asJavaCollection
       case _ ⇒ x.toString
     }
-    new JSONObject(
+    Jsoner.prettyPrint(Jsoner.serialize(new JsonObject(
       widgetMap.mapValues {
         _.mapValues(convert).asJava
       }.asJava
-    ).toJSONString
+    )))
   }
 }

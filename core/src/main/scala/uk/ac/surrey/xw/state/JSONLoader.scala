@@ -12,8 +12,8 @@ import org.nlogo.core.Nobody
 
 import uk.ac.surrey.xw.api.XWException
 
-import org.json.simple.parser.JSONParser
-import org.json.simple.parser.ParseException
+import org.json.simple.Jsoner
+import org.json.simple.DeserializationException
 
 class JSONLoader(writer: Writer) {
 
@@ -33,9 +33,9 @@ class JSONLoader(writer: Writer) {
 
   def load(json: String): Unit = {
     val javaWidgetMap =
-      try new JSONParser().parse(json).asInstanceOf[java.util.Map[_, _]]
+      try Jsoner.deserialize(json).asInstanceOf[java.util.Map[_, _]]
       catch {
-        case e: ParseException ⇒ throw XWException(
+        case e: DeserializationException ⇒ throw XWException(
           "Error parsing JSON input at position " + e.getPosition, e)
         case e: ClassCastException ⇒ throw XWException(
           "Error parsing JSON input: main value is not a JSON object.", e)
