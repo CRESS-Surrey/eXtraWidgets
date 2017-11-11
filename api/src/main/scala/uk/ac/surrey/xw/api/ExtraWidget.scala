@@ -16,8 +16,11 @@ trait ExtraWidget extends Component {
   val kind: WidgetKind[this.type]
 
   def init(propertyMap: PropertyMap): Unit =
-    for ((propertyKey, value) ← propertyMap)
-      setProperty(propertyKey, value)
+    propertyMap.toSeq
+      // make sure the default property gets set last
+      // (see https://github.com/CRESS-Surrey/eXtraWidgets/issues/162)
+      .sortBy  { case (k, v) ⇒ kind.defaultProperty.map(_.key).contains(k) }
+      .foreach { case (k, v) ⇒ setProperty(k, v) }
 
   def setProperty(
     propertyKey: PropertyKey,
