@@ -1,6 +1,6 @@
 lazy val root = (project in file("."))
   .settings(version := "2.0.0")
-  .aggregate(xw, core, api, note, checkbox, slider, chooser, multichooser, input, button)
+  .aggregate(xw, core, api, note, image, checkbox, slider, chooser, multichooser, input, button)
 
 lazy val api = project
   .settings(version := "2.0.0")
@@ -10,6 +10,10 @@ lazy val core = project
   .dependsOn(api)
 
 lazy val note = (project in file("./xw/widgets/NoteWidget/"))
+  .settings(version := "2.0.0")
+  .dependsOn(api)
+
+lazy val image = (project in file("./xw/widgets/ImageWidget/"))
   .settings(version := "2.0.0")
   .dependsOn(api)
 
@@ -43,6 +47,7 @@ lazy val xw = project.dependsOn(core)
     (test in Test) := {
       val _ = Seq(
         (Keys.`package` in (note, Compile)).value,
+        (Keys.`package` in (image, Compile)).value,
         (Keys.`package` in (checkbox, Compile)).value,
         (Keys.`package` in (slider, Compile)).value,
         (Keys.`package` in (chooser, Compile)).value,
