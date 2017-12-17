@@ -41,6 +41,7 @@ class Button(
   val ws: GUIWorkspace)
   extends JButton
   with ComponentWidget {
+  setBorderPainted(false)
   val kind = new ButtonKind[this.type]
   var commands = ""
   val owner = new SimpleJobOwner(key, ws.world.mainRNG, Observer) {
