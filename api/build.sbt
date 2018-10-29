@@ -18,7 +18,7 @@ artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test."
 resolvers += Resolver.bintrayRepo("netlogo", "NetLogo-JVM")
 
 libraryDependencies ++= Seq(
-  "org.nlogo" % "netlogo" % "6.0.2" intransitive
+  "org.nlogo" % "netlogo" % "6.0.4" intransitive
 )
 
 site.settings
