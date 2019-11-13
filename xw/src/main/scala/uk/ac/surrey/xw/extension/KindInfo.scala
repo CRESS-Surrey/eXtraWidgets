@@ -1,11 +1,11 @@
 package uk.ac.surrey.xw.extension
 
 import uk.ac.surrey.xw.api.KindName
+import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.state.Reader
-import uk.ac.surrey.xw.api.PropertyKey
 
 class KindInfo(reader: Reader,
   widgetKinds: Map[KindName, WidgetKind[_]]) {

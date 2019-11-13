@@ -1,9 +1,9 @@
+sudo: false
+cache:
+  directories:
+  - $HOME/.ivy2
+  - $HOME/.sbt/boot
+  - $HOME/.sbt/launchers
+jdk: oraclejdk8
 language: scala
-scala:
-- 2.9.3
-addons:
-  apt:
-    packages:
-      - openjdk-6-jdk
-jdk:
-- openjdk6
+scala: 2.12.0

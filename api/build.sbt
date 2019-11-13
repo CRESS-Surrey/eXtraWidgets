@@ -1,8 +1,9 @@
 name := "eXtraWidgets-API"
 
-scalaVersion := "2.9.3"
+scalaVersion := "2.12.2"
 
 scalacOptions ++= Seq(
+  "-feature",
   "-deprecation",
   "-unchecked",
   "-Xfatal-warnings",
@@ -14,9 +15,10 @@ artifactName in Compile := { (_, _, artifact: Artifact) => artifact.name + "." +
 
 artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
 
+resolvers += Resolver.bintrayRepo("netlogo", "NetLogo-JVM")
+
 libraryDependencies ++= Seq(
-  "org.nlogo" % "NetLogo" % "5.1.0" from
-    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar"
+  "org.nlogo" % "netlogo" % "6.0.4" intransitive
 )
 
 site.settings

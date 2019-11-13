@@ -2,8 +2,8 @@ package uk.ac.surrey.xw.extension.prim
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultReporter
-import org.nlogo.api.Syntax.reporterSyntax
+import org.nlogo.api.Reporter
+import org.nlogo.core.Syntax.reporterSyntax
 
 import uk.ac.surrey.xw.extension.WidgetContextManager
 import uk.ac.surrey.xw.state.Reader
@@ -13,8 +13,8 @@ class GetProperty(
   propertyKey: String,
   outputType: Int,
   wcm: WidgetContextManager)
-  extends DefaultReporter {
-  override def getSyntax = reporterSyntax(outputType)
+  extends Reporter {
+  override def getSyntax = reporterSyntax(ret = outputType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val widgetKey = wcm.currentContext
     reader.get(propertyKey, widgetKey)

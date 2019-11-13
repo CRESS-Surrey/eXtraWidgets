@@ -2,14 +2,14 @@ package uk.ac.surrey.xw.multichooser
 
 import java.awt.BorderLayout.CENTER
 
-import org.nlogo.api.LogoList
-import org.nlogo.api.LogoList.toIterator
-import org.nlogo.window.GUIWorkspace
-
 import javax.swing.BorderFactory
 import javax.swing.JList
 import javax.swing.JScrollPane
 import javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
+
+import org.nlogo.core.LogoList
+import org.nlogo.window.GUIWorkspace
+
 import uk.ac.surrey.xw.api.IntegerProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
@@ -27,7 +27,7 @@ class MultiChooserKind[W <: MultiChooser] extends LabeledPanelWidgetKind[W] {
   override val heightProperty = new IntegerProperty[W](
     "HEIGHT", Some(_.setHeight(_)), _.getHeight, 100)
 
-  private def items(jl: JList) =
+  private def items(jl: JList[AnyRef]) =
     (0 until jl.getModel.getSize).map(jl.getModel.getElementAt)
 
   val selectedItemsProperty = new ListProperty[W](
@@ -38,7 +38,7 @@ class MultiChooserKind[W <: MultiChooser] extends LabeledPanelWidgetKind[W] {
         xs.map(x ⇒ _items.indexOf(x)).filterNot(_ == -1).toArray
       )
     }),
-    w ⇒ LogoList(w.jList.getSelectedValues: _*)
+    w ⇒ LogoList.fromJava(w.jList.getSelectedValuesList)
   )
 
   val itemsProperty = new ListProperty[W](
@@ -64,7 +64,7 @@ class MultiChooser(
 
   override val kind = new MultiChooserKind[this.type]
 
-  val jList = new JList() {
+  val jList = new JList[AnyRef]() {
     setSelectionMode(MULTIPLE_INTERVAL_SELECTION)
     setBorder(BorderFactory.createRaisedBevelBorder)
   }

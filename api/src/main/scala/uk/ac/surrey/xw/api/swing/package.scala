@@ -9,8 +9,6 @@ import java.awt.event.FocusListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 
-import org.nlogo.api.I18N
-
 import javax.swing.AbstractAction
 import javax.swing.AbstractButton
 import javax.swing.JList
@@ -19,6 +17,10 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
+
+import scala.language.implicitConversions
+
+import org.nlogo.core.I18N
 
 package object swing {
 
@@ -47,8 +49,8 @@ package object swing {
     new ListSelectionListener {
       override def valueChanged(e: ListSelectionEvent) = f(e)
     }
-  implicit def enrichJList(jl: JList) = new RichJList(jl)
-  class RichJList(jl: JList) {
+  implicit def enrichJList[T](jl: JList[T]) = new RichJList(jl)
+  class RichJList[T](jl: JList[T]) {
     def onValueChanged[T](f: (ListSelectionEvent) ⇒ T) =
       jl.addListSelectionListener(listSelectionListener(f))
   }
@@ -78,7 +80,7 @@ package object swing {
     def showMessage(msg: String) {
       val frame = org.nlogo.awt.Hierarchy.getFrame(c)
       if (frame != null) {
-        org.nlogo.swing.OptionDialog.show(frame, msg,
+        org.nlogo.swing.OptionDialog.showMessage(frame, msg,
           msg, Array(I18N.gui.get("common.buttons.ok")))
       }
     }

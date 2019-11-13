@@ -1,12 +1,13 @@
 package uk.ac.surrey.xw.button
 
-import org.nlogo.api.CompilerException
-import org.nlogo.api.Observer
+import javax.swing.JButton
+
 import org.nlogo.api.SimpleJobOwner
+import org.nlogo.core.AgentKind.Observer
+import org.nlogo.core.CompilerException
 import org.nlogo.window.GUIWorkspace
 import org.nlogo.window.InterfaceColors.BUTTON_BACKGROUND
 
-import javax.swing.JButton
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ComponentWidget
 import uk.ac.surrey.xw.api.ComponentWidgetKind
@@ -40,9 +41,10 @@ class Button(
   val ws: GUIWorkspace)
   extends JButton
   with ComponentWidget {
+  setBorderPainted(false)
   val kind = new ButtonKind[this.type]
   var commands = ""
-  val owner = new SimpleJobOwner(key, ws.world.mainRNG, classOf[Observer]) {
+  val owner = new SimpleJobOwner(key, ws.world.mainRNG, Observer) {
     override def isButton = true
     override def ownsPrimaryJobs = true
   }

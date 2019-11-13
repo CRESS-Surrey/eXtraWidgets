@@ -2,24 +2,20 @@ package uk.ac.surrey.xw
 
 import java.util.concurrent.ConcurrentSkipListMap
 
-import scala.collection.JavaConverters.asScalaConcurrentMapConverter
-import scala.collection.mutable.ConcurrentMap
-
-import org.nlogo.api.ExtensionManager
-import org.nlogo.api.SimpleChangeEventPublisher
+import scala.collection.JavaConverters.mapAsScalaConcurrentMapConverter
+import scala.collection.concurrent
+import scala.language.implicitConversions
 
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.normalizeString
-import uk.ac.surrey.xw.state.Reader
-import uk.ac.surrey.xw.state.Writer
 
 package object state {
 
-  type MutablePropertyMap = ConcurrentMap[PropertyKey, PropertyValue]
-  type MutableWidgetMap = ConcurrentMap[WidgetKey, MutablePropertyMap]
+  type MutablePropertyMap = concurrent.Map[PropertyKey, PropertyValue]
+  type MutableWidgetMap = concurrent.Map[WidgetKey, MutablePropertyMap]
 
   // Note: we use ConcurrentSkipListMap instead of ConcurrentHashMap
   // to ensure reproducibility of runs across architectures. It's also

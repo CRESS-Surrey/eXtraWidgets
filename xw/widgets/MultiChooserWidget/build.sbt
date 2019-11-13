@@ -1,8 +1,9 @@
 name := "MultiChooserWidget"
 
-scalaVersion := "2.9.3"
+scalaVersion := "2.12.2"
 
 scalacOptions ++= Seq(
+  "-feature",
   "-deprecation",
   "-unchecked",
   "-Xfatal-warnings",

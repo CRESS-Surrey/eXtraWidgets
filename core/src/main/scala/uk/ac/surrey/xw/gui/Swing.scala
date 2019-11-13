@@ -8,6 +8,9 @@ import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
+
+import scala.language.implicitConversions
+
 import uk.ac.surrey.xw.api.XWException
 
 object Swing {

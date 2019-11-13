@@ -1,16 +1,19 @@
 package uk.ac.surrey.xw.state
 
+import scala.Left
 import scala.Option.option2Iterable
+import scala.Right
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 
-import org.json.simple.parser.JSONParser
-import org.json.simple.parser.ParseException
 import org.nlogo.api.Dump
-import org.nlogo.api.LogoList
-import org.nlogo.api.Nobody
+import org.nlogo.core.LogoList
+import org.nlogo.core.Nobody
 
 import uk.ac.surrey.xw.api.XWException
+
+import org.json.simple.Jsoner
+import org.json.simple.DeserializationException
 
 class JSONLoader(writer: Writer) {
 
@@ -30,9 +33,9 @@ class JSONLoader(writer: Writer) {
 
   def load(json: String): Unit = {
     val javaWidgetMap =
-      try new JSONParser().parse(json).asInstanceOf[java.util.Map[_, _]]
+      try Jsoner.deserialize(json).asInstanceOf[java.util.Map[_, _]]
       catch {
-        case e: ParseException ⇒ throw XWException(
+        case e: DeserializationException ⇒ throw XWException(
           "Error parsing JSON input at position " + e.getPosition, e)
         case e: ClassCastException ⇒ throw XWException(
           "Error parsing JSON input: main value is not a JSON object.", e)
@@ -41,6 +44,7 @@ class JSONLoader(writer: Writer) {
       (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
         case (k: String, v) ⇒ k -> convertJSONValue(v)
+        case (k, v) => throw new XWException("Key " + k + " is not a string")
       }
     } yield widgetKey -> propertyMap.toMap)
       .toSeq

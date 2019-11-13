@@ -1,11 +1,11 @@
 package uk.ac.surrey.xw.api
 
-import org.nlogo.swing.Utils.createWidgetBorder
-
 import javax.swing.BorderFactory.createCompoundBorder
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JComponent
 import javax.swing.border.Border
+
+import org.nlogo.swing.Utils.createWidgetBorder
 
 abstract class JComponentWidgetKind[W <: JComponentWidget]
   extends ComponentWidgetKind[W] {

@@ -4,13 +4,17 @@ import java.awt.BorderLayout.CENTER
 import java.awt.BorderLayout.EAST
 import java.awt.BorderLayout.NORTH
 
-import org.nlogo.api.Dump
-import org.nlogo.window.GUIWorkspace
-import org.nlogo.window.SliderData
-
 import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JSlider
+
+import scala.language.reflectiveCalls
+
+import org.nlogo.api.Dump
+import org.nlogo.api.MultiErrorHandler
+import org.nlogo.window.GUIWorkspace
+import org.nlogo.window.SliderData
+
 import uk.ac.surrey.xw.api.DoubleProperty
 import uk.ac.surrey.xw.api.LabeledPanelWidget
 import uk.ac.surrey.xw.api.LabeledPanelWidgetKind
@@ -45,7 +49,7 @@ class Slider(
 
   override val kind = new SliderKind[this.type]
 
-  class Data extends SliderData {
+  class Data extends SliderData(new MultiErrorHandler {}) {
     def toTicks(v: Double): Int = math.round((v - minimum) / increment).toInt
     def fromTicks(ticks: Int): Double = minimum + (ticks * increment)
     def update(v: Double): Boolean = valueSetter(coerceValue(v))

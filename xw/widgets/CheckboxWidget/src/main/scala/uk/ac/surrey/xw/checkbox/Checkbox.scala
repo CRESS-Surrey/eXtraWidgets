@@ -1,8 +1,9 @@
 package uk.ac.surrey.xw.checkbox
 
+import javax.swing.JCheckBox
+
 import org.nlogo.window.GUIWorkspace
 
-import javax.swing.JCheckBox
 import uk.ac.surrey.xw.api.AbstractButtonWidget
 import uk.ac.surrey.xw.api.AbstractButtonWidgetKind
 import uk.ac.surrey.xw.api.State

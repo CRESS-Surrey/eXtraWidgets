@@ -1,8 +1,9 @@
 name := "eXtraWidgets-Core"
 
-scalaVersion := "2.9.3"
+scalaVersion := "2.12.0"
 
 scalacOptions ++= Seq(
+  "-feature",
   "-deprecation",
   "-unchecked",
   "-Xfatal-warnings",
@@ -17,7 +18,5 @@ artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test."
 fork := true
 
 libraryDependencies ++= Seq(
-  "org.nlogo" % "NetLogo" % "5.1.0" from
-    "http://ccl.northwestern.edu/netlogo/5.1.0/NetLogo.jar",
-  "com.googlecode.json-simple" % "json-simple" % "1.1.1"
+  "com.github.cliftonlabs" % "json-simple" % "2.3.0"
 )
