@@ -15,8 +15,6 @@ netLogoExtName := "xw"
 
 netLogoClassManager := "uk.ac.surrey.xw.extension.ExtraWidgetsExtension"
 
-netLogoZipSources := false
-
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
@@ -26,7 +24,9 @@ libraryDependencies ++= Seq(
   "org.ow2.asm" % "asm-all" % "5.0.4" % "test",
   "org.picocontainer" % "picocontainer" % "2.13.6" % "test",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-  "commons-codec" % "commons-codec" % "1.10" % "test"
+  "commons-codec" % "commons-codec" % "1.10" % "test",
+  "org.jogamp.jogl" % "jogl-all" % "2.4.0" from "https://jogamp.org/deployment/v2.4.0/jar/jogl-all.jar",
+  "org.jogamp.gluegen" % "gluegen-rt" % "2.4.0" from "https://jogamp.org/deployment/v2.4.0/jar/gluegen-rt.jar"
 )
 
 test in Test := {
