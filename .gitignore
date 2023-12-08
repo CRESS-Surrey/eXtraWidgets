@@ -21,3 +21,6 @@ project/plugins/project/
 .cache
 .settings
 .cache-main
+
+# IntelliJ Idea
+.idea
