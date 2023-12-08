@@ -31,7 +31,12 @@ object WidgetsLoader {
         modifiers = clazz.getModifiers
         if isPublic(modifiers) && !isAbstract(modifiers) &&
           classOf[WidgetKind[_]].isAssignableFrom(clazz)
-      } yield clazz.newInstance.asInstanceOf[WidgetKind[_ <: ExtraWidget]]
+      } yield {
+        clazz
+          .getDeclaredConstructor(Seq.empty[Class[_]] : _*)
+          .newInstance()
+          .asInstanceOf[WidgetKind[_ <: ExtraWidget]]
+      }
     (new TabKind +: widgetKinds)
       .map(kind ⇒ kind.name -> kind)
       .toMap
