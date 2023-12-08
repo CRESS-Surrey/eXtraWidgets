@@ -1,6 +1,6 @@
 name := "NoteWidget"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.18"
 
 scalacOptions ++= Seq(
   "-feature",
@@ -13,10 +13,10 @@ val jarName = "NoteWidget.jar"
 
 artifactName := { (_, _, _) => jarName }
 
-packageBin in Compile <<= (packageBin in Compile, baseDirectory) map {
-  (jar, base) =>
-  IO.copyFile(jar, base / jarName)
+packageBin in Compile := {
+  val jar = (packageBin in Compile).value
+  IO.copyFile(jar, baseDirectory.value / jarName)
   jar
 }
 
-cleanFiles <++= baseDirectory { base => Seq(base / jarName) }
+cleanFiles += baseDirectory.value / jarName
