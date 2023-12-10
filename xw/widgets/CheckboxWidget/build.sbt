@@ -1,3 +1,3 @@
 name := "CheckboxWidget"
 
-artifactName := { (_, _, _) => "CheckboxWidget.jar" }
+artifactName := { (_, _, _) => name.value + ".jar" }
