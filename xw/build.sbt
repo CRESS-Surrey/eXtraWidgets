@@ -8,6 +8,9 @@ netLogoShortDescription := "An extension for creating additional interface tabs 
 netLogoLongDescription  := netLogoShortDescription.value
 netLogoHomepage         := "https://github.com/NetLogo/NetLogo-Extension-Plugin"
 
+// We need to run `package` on the root project for all jars to be created and
+// included when running `packageZip`. It would be nice to automate that.
+
 netLogoPackageExtras ++=
   Seq("api", "core")
     .map(x =>
