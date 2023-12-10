@@ -16,11 +16,8 @@ netLogoPackageExtras ++=
     (baseDirectory.value / "widgets")
       .listFiles
       .filter(_.isDirectory)
-      .flatMap(widgetFolder =>
-        (widgetFolder / "target" / "scala-2.12")
-          .listFiles
-          .filter(_.getName.endsWith(".jar"))
-          .map(jarFile =>
-            (jarFile, Option("widgets/" + widgetFolder.getName + "/" + jarFile.getName))
-          )
-      )
+      .map(widgetFolder => {
+        val name = widgetFolder.getName
+        val jar = widgetFolder / "target" / "scala-2.12" / (name + ".jar")
+        (jar, Option("widgets/" + name + "/" + jar.getName))
+      })
