@@ -1,8 +1,3 @@
-addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")
+resolvers += "netlogo-extension-plugin" at "https://dl.cloudsmith.io/public/netlogo/netlogo-extension-plugin/maven/"
 
-resolvers += Resolver.url(
-  "NetLogo-JVM",
-  url("http://dl.bintray.com/content/netlogo/NetLogo-JVM"))(
-    Resolver.ivyStylePatterns)
-
-addSbtPlugin("org.nlogo" % "netlogo-extension-plugin" % "3.0")
+addSbtPlugin("org.nlogo" % "netlogo-extension-plugin" % "5.2.3")

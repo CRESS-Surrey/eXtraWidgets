@@ -1,6 +1,6 @@
 name := "eXtraWidgets-Core"
 
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.18"
 
 scalacOptions ++= Seq(
   "-feature",
@@ -11,9 +11,9 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
-artifactName in Compile := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
+Compile / artifactName := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
 
-artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
+Test / artifactName := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
 
 fork := true
 

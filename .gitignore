@@ -1,7 +1,8 @@
 *.class
 *.log
 *.jar
-xw.zip
+xw-*.zip
+xw/.bundledFiles
 
 # sbt specific
 .history
@@ -21,3 +22,7 @@ project/plugins/project/
 .cache
 .settings
 .cache-main
+
+# IntelliJ Idea
+.idea
+.bsp

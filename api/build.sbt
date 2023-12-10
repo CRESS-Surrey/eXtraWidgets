@@ -1,6 +1,6 @@
 name := "eXtraWidgets-API"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.18"
 
 scalacOptions ++= Seq(
   "-feature",
@@ -11,20 +11,14 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
-artifactName in Compile := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
+Compile / artifactName := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
 
-artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
+Test / artifactName := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
 
-resolvers += Resolver.bintrayRepo("netlogo", "NetLogo-JVM")
+resolvers += "netlogo" at "https://dl.cloudsmith.io/public/netlogo/netlogo/maven/"
 
 libraryDependencies ++= Seq(
-  "org.nlogo" % "netlogo" % "6.0.4" intransitive
+  "org.nlogo" % "netlogo" % "6.4.0",
+  "org.jogamp.jogl" % "jogl-all" % "2.4.0" from "https://jogamp.org/deployment/v2.4.0/jar/jogl-all.jar",
+  "org.jogamp.gluegen" % "gluegen-rt" % "2.4.0" from "https://jogamp.org/deployment/v2.4.0/jar/gluegen-rt.jar"
 )
-
-site.settings
-
-site.includeScaladoc("/")
-
-ghpages.settings
-
-git.remoteRepo := "git@github.com:CRESS-Surrey/eXtraWidgets.git"
