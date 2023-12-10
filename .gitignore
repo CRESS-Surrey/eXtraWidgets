@@ -1,7 +1,8 @@
 *.class
 *.log
 *.jar
-xw.zip
+xw-*.zip
+xw/.bundledFiles
 
 # sbt specific
 .history
@@ -24,3 +25,4 @@ project/plugins/project/
 
 # IntelliJ Idea
 .idea
+.bsp

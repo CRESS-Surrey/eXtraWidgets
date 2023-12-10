@@ -11,9 +11,9 @@ scalacOptions ++= Seq(
 
 exportJars := true
 
-artifactName in Compile := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
+Compile / artifactName := { (_, _, artifact: Artifact) => artifact.name + "." + artifact.extension }
 
-artifactName in Test := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
+Test / artifactName := { (_, _, artifact: Artifact) => artifact.name + "-test." + artifact.extension }
 
 fork := true
 
