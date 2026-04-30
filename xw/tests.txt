@@ -160,16 +160,16 @@ test-export-import
   O> set glob1 xw:tabs
   O> set glob2 xw:widgets
   O> set glob3 [ xw:tab ] xw:of xw:widgets
-  O> xw:export "tests/test1.json"
+  O> xw:export "target/test1.json"
   O> xw:clear-all
-  O> xw:import "tests/test1.json"
+  O> xw:import "target/test1.json"
   glob1 = xw:tabs => true
   glob2 = xw:widgets => true
   glob3 = [ xw:tab ] xw:of xw:widgets => true
-  O> xw:export "tests/test2.json"
-  O> file-open "tests/test1.json"
+  O> xw:export "target/test2.json"
+  O> file-open "target/test1.json"
   O> set glob1 file-read-line
-  O> file-open "tests/test2.json"
+  O> file-open "target/test2.json"
   O> set glob2 file-read-line
   glob1 = glob2 => true
   O> file-close-all
@@ -187,9 +187,9 @@ export-import-preserves-values
   O> xw:create-text-input "ti" [ xw:set-text "a" ]
   O> xw:create-numeric-input "ni" [ xw:set-value 10 ]
   O> xw:create-button "b" [ xw:set-commands "print \"hello world\"" ]
-  O> xw:export "tests/export-import-preserves-values.json"
+  O> xw:export "target/export-import-preserves-values.json"
   O> xw:clear-all
-  O> xw:import "tests/export-import-preserves-values.json"
+  O> xw:import "target/export-import-preserves-values.json"
   xw:get "s1" => 10
   xw:get "c1" => "b"
   xw:get "c2" => 2
@@ -204,14 +204,14 @@ import-multiple-files
   extensions [xw]
   O> xw:create-tab "t1"
   O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
-  O> xw:export "tests/t1.json"
+  O> xw:export "target/t1.json"
   O> xw:clear-all
   O> xw:create-tab "t2"
   O> foreach n-values 5 [ [i] -> word "mc" i ] xw:create-multi-chooser
-  O> xw:export "tests/t2.json"
+  O> xw:export "target/t2.json"
   O> xw:clear-all
-  O> xw:import "tests/t1.json"
-  O> xw:import "tests/t2.json"
+  O> xw:import "target/t1.json"
+  O> xw:import "target/t2.json"
   xw:tabs => ["t1" "t2"]
   xw:widgets => ["mc0" "mc1" "mc2" "mc3" "mc4" "s0" "s1" "s2" "s3" "s4"]
 
