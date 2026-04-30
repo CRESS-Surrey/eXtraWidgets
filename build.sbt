@@ -1,4 +1,4 @@
-ThisBuild / version      := "2.0.0"
+ThisBuild / version      := "3.0.0-SNAPSHOT"
 ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / scalacOptions ++= Seq(
   "-feature",
