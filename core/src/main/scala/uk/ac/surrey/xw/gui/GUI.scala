@@ -26,7 +26,7 @@ import uk.ac.surrey.xw.state.Writer
 class GUI(
   val app: App,
   val writer: Writer,
-  val widgetKinds: Map[String, WidgetKind[_]]) {
+  val widgetKinds: Map[String, WidgetKind[?]]) {
 
   writer.subscribe(handleEvent, {
     case SetProperty(_,_,_,fromUI) => !fromUI
@@ -58,9 +58,9 @@ class GUI(
   private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit =
     for {
       kindName <- propertyMap.get("KIND").map(_.toString).orException(
-        "Can't find KIND for " + widgetKey + " in " + propertyMap).right
+        "Can't find KIND for " + widgetKey + " in " + propertyMap)
       kind <- widgetKinds.get(normalizeString(kindName)).orException(
-        "Kind " + kindName + " not loaded.").right
+        "Kind " + kindName + " not loaded.")
     } kind.newWidget(widgetKey, writer, app.workspace).init(propertyMap)
 
   private def setProperty(

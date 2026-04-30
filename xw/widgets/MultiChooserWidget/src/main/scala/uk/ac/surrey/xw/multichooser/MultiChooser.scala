@@ -46,7 +46,7 @@ class MultiChooserKind[W <: MultiChooser] extends LabeledPanelWidgetKind[W] {
     Some((w, xs) => {
       w.jList.setListData(xs.toVector.toArray)
     }),
-    w => LogoList(items(w.jList): _*)
+    w => LogoList(items(w.jList)*)
   )
 
   override def propertySet = super.propertySet ++ Set(

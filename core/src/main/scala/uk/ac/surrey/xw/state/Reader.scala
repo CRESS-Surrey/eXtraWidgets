@@ -1,8 +1,7 @@
 package uk.ac.surrey.xw.state
 
 import scala.Vector
-import scala.collection.JavaConverters.asJavaCollectionConverter
-import scala.collection.JavaConverters.mapAsJavaMapConverter
+import scala.jdk.CollectionConverters.*
 
 import org.nlogo.core.LogoList
 import org.nlogo.core.Nobody
@@ -65,15 +64,15 @@ class Reader(
       "Widget " + widgetKey + " does not exist.")
 
   def propertyMap(widgetKey: WidgetKey): Either[XWException, PropertyMap] =
-    mutablePropertyMap(widgetKey).right.map(_.toMap)
+    mutablePropertyMap(widgetKey).map(_.toMap)
 
   def contains(widgetKey: WidgetKey) = widgetMap.contains(widgetKey)
 
   def propertyKeyVector(widgetKey: WidgetKey): Either[XWException, Vector[PropertyKey]] =
-    mutablePropertyMap(widgetKey).right.map(Vector() ++ _.keysIterator)
+    mutablePropertyMap(widgetKey).map(Vector() ++ _.keysIterator)
 
   def properties(widgetKey: WidgetKey): Either[XWException, Vector[(PropertyKey, PropertyValue)]] =
-    mutablePropertyMap(widgetKey).right.map(Vector() ++ _.iterator)
+    mutablePropertyMap(widgetKey).map(Vector() ++ _.iterator)
 
   def toJSON = {
     def convert(x: AnyRef): AnyRef = x match {

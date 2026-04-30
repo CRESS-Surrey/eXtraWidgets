@@ -3,6 +3,7 @@ package uk.ac.surrey.xw.api
 import java.awt.Color
 
 import scala.Vector
+import scala.reflect.ClassTag
 
 import org.nlogo.api.Color.getARGBbyPremodulatedColorNumber
 import org.nlogo.api.Color.getClosestColorNumberByARGB
@@ -22,7 +23,7 @@ abstract class Property[+T, W](
   _key: PropertyKey,
   setter: Option[(W, T) => Unit],
   getter: W => T,
-  val defaultValue: T)(implicit m: Manifest[T]) {
+  val defaultValue: T)(implicit m: ClassTag[T]) {
   val syntaxType: Int
   val key = makeKey(_key)
   private def checkType(x: Any) = {

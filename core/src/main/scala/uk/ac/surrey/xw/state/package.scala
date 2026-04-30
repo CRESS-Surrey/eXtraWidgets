@@ -2,8 +2,8 @@ package uk.ac.surrey.xw
 
 import java.util.concurrent.ConcurrentSkipListMap
 
-import scala.collection.JavaConverters.mapAsScalaConcurrentMapConverter
 import scala.collection.concurrent
+import scala.jdk.CollectionConverters.*
 import scala.language.implicitConversions
 
 import uk.ac.surrey.xw.api.PropertyKey

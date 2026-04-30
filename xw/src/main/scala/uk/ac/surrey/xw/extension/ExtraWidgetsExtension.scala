@@ -54,7 +54,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       new File(xwJarURL.toURI).getParentFile
     }
 
-    val widgetKinds: Map[KindName, WidgetKind[_]] =
+    val widgetKinds: Map[KindName, WidgetKind[?]] =
       WidgetsLoader.loadWidgetKinds(xwFolder)
 
     locally {
@@ -72,7 +72,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
   private def primitiveList(
     writer: Writer,
-    widgetKinds: Map[KindName, WidgetKind[_]],
+    widgetKinds: Map[KindName, WidgetKind[?]],
     widgetContextManager: WidgetContextManager,
     kindInfo: KindInfo,
     workspace: AbstractWorkspace): Iterable[(String, Primitive)] = {

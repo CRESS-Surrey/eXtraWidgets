@@ -28,7 +28,7 @@ trait ExtraWidget extends Component {
     for (property <- kind.properties.get(propertyKey))
       property.set(this, propertyValue)
 
-  def updateInState(property: Property[_, this.type]): Unit =
+  def updateInState(property: Property[?, this.type]): Unit =
     state.set(property.key, this.key, property.get(this))
 
   override def setEnabled(b: Boolean) = {

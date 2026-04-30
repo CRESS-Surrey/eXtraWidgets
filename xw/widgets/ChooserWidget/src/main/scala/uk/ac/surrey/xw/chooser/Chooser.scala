@@ -36,7 +36,7 @@ class ChooserKind[W <: Chooser] extends LabeledPanelWidgetKind[W] {
       xs.foreach(w.combo.addItem(_))
       w.combo.setSelectedItem(xs.toVector.headOption.orNull)
     }),
-    w => LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt): _*)
+    w => LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt)*)
   )
 
   override def propertySet = super.propertySet ++ Set(

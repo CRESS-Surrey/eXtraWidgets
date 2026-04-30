@@ -9,7 +9,7 @@ import java.net.URLClassLoader
 import java.util.jar.Attributes
 import java.util.jar.JarFile
 
-import scala.collection.JavaConverters.enumerationAsScalaIteratorConverter
+import scala.jdk.CollectionConverters.*
 
 import uk.ac.surrey.xw.api.ExtraWidget
 import uk.ac.surrey.xw.api.TabKind
@@ -18,7 +18,7 @@ import uk.ac.surrey.xw.api.XWException
 
 object WidgetsLoader {
 
-  def loadWidgetKinds(extensionFolder: File): Map[String, WidgetKind[_]] = {
+  def loadWidgetKinds(extensionFolder: File): Map[String, WidgetKind[?]] = {
     val widgetJars =
       for {
         folder <- getWidgetsFolder(extensionFolder).listFiles
@@ -57,7 +57,7 @@ object WidgetsLoader {
       if entryName.endsWith(".class")
       className = entryName
         .stripSuffix(".class")
-        .replaceAllLiterally("/", ".")
+        .replace("/", ".")
     } yield className
 
   def getAttributeValue(attributes: Attributes, attributeName: String, fileURL: URL): Either[XWException, String] =
@@ -68,7 +68,7 @@ object WidgetsLoader {
   def loadClass(
     className: String,
     classLoader: ClassLoader,
-    fileURL: URL): Class[_] =
+    fileURL: URL): Class[?] =
     try classLoader.loadClass(className)
     catch {
       case e: ClassNotFoundException =>
@@ -84,7 +84,7 @@ object WidgetsLoader {
     val connection = url.openConnection.asInstanceOf[JarURLConnection]
     Option(connection.getManifest())
       .toRight(XWException("Can't find Manifest file in widget jar: " + fileURL + "."))
-      .right.map(_.getMainAttributes)
+      .map(_.getMainAttributes)
   }
 
   def getWidgetsFolder(extensionFolder: File): File =

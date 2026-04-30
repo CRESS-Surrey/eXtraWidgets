@@ -21,7 +21,7 @@ import uk.ac.surrey.xw.api.normalizeString
  */
 class Writer(
   widgetMap: MutableWidgetMap,
-  widgetKinds: Map[KindName, WidgetKind[_]])
+  widgetKinds: Map[KindName, WidgetKind[?]])
   extends Reader(widgetMap)
   with State {
 
@@ -53,7 +53,7 @@ class Writer(
     validateUnique("KEY", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
-      case _: TabKind[_] =>
+      case _: TabKind[?] =>
         tabCreationSeq = tabCreationSeq :+ widgetKey
         Map.empty
       case _ if properties.isDefinedAt(tabPropertyKey) =>
@@ -69,7 +69,7 @@ class Writer(
     publish(AddWidget(widgetKey, allProperties))
   }
 
-  def getKind(widgetKey: WidgetKey, propertyMap: PropertyMap): WidgetKind[_] = {
+  def getKind(widgetKey: WidgetKey, propertyMap: PropertyMap): WidgetKind[?] = {
     val kindName = propertyMap
       .getOrElse(kindPropertyKey, throw XWException(
         "Cannot add widget " + widgetKey + " since its kind is unspecified.",
@@ -128,7 +128,7 @@ class Writer(
 
   def clearAll(): Unit = {
     widgetKeyVector.sortBy { k => // tabs last
-      propertyMap(k).right.toOption
+      propertyMap(k).toOption
         .flatMap(_.get("KIND"))
         .map(_.toString).map(normalizeString) == Some(tabKindName)
     }.foreach(remove)

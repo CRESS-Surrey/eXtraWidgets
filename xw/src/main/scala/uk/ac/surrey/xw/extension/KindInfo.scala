@@ -8,7 +8,7 @@ import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.state.Reader
 
 class KindInfo(reader: Reader,
-  widgetKinds: Map[KindName, WidgetKind[_]]) {
+  widgetKinds: Map[KindName, WidgetKind[?]]) {
 
   def kindName(widgetKey: WidgetKey) =
     reader.get("KIND", widgetKey).asInstanceOf[String]

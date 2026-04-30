@@ -109,8 +109,8 @@ class NumericInput(
       case Right(d) => Right(format(d))
     }
 
-  override def afterTextUpdate() =
-    for (d <- NumberParser.parse(textField.getText()).right) {
+  override def afterTextUpdate(): Unit =
+    NumberParser.parse(textField.getText()).foreach { d =>
       number = d
       updateInState(kind.valueProperty)
     }

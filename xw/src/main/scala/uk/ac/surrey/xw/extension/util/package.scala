@@ -60,7 +60,7 @@ package object util {
 
   def runTask(workspace: AbstractWorkspace, context: Context, task: AnonymousCommand, args: Array[AnyRef]): Unit = {
     val childContext = new Context(context, workspace.world.observers)
-   context.activation = new Activation(
+    context.activation = new Activation(
       task.procedure, childContext.activation, task.locals, 0,
       task.binding.enterScope(task.formals, args))
     childContext.ip = -1 // makeConcurrentJob increments the ip and we want to start at 0

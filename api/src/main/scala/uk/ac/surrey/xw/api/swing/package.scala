@@ -87,7 +87,7 @@ package object swing {
     def allChildren: Seq[Component] =
       c match {
         case c: Container =>
-          c.getComponents ++ c.getComponents.flatMap(_.allChildren)
+          c.getComponents.toSeq ++ c.getComponents.toSeq.flatMap(_.allChildren)
         case _ => Seq()
       }
   }
