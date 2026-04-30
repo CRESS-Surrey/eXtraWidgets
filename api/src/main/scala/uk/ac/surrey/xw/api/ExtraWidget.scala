@@ -19,13 +19,13 @@ trait ExtraWidget extends Component {
     propertyMap.toSeq
       // make sure the default property gets set last
       // (see https://github.com/CRESS-Surrey/eXtraWidgets/issues/162)
-      .sortBy  { case (k, v) ⇒ kind.defaultProperty.map(_.key).contains(k) }
-      .foreach { case (k, v) ⇒ setProperty(k, v) }
+      .sortBy  { case (k, v) => kind.defaultProperty.map(_.key).contains(k) }
+      .foreach { case (k, v) => setProperty(k, v) }
 
   def setProperty(
     propertyKey: PropertyKey,
     propertyValue: PropertyValue): Unit =
-    for (property ← kind.properties.get(propertyKey))
+    for (property <- kind.properties.get(propertyKey))
       property.set(this, propertyValue)
 
   def updateInState(property: Property[_, this.type]): Unit =
@@ -34,7 +34,7 @@ trait ExtraWidget extends Component {
   override def setEnabled(b: Boolean) = {
     super.setEnabled(b)
     Some(this).collect {
-      case comp: ComponentWidget ⇒
+      case comp: ComponentWidget =>
         comp.setForeground(if (b) comp.getFontColor else gray)
     }
     this.allChildren.foreach(_.setEnabled(b))

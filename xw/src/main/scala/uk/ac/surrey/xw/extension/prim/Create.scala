@@ -20,7 +20,7 @@ class Create(kindName: String, writer: Writer, wcm: WidgetContextManager)
   def perform(args: Array[Argument], context: Context): Unit = {
     val widgetKey = args(0).getString
     writer.add(widgetKey, Map("KIND" -> kindName))
-    wcm.withContext(args(0).getString) { () ⇒
+    wcm.withContext(args(0).getString) { () =>
       runBlock(context)
     }
   }

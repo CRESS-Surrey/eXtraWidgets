@@ -38,11 +38,11 @@ class GUI(
   private def handleEvent(event: StateEvent): Unit =
     invokeLater {
       event match {
-        case AddWidget(widgetKey, propertyMap) ⇒
+        case AddWidget(widgetKey, propertyMap) =>
           addWidget(widgetKey, propertyMap)
-        case SetProperty(widgetKey, propertyKey, propertyValue, _) ⇒
+        case SetProperty(widgetKey, propertyKey, propertyValue, _) =>
           setProperty(widgetKey, propertyKey, propertyValue)
-        case RemoveWidget(widgetKey) ⇒
+        case RemoveWidget(widgetKey) =>
           removeWidget(widgetKey)
       }
     }
@@ -51,15 +51,15 @@ class GUI(
     val xwTabs = app.workspace.xwTabs
     (xwTabs ++ xwTabs.flatMap(_.allChildren))
       .collectFirst {
-        case w: ExtraWidget if w.key == widgetKey ⇒ w
+        case w: ExtraWidget if w.key == widgetKey => w
       }
   }
 
   private def addWidget(widgetKey: WidgetKey, propertyMap: PropertyMap): Unit =
     for {
-      kindName ← propertyMap.get("KIND").map(_.toString).orException(
+      kindName <- propertyMap.get("KIND").map(_.toString).orException(
         "Can't find KIND for " + widgetKey + " in " + propertyMap).right
-      kind ← widgetKinds.get(normalizeString(kindName)).orException(
+      kind <- widgetKinds.get(normalizeString(kindName)).orException(
         "Kind " + kindName + " not loaded.").right
     } kind.newWidget(widgetKey, writer, app.workspace).init(propertyMap)
 
@@ -72,10 +72,10 @@ class GUI(
     )
 
   private def removeWidget(widgetKey: WidgetKey): Unit =
-    for (w ← getWidget(widgetKey)) w match {
-      case tab: Tab ⇒ tab.removeFromAppTabs()
-      case cw: ComponentWidget ⇒
-        for (t ← cw.tab) {
+    for (w <- getWidget(widgetKey)) w match {
+      case tab: Tab => tab.removeFromAppTabs()
+      case cw: ComponentWidget =>
+        for (t <- cw.tab) {
           t.panel.remove(cw)
           t.panel.repaint()
         }

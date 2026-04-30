@@ -16,17 +16,17 @@ object RichWorkspace {
 class RichWorkspace(ws: GUIWorkspace) {
 
   def app: App = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
-    .collectFirst { case app: App ⇒ app }
+    .collectFirst { case app: App => app }
     .getOrElse(throw new XWException("Can't access application tabs."))
 
   def tabManager: TabManager = app.tabManager
 
   def tabs: TabsPanel = tabManager.mainTabs
 
-  def xwTabs: Seq[Tab] = tabs.getComponents.collect { case t: Tab ⇒ t }.toSeq
+  def xwTabs: Seq[Tab] = tabs.getComponents.collect { case t: Tab => t }.toSeq
 
   def reorderTabs(state: State): Unit =
-    for (tab ← xwTabs.sortBy(t ⇒ (t.getOrder, state.tabCreationOrder(t.key)))) {
+    for (tab <- xwTabs.sortBy(t => (t.getOrder, state.tabCreationOrder(t.key)))) {
       tab.removeFromAppTabs()
       tab.addToAppTabs()
     }

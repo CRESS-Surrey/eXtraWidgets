@@ -26,17 +26,17 @@ class ChooserKind[W <: Chooser] extends LabeledPanelWidgetKind[W] {
   val selectedItemProperty = new ObjectProperty[W](
     "SELECTED-ITEM",
     Some(_.combo.setSelectedItem(_)),
-    w ⇒ Option(w.combo.getSelectedItem).getOrElse(Nobody)
+    w => Option(w.combo.getSelectedItem).getOrElse(Nobody)
   )
 
   val itemsProperty = new ListProperty[W](
     "ITEMS",
-    Some((w, xs) ⇒ {
+    Some((w, xs) => {
       w.combo.removeAllItems()
       xs.foreach(w.combo.addItem(_))
       w.combo.setSelectedItem(xs.toVector.headOption.orNull)
     }),
-    w ⇒ LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt): _*)
+    w => LogoList((0 until w.combo.getItemCount).map(w.combo.getItemAt): _*)
   )
 
   override def propertySet = super.propertySet ++ Set(
@@ -60,7 +60,7 @@ class Chooser(
   /* Use a custom renderer so Dump.logoObject is used instead of toString */
   combo.setRenderer(new LogoObjectListCellRenderer)
 
-  combo.onItemStateChanged { event ⇒
+  combo.onItemStateChanged { event =>
     if (event.getStateChange == SELECTED)
       updateInState(kind.selectedItemProperty)
   }

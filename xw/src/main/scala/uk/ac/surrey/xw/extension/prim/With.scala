@@ -25,18 +25,18 @@ class With(wcm: WidgetContextManager) extends Reporter {
   override def report(args: Array[Argument], context: Context): AnyRef = {
     val task = args(1).getReporter
     def predicate(key: WidgetKey): Boolean =
-      wcm.withContext(key) { () ⇒
+      wcm.withContext(key) { () =>
         task.report(context, Array[AnyRef]()) match {
-          case b: java.lang.Boolean ⇒ b
-          case obj ⇒ throw XWException(
+          case b: java.lang.Boolean => b
+          case obj => throw XWException(
             "Expected a true/false value but got " +
               Dump.logoObject(obj) + " instead.")
         }
       }
     LogoList.fromVector(
       args(0).getList.toVector.collect {
-        case key: String ⇒ key
-        case obj ⇒ throw XWException(
+        case key: String => key
+        case obj => throw XWException(
           "Expected a widget key string but got " +
             Dump.logoObject(obj) + " instead.")
       }.filter(predicate))

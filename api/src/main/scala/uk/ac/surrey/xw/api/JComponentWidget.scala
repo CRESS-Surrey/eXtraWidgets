@@ -11,7 +11,7 @@ import org.nlogo.theme.InterfaceColors
 abstract class JComponentWidgetKind[W <: JComponentWidget]
   extends ComponentWidgetKind[W] {
   val opaqueProperty = new BooleanProperty[W](
-    "OPAQUE", Some((w, b) ⇒ { w.setOpaque(b); w.updateBorder() }), _.isOpaque, true)
+    "OPAQUE", Some((w, b) => { w.setOpaque(b); w.updateBorder() }), _.isOpaque, true)
   override def propertySet = super.propertySet ++ Set(opaqueProperty)
 }
 

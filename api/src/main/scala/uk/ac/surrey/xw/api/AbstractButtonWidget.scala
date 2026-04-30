@@ -16,7 +16,7 @@ abstract class AbstractButtonWidgetKind[W <: AbstractButtonWidget]
 trait AbstractButtonWidget extends AbstractButton with JComponentWidget {
   override val kind: AbstractButtonWidgetKind[this.type]
 
-  this.onItemStateChanged { _ ⇒
+  this.onItemStateChanged { _ =>
     updateInState(kind.selectedProperty)
   }
 }

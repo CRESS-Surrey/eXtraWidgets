@@ -26,21 +26,21 @@ class Writer(
   with State {
 
   private val subscribers =
-    new CopyOnWriteArrayList[(StateEvent ⇒ Unit, StateEvent ⇒ Boolean)]
+    new CopyOnWriteArrayList[(StateEvent => Unit, StateEvent => Boolean)]
 
-  def subscribe(listener: StateEvent ⇒ Unit): Unit =
-    subscribe(listener, _ ⇒ true)
+  def subscribe(listener: StateEvent => Unit): Unit =
+    subscribe(listener, _ => true)
 
-  def subscribe(listener: StateEvent ⇒ Unit, filter: StateEvent ⇒ Boolean): Unit =
+  def subscribe(listener: StateEvent => Unit, filter: StateEvent => Boolean): Unit =
     subscribers.add(listener -> filter)
 
-  def removeSubscription(listener: StateEvent ⇒ Unit): Unit =
-    subscribers.removeIf(entry ⇒ entry._1 == listener)
+  def removeSubscription(listener: StateEvent => Unit): Unit =
+    subscribers.removeIf(entry => entry._1 == listener)
 
   private def publish(event: StateEvent): Unit =
     subscribers.asScala.foreach {
-      case (listener, filter) if filter(event) ⇒ listener(event)
-      case _ ⇒
+      case (listener, filter) if filter(event) => listener(event)
+      case _ =>
     }
 
   private var tabCreationSeq: Seq[WidgetKey] = Seq.empty
@@ -53,12 +53,12 @@ class Writer(
     validateUnique("KEY", widgetKey).rightOrThrow
     val kind = getKind(widgetKey, properties)
     val tabProperty: PropertyMap = kind match {
-      case _: TabKind[_] ⇒
+      case _: TabKind[_] =>
         tabCreationSeq = tabCreationSeq :+ widgetKey
         Map.empty
-      case _ if properties.isDefinedAt(tabPropertyKey) ⇒
+      case _ if properties.isDefinedAt(tabPropertyKey) =>
         Map.empty
-      case _ ⇒
+      case _ =>
         Map(tabPropertyKey -> tabCreationSeq.lastOption.getOrElse(
           throw new XWException("There currently are no extra tabs."))
         )
@@ -75,8 +75,8 @@ class Writer(
         "Cannot add widget " + widgetKey + " since its kind is unspecified.",
         XWException(kindPropertyKey + " missing in: " + propertyMap))
       ) match {
-        case s: String ⇒ s
-        case x ⇒ throw XWException(
+        case s: String => s
+        case x => throw XWException(
           "Expected widget kind to be a string but got " + x + " instead.",
           XWException(kindPropertyKey + " not a string in: " + propertyMap)
         )
@@ -91,7 +91,7 @@ class Writer(
       // Special case: if we're removing a tab, also
       // remove the widgets on that tab from the widget map
       widgetMap --= widgetMap.collect {
-        case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) ⇒ k
+        case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) => k
       }
       tabCreationSeq = tabCreationSeq.filterNot(_ == widgetKey)
     }
@@ -127,7 +127,7 @@ class Writer(
   }
 
   def clearAll(): Unit = {
-    widgetKeyVector.sortBy { k ⇒ // tabs last
+    widgetKeyVector.sortBy { k => // tabs last
       propertyMap(k).right.toOption
         .flatMap(_.get("KIND"))
         .map(_.toString).map(normalizeString) == Some(tabKindName)

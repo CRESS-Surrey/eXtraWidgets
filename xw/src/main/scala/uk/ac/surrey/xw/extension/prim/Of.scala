@@ -27,13 +27,13 @@ class Of(wcm: WidgetContextManager) extends Reporter {
   override def report(args: Array[Argument], context: Context): AnyRef = {
     val task = args(0).getReporter
     def reportFor(key: WidgetKey) =
-      wcm.withContext(key) { () ⇒ task.report(context, Array[AnyRef]()) }
+      wcm.withContext(key) { () => task.report(context, Array[AnyRef]()) }
     args(1).get match {
-      case key: WidgetKey ⇒ reportFor(key)
-      case list: LogoList ⇒ LogoList.fromVector(
-        for (obj ← list.toVector) yield obj match {
-          case key: String ⇒ reportFor(key)
-          case _ ⇒ throw XWException(
+      case key: WidgetKey => reportFor(key)
+      case list: LogoList => LogoList.fromVector(
+        for (obj <- list.toVector) yield obj match {
+          case key: String => reportFor(key)
+          case _ => throw XWException(
             "Expected a widget key string but got " +
               Dump.logoObject(obj) + " instead.")
         })

@@ -19,14 +19,14 @@ class JSONLoader(writer: Writer) {
 
   // Handle the possible values returned by the JSON parser
   def convertJSONValue(v: Any): AnyRef = try v match {
-    case l: java.util.List[_] ⇒
+    case l: java.util.List[_] =>
       LogoList.fromIterator(l.asScala.iterator.map(convertJSONValue))
-    case s: java.lang.String ⇒ s
-    case n: java.lang.Number ⇒ Double.box(n.doubleValue)
-    case b: java.lang.Boolean ⇒ b
-    case null ⇒ Nobody
+    case s: java.lang.String => s
+    case n: java.lang.Number => Double.box(n.doubleValue)
+    case b: java.lang.Boolean => b
+    case null => Nobody
   } catch {
-    case e: MatchError ⇒ throw XWException(
+    case e: MatchError => throw XWException(
       "Unsupported value in JSON input: " +
         Dump.logoObject(v.asInstanceOf[AnyRef]), e)
   }
@@ -35,27 +35,27 @@ class JSONLoader(writer: Writer) {
     val javaWidgetMap =
       try Jsoner.deserialize(json).asInstanceOf[java.util.Map[_, _]]
       catch {
-        case e: DeserializationException ⇒ throw XWException(
+        case e: DeserializationException => throw XWException(
           "Error parsing JSON input at position " + e.getPosition, e)
-        case e: ClassCastException ⇒ throw XWException(
+        case e: ClassCastException => throw XWException(
           "Error parsing JSON input: main value is not a JSON object.", e)
       }
     val errors = (for {
-      case (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
+      case (widgetKey: String, jMap: java.util.Map[_, _]) <- javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
-        case (k: String, v) ⇒ k -> convertJSONValue(v)
+        case (k: String, v) => k -> convertJSONValue(v)
         case (k, v) => throw new XWException("Key " + k + " is not a string")
       }
     } yield widgetKey -> propertyMap.toMap)
       .toSeq
       .sortBy(_._2.get("KIND") != Some("TAB"))
       .map {
-        case (k, ps) ⇒
+        case (k, ps) =>
           try {
             writer.add(k, ps)
             Right(())
           } catch {
-            case e: XWException ⇒ Left(e.getMessage)
+            case e: XWException => Left(e.getMessage)
           }
       }
       .flatMap(_.left.toOption)

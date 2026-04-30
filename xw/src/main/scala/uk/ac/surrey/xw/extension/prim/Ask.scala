@@ -22,13 +22,13 @@ class Ask(wcm: WidgetContextManager)
   ))
   def perform(args: Array[Argument], context: Context): Unit = {
     def runFor(key: WidgetKey) =
-      wcm.withContext(key) { () ⇒ runBlock(context) }
+      wcm.withContext(key) { () => runBlock(context) }
     args(0).get match {
-      case key: WidgetKey ⇒ runFor(key)
-      case list: LogoList ⇒
-        for (obj ← list) obj match {
-          case key: String ⇒ runFor(key)
-          case _ ⇒ throw XWException(
+      case key: WidgetKey => runFor(key)
+      case list: LogoList =>
+        for (obj <- list) obj match {
+          case key: String => runFor(key)
+          case _ => throw XWException(
             "Expected a widget key string but got " +
               Dump.logoObject(obj) + " instead.")
         }

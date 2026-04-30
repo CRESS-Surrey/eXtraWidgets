@@ -19,22 +19,22 @@ object Swing {
   implicit def enrichJComponent(jComponent: JComponent): RichJComponent = new RichJComponent(jComponent)
 
   class RichComponent(component: Component) {
-    def onComponentShown[T](f: ComponentEvent ⇒ T): Unit = {
+    def onComponentShown[T](f: ComponentEvent => T): Unit = {
       component.addComponentListener(new ComponentAdapter() {
         override def componentShown(e: ComponentEvent): Unit = f(e)
       })
     }
-    def onComponentHidden[T](f: ComponentEvent ⇒ T): Unit = {
+    def onComponentHidden[T](f: ComponentEvent => T): Unit = {
       component.addComponentListener(new ComponentAdapter() {
         override def componentHidden(e: ComponentEvent): Unit = f(e)
       })
     }
-    def onComponentMoved[T](f: ComponentEvent ⇒ T): Unit = {
+    def onComponentMoved[T](f: ComponentEvent => T): Unit = {
       component.addComponentListener(new ComponentAdapter() {
         override def componentMoved(e: ComponentEvent): Unit = f(e)
       })
     }
-    def onComponentResized[T](f: ComponentEvent ⇒ T): Unit = {
+    def onComponentResized[T](f: ComponentEvent => T): Unit = {
       component.addComponentListener(new ComponentAdapter() {
         override def componentResized(e: ComponentEvent): Unit = f(e)
       })
@@ -50,17 +50,17 @@ object Swing {
       override def ancestorRemoved(e: AncestorEvent): Unit = ()
     }
 
-    def onAncestorAdded[T](f: AncestorEvent ⇒ T): Unit = {
+    def onAncestorAdded[T](f: AncestorEvent => T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
         override def ancestorAdded(e: AncestorEvent): Unit = { f(e) }
       })
     }
-    def onAncestorMoved[T](f: AncestorEvent ⇒ T): Unit = {
+    def onAncestorMoved[T](f: AncestorEvent => T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
         override def ancestorMoved(e: AncestorEvent): Unit = { f(e) }
       })
     }
-    def onAncestorRemoved[T](f: AncestorEvent ⇒ T): Unit = {
+    def onAncestorRemoved[T](f: AncestorEvent => T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
         override def ancestorRemoved(e: AncestorEvent): Unit = { f(e) }
       })
@@ -76,7 +76,7 @@ object Swing {
       null, // icon
       null, // options
       default))
-      .collect { case s: String ⇒ s }
+      .collect { case s: String => s }
       .map(_.trim)
   }
 

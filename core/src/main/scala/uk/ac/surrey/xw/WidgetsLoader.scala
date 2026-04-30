@@ -21,14 +21,14 @@ object WidgetsLoader {
   def loadWidgetKinds(extensionFolder: File): Map[String, WidgetKind[_]] = {
     val widgetJars =
       for {
-        folder ← getWidgetsFolder(extensionFolder).listFiles
+        folder <- getWidgetsFolder(extensionFolder).listFiles
         if folder.isDirectory
-        file ← folder.listFiles
+        file <- folder.listFiles
         if file.getName.toUpperCase == (folder.getName + ".jar").toUpperCase
       } yield file
     val widgetKinds = loadWidgetKindsFromJars(widgetJars, getClass.getClassLoader)
     (Seq(new TabKind) ++ widgetKinds)
-      .map(kind ⇒ kind.name -> kind)
+      .map(kind => kind.name -> kind)
       .toMap
   }
 
@@ -52,7 +52,7 @@ object WidgetsLoader {
 
   def classNamesIn(jar: File): Iterator[String] =
     for {
-      entry ← new JarFile(jar).entries.asScala
+      entry <- new JarFile(jar).entries.asScala
       entryName = entry.getName
       if entryName.endsWith(".class")
       className = entryName
@@ -71,10 +71,10 @@ object WidgetsLoader {
     fileURL: URL): Class[_] =
     try classLoader.loadClass(className)
     catch {
-      case e: ClassNotFoundException ⇒
+      case e: ClassNotFoundException =>
         throw new XWException("Can't find class " + className +
           "\n in widget jar: " + fileURL + ".", e)
-      case e: NoClassDefFoundError ⇒
+      case e: NoClassDefFoundError =>
         throw new XWException("No class definition found for " + className +
           "\n in widget jar: " + fileURL + ".")
     }

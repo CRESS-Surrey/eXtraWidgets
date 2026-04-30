@@ -66,7 +66,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val kindInfo = new KindInfo(writer, widgetKinds)
     primitives = primitiveList(writer, widgetKinds, widgetContextManager, kindInfo, workspace)
 
-    for (app ← getApp(extensionManager))
+    for (app <- getApp(extensionManager))
       new GUI(app, writer, widgetKinds)
   }
 
@@ -92,11 +92,11 @@ class ExtraWidgetsExtension extends DefaultClassManager {
 
     val kindListPrimitives: Iterable[(String, Primitive)] =
       for {
-        (kindName, pluralName) ← widgetKinds.view.mapValues(_.pluralName).toMap
+        (kindName, pluralName) <- widgetKinds.view.mapValues(_.pluralName).toMap
       } yield pluralName -> new KindList(kindName, writer)
 
     val constructorPrimitives: Iterable[(String, Primitive)] =
-      widgetKinds.keys.map { kindName ⇒
+      widgetKinds.keys.map { kindName =>
         ("CREATE-" + kindName) -> new Create(kindName, writer, widgetContextManager)
       }
 
@@ -117,17 +117,17 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     }
 
     val getters: Iterable[(String, Primitive)] = for {
-      (key, outputType) ← reduceProperties(includeReadOnly = true)
+      (key, outputType) <- reduceProperties(includeReadOnly = true)
       getter = new GetProperty(writer, key, outputType, widgetContextManager)
     } yield key -> getter
 
     val setters: Iterable[(String, Primitive)] = for {
-      (key, inputType) ← reduceProperties(includeReadOnly = false)
+      (key, inputType) <- reduceProperties(includeReadOnly = false)
       setter = new SetProperty(writer, key, inputType, kindInfo, widgetContextManager)
     } yield ("SET-" + key) -> setter
 
     val changeSubscribers: Iterable[(String, Primitive)] = for {
-      (key, _) ← reduceProperties(includeReadOnly = false)
+      (key, _) <- reduceProperties(includeReadOnly = false)
       onChange = new OnChangeProperty(writer, key, widgetContextManager)
     } yield ("ON-" + key + "-CHANGE") -> onChange
 
@@ -192,7 +192,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     Option(file.listFiles).getOrElse(Array.empty)
 
   def load(primitiveManager: PrimitiveManager): Unit =
-    for ((name, prim) ← Option(primitives).getOrElse(primitiveMetadataFallback()))
+    for ((name, prim) <- Option(primitives).getOrElse(primitiveMetadataFallback()))
       primitiveManager.addPrimitive(name, prim)
 
   override def unload(em: ExtensionManager): Unit =

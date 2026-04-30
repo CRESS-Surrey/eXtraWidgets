@@ -19,18 +19,18 @@ class SelectTab(reader: Reader, ws: AbstractWorkspace) extends Command {
   override def getSyntax = commandSyntax(right = List(NumberType | StringType))
   def perform(args: Array[Argument], context: Context): Unit =
     ws match {
-      case guiWS: GUIWorkspace ⇒
+      case guiWS: GUIWorkspace =>
         args(0).get match {
-          case n: java.lang.Number ⇒
+          case n: java.lang.Number =>
             val i = n.intValue - 1
             if (i < 0 || i >= guiWS.tabs.getTabCount) throw XWException(
               "Invalid tab index: " + n.intValue + ".")
             invokeLater { guiWS.tabs.setSelectedIndex(i) }
-          case s: java.lang.String ⇒
+          case s: java.lang.String =>
             val tab = guiWS.xwTabs.find(_.key == s).getOrElse(throw XWException(
               "Unknown tab key: " + s + "."))
             invokeLater { guiWS.tabs.setSelectedComponent(tab) }
         }
-      case _ ⇒ // we're most likely headless, do nothing...
+      case _ => // we're most likely headless, do nothing...
     }
 }

@@ -23,17 +23,17 @@ class Export(reader: Reader) extends Command {
       val fileName = ws.fileManager.attachPrefix(filePath)
       new PrintWriter(new BufferedWriter(new FileWriter(fileName)))
     } catch {
-      case ex: java.io.IOException ⇒ throw XWException(ex.getMessage, ex)
-      case ex: java.net.MalformedURLException ⇒ throw XWException(ex.getMessage, ex)
-      case ex: java.lang.IllegalStateException ⇒ throw XWException(ex.getMessage)
+      case ex: java.io.IOException => throw XWException(ex.getMessage, ex)
+      case ex: java.net.MalformedURLException => throw XWException(ex.getMessage, ex)
+      case ex: java.lang.IllegalStateException => throw XWException(ex.getMessage)
     }
     try {
       printWriter.write(reader.toJSON)
     } catch {
-      case ex: java.io.IOException ⇒ throw XWException(ex.getMessage, ex)
+      case ex: java.io.IOException => throw XWException(ex.getMessage, ex)
     } finally {
       try printWriter.close()
-      catch { case _: java.io.IOException ⇒ } // give up
+      catch { case _: java.io.IOException => } // give up
     }
   }
 }

@@ -20,7 +20,7 @@ class NoteKind[W <: Note] extends JComponentWidgetKind[W] {
   override val colorProperty = new ColorProperty[W](
     "COLOR", Some(_.setBackground(_)), _.getBackground, white)
   override val opaqueProperty = new BooleanProperty[W](
-    "OPAQUE", Some((w, b) ⇒ { w.setOpaque(b); w.updateBorder() }), _.isOpaque, false)
+    "OPAQUE", Some((w, b) => { w.setOpaque(b); w.updateBorder() }), _.isOpaque, false)
   val textProperty = new StringProperty[W]("TEXT", Some(_.setText(_)), _.getText)
   val defaultProperty = Some(textProperty)
   override def propertySet = super.propertySet + textProperty

@@ -22,17 +22,17 @@ class Import(writer: Writer) extends Command {
       val fileName = ws.fileManager.attachPrefix(filePath)
       Source.fromFile(fileName)
     } catch {
-      case ex: java.io.IOException ⇒ throw XWException(ex.getMessage, ex)
-      case ex: java.net.MalformedURLException ⇒ throw XWException(ex.getMessage, ex)
-      case ex: java.lang.IllegalStateException ⇒ throw XWException(ex.getMessage)
+      case ex: java.io.IOException => throw XWException(ex.getMessage, ex)
+      case ex: java.net.MalformedURLException => throw XWException(ex.getMessage, ex)
+      case ex: java.lang.IllegalStateException => throw XWException(ex.getMessage)
     }
     try {
       new JSONLoader(writer).load(source.getLines.mkString("\n"))
     } catch {
-      case ex: java.io.IOException ⇒ throw XWException(ex.getMessage, ex)
+      case ex: java.io.IOException => throw XWException(ex.getMessage, ex)
     } finally {
       try source.close()
-      catch { case _: java.io.IOException ⇒ } // give up
+      catch { case _: java.io.IOException => } // give up
     }
   }
 }

@@ -35,16 +35,16 @@ trait HasTextField {
 
   val textField = new JTextField(text) {
     getInputMap.put(getKeyStroke(VK_ENTER, 0),
-      newAction { _ ⇒ transferFocus() })
+      newAction { _ => transferFocus() })
     getInputMap.put(getKeyStroke(VK_ESCAPE, 0),
-      newAction { _ ⇒ setText(text); transferFocus() })
-    this.onFocusLost { _ ⇒
+      newAction { _ => setText(text); transferFocus() })
+    this.onFocusLost { _ =>
       if (text != getText)
         validateText match {
-          case Right(t) ⇒
+          case Right(t) =>
             text = t
             afterTextUpdate()
-          case Left(msg) ⇒
+          case Left(msg) =>
             this.showMessage(msg)
             invokeLater { requestFocus() }
         }
@@ -56,7 +56,7 @@ class TextInputKind[W <: TextInput] extends LabeledPanelWidgetKind[W] {
   val newWidget = new TextInput(_, _, _)
   val name = "TEXT-INPUT"
   val textProperty = new StringProperty[W]("TEXT",
-    Some((w, s) ⇒ { w.text = s; w.textField.setText(s) }),
+    Some((w, s) => { w.text = s; w.textField.setText(s) }),
     _.text)
   val defaultProperty = Some(textProperty)
   override def propertySet = super.propertySet ++ Set(textProperty)
@@ -79,7 +79,7 @@ class NumericInputKind[W <: NumericInput] extends LabeledPanelWidgetKind[W] {
   val name = "NUMERIC-INPUT"
   val valueProperty = new DoubleProperty[W](
     "VALUE",
-    Some((w, d) ⇒ { w.number = d; w.textField.setText(w.format(w.number)) }),
+    Some((w, d) => { w.number = d; w.textField.setText(w.format(w.number)) }),
     _.number
   )
   val defaultProperty = Some(valueProperty)
@@ -105,12 +105,12 @@ class NumericInput(
 
   override def validateText =
     NumberParser.parse(textField.getText()) match {
-      case Left(msg) ⇒ Left(msg)
-      case Right(d) ⇒ Right(format(d))
+      case Left(msg) => Left(msg)
+      case Right(d) => Right(format(d))
     }
 
   override def afterTextUpdate() =
-    for (d ← NumberParser.parse(textField.getText()).right) {
+    for (d <- NumberParser.parse(textField.getText()).right) {
       number = d
       updateInState(kind.valueProperty)
     }

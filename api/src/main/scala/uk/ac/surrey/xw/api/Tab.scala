@@ -57,8 +57,8 @@ class Tab(
     setLayout(null)
     override def getPreferredSize: java.awt.Dimension =
       if (getComponents.nonEmpty) {
-        val maxX = getComponents.map(c ⇒ c.getLocation.x + c.getSize.width).max
-        val maxY = getComponents.map(c ⇒ c.getLocation.y + c.getSize.height).max
+        val maxX = getComponents.map(c => c.getLocation.x + c.getSize.width).max
+        val maxY = getComponents.map(c => c.getLocation.y + c.getSize.height).max
         new java.awt.Dimension(maxX, maxY)
       } else new java.awt.Dimension(0, 0)
   }
@@ -69,7 +69,7 @@ class Tab(
 
   private def index: Int =
     (0 until tabs.getTabCount)
-      .find(i ⇒ tabs.getComponentAt(i) == this)
+      .find(i => tabs.getComponentAt(i) == this)
       .getOrElse(throw XWException("Tab " + key + " not in application tabs."))
 
   private var _title = ""

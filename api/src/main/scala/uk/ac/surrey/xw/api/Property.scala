@@ -20,8 +20,8 @@ import org.nlogo.core.Syntax.WildcardType
 
 abstract class Property[+T, W](
   _key: PropertyKey,
-  setter: Option[(W, T) ⇒ Unit],
-  getter: W ⇒ T,
+  setter: Option[(W, T) => Unit],
+  getter: W => T,
   val defaultValue: T)(implicit m: Manifest[T]) {
   val syntaxType: Int
   val key = makeKey(_key)
@@ -42,8 +42,8 @@ abstract class Property[+T, W](
 
 class ObjectProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, AnyRef) ⇒ Unit],
-  getter: W ⇒ AnyRef,
+  setter: Option[(W, AnyRef) => Unit],
+  getter: W => AnyRef,
   override val defaultValue: AnyRef = Nobody)
   extends Property(_key, setter, getter, defaultValue) {
   val syntaxType = WildcardType
@@ -51,8 +51,8 @@ class ObjectProperty[W](
 
 class StringProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, String) ⇒ Unit],
-  getter: W ⇒ String,
+  setter: Option[(W, String) => Unit],
+  getter: W => String,
   override val defaultValue: String = "")
   extends Property(_key, setter, getter, defaultValue) {
   val syntaxType = StringType
@@ -60,8 +60,8 @@ class StringProperty[W](
 
 class BooleanProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, Boolean) ⇒ Unit],
-  getter: W ⇒ Boolean,
+  setter: Option[(W, Boolean) => Unit],
+  getter: W => Boolean,
   override val defaultValue: Boolean = false)
   extends Property(_key, setter, getter, defaultValue) {
   override val key = {
@@ -70,12 +70,12 @@ class BooleanProperty[W](
   }
   val syntaxType = BooleanType
   override def encode(x: Any): AnyRef = x match {
-    case b: Boolean ⇒ Boolean.box(b)
-    case _ ⇒ super.encode(x)
+    case b: Boolean => Boolean.box(b)
+    case _ => super.encode(x)
   }
   override def decode(x: AnyRef): Boolean = x match {
-    case b: java.lang.Boolean ⇒ b.booleanValue
-    case _ ⇒ super.decode(x)
+    case b: java.lang.Boolean => b.booleanValue
+    case _ => super.decode(x)
   }
 
 }
@@ -83,50 +83,50 @@ class BooleanProperty[W](
 trait NumberEncoder[T, W] extends Property[T, W] {
   abstract override def encode(x: Any): AnyRef =
     x.asInstanceOf[AnyRef] match {
-      case n: java.lang.Number ⇒ Double.box(n.doubleValue)
-      case _ ⇒ super.encode(x)
+      case n: java.lang.Number => Double.box(n.doubleValue)
+      case _ => super.encode(x)
     }
 }
 
 class IntegerProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, Int) ⇒ Unit],
-  getter: W ⇒ Int,
+  setter: Option[(W, Int) => Unit],
+  getter: W => Int,
   override val defaultValue: Int = 0)
   extends Property(_key, setter, getter, defaultValue)
   with NumberEncoder[Int, W] {
   val syntaxType = NumberType
   override def decode(x: AnyRef): Int = x match {
-    case n: java.lang.Number ⇒ n.intValue
-    case _ ⇒ super.decode(x)
+    case n: java.lang.Number => n.intValue
+    case _ => super.decode(x)
   }
   override def get(w: W) = Double.box(getter(w).toDouble)
 }
 
 class DoubleProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, Double) ⇒ Unit],
-  getter: W ⇒ Double,
+  setter: Option[(W, Double) => Unit],
+  getter: W => Double,
   override val defaultValue: Double = 0d)
   extends Property(_key, setter, getter, defaultValue)
   with NumberEncoder[Double, W] {
   val syntaxType = NumberType
   override def decode(x: AnyRef): Double = x match {
-    case n: java.lang.Number ⇒ n.doubleValue
-    case _ ⇒ super.decode(x)
+    case n: java.lang.Number => n.doubleValue
+    case _ => super.decode(x)
   }
 }
 
 class ColorProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, Color) ⇒ Unit],
-  getter: W ⇒ Color,
+  setter: Option[(W, Color) => Unit],
+  getter: W => Color,
   override val defaultValue: Color = Color.white)
   extends Property(_key, setter, getter, defaultValue) {
   val syntaxType = NumberType | ListType
   override def encode(x: Any): AnyRef =
     x.asInstanceOf[AnyRef] match {
-      case c: java.awt.Color ⇒ {
+      case c: java.awt.Color => {
         val closestDouble = getClosestColorNumberByARGB(c.getRGB)
         val closestARGB = getARGBbyPremodulatedColorNumber(closestDouble)
         if (closestARGB == c.getRGB)
@@ -136,15 +136,15 @@ class ColorProperty[W](
             Vector(c.getRed, c.getGreen, c.getBlue, c.getAlpha).map(Double.box(_))
           )
       }
-      case n: java.lang.Number ⇒ Double.box(modulateDouble(n.doubleValue))
-      case ll: LogoList ⇒ encode(decode(ll))
-      case _ ⇒ super.encode(x)
+      case n: java.lang.Number => Double.box(modulateDouble(n.doubleValue))
+      case ll: LogoList => encode(decode(ll))
+      case _ => super.encode(x)
     }
   override def decode(x: AnyRef): java.awt.Color = {
     x match {
-      case c: java.lang.Double ⇒ getColor(Double.box(modulateDouble(c)))
-      case ll: LogoList ⇒ getColor(validRGBList(ll.toVector))
-      case _ ⇒ super.decode(x)
+      case c: java.lang.Double => getColor(Double.box(modulateDouble(c)))
+      case ll: LogoList => getColor(validRGBList(ll.toVector))
+      case _ => super.decode(x)
     }
   }
 
@@ -165,9 +165,9 @@ class ColorProperty[W](
   def validRGBList(rgb: Vector[AnyRef]): LogoList = {
     if (!Set(3, 4).contains(rgb.size)) throw XWException(
       I18N.errors.get("org.nlogo.agent.Agent.rgbListSizeError.3or4"))
-    LogoList.fromVector(rgb.map { x ⇒
+    LogoList.fromVector(rgb.map { x =>
       val c = try x.asInstanceOf[java.lang.Number].intValue catch {
-        case e: ClassCastException ⇒ throw XWException(
+        case e: ClassCastException => throw XWException(
           "Got " + Dump.logoObject(x) + ", but RGB values must be numbers.")
       }
       if (c < 0 || c > 255) throw XWException(
@@ -179,8 +179,8 @@ class ColorProperty[W](
 
 class ListProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, LogoList) ⇒ Unit],
-  getter: W ⇒ LogoList,
+  setter: Option[(W, LogoList) => Unit],
+  getter: W => LogoList,
   override val defaultValue: LogoList = LogoList.Empty)
   extends Property(_key, setter, getter, defaultValue) {
   val syntaxType = ListType

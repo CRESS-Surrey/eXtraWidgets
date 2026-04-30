@@ -32,21 +32,21 @@ class MultiChooserKind[W <: MultiChooser] extends LabeledPanelWidgetKind[W] {
 
   val selectedItemsProperty = new ListProperty[W](
     "SELECTED-ITEMS",
-    Some((w, xs) ⇒ {
+    Some((w, xs) => {
       val _items = items(w.jList)
       w.jList.setSelectedIndices(
-        xs.map(x ⇒ _items.indexOf(x)).filterNot(_ == -1).toArray
+        xs.map(x => _items.indexOf(x)).filterNot(_ == -1).toArray
       )
     }),
-    w ⇒ LogoList.fromJava(w.jList.getSelectedValuesList)
+    w => LogoList.fromJava(w.jList.getSelectedValuesList)
   )
 
   val itemsProperty = new ListProperty[W](
     "ITEMS",
-    Some((w, xs) ⇒ {
+    Some((w, xs) => {
       w.jList.setListData(xs.toVector.toArray)
     }),
-    w ⇒ LogoList(items(w.jList): _*)
+    w => LogoList(items(w.jList): _*)
   )
 
   override def propertySet = super.propertySet ++ Set(
@@ -73,7 +73,7 @@ class MultiChooser(
   /* Use a custom renderer so Dump.logoObject is used instead of toString */
   jList.setCellRenderer(new LogoObjectListCellRenderer)
 
-  jList.onValueChanged { event ⇒
+  jList.onValueChanged { event =>
     if (!event.getValueIsAdjusting)
       updateInState(kind.selectedItemsProperty)
   }

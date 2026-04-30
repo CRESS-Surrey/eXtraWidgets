@@ -92,7 +92,7 @@ class Slider(
   def updateValueLabel(): Unit =
     valueLabel.setText(valueString(sliderData.value))
 
-  slider.onStateChange { _ ⇒
+  slider.onStateChange { _ =>
     sliderData.updateFromTicks(slider.getValue)
     updateValueLabel()
     updateInState(kind.valueProperty)

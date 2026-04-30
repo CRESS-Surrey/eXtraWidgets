@@ -37,9 +37,9 @@ class Reader(
   def validateUnique(
     propertyKey: PropertyKey,
     value: PropertyValue,
-    filter: collection.Map[PropertyKey, PropertyValue] ⇒ Boolean = _ ⇒ true) = {
+    filter: collection.Map[PropertyKey, PropertyValue] => Boolean = _ => true) = {
     val otherValues = for {
-      (v, w) ← widgetMap
+      (v, w) <- widgetMap
       if filter(w)
     } yield v
     Option(value).filter(isUnique(_, otherValues))
@@ -77,12 +77,12 @@ class Reader(
 
   def toJSON = {
     def convert(x: AnyRef): AnyRef = x match {
-      case Nobody ⇒ null
-      case _: java.lang.String ⇒ x
-      case _: java.lang.Number ⇒ x
-      case _: java.lang.Boolean ⇒ x
-      case l: LogoList ⇒ l.toVector.map(convert).asJavaCollection
-      case _ ⇒ x.toString
+      case Nobody => null
+      case _: java.lang.String => x
+      case _: java.lang.Number => x
+      case _: java.lang.Boolean => x
+      case l: LogoList => l.toVector.map(convert).asJavaCollection
+      case _ => x.toString
     }
     Jsoner.prettyPrint(Jsoner.serialize(new JsonObject(
       widgetMap.view.mapValues { properties =>

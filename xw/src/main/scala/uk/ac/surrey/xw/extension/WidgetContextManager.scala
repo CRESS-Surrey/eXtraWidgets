@@ -12,7 +12,7 @@ class WidgetContextManager {
       | you are trying to use should be called from inside a
       | block passed to xw:create-<kind>, xw:ask or xw:of.
       |""".stripMargin))
-  def withContext[A](key: WidgetKey)(f: () ⇒ A): A = {
+  def withContext[A](key: WidgetKey)(f: () => A): A = {
     stack = key :: stack // push
     val result = f()
     stack = stack.tail // pop

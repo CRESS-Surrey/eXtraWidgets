@@ -22,7 +22,7 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val heightProperty = new IntegerProperty[W](
     "HEIGHT", Some(_.setHeight(_)), _.getHeight, 25)
   val hiddenProperty = new BooleanProperty[W](
-    "HIDDEN", Some((w, b) ⇒ w.setVisible(!b)), !_.isVisible)
+    "HIDDEN", Some((w, b) => w.setVisible(!b)), !_.isVisible)
   val colorProperty = new ColorProperty[W](
     "COLOR", Some(_.setBackground(_)), _.getBackground, InterfaceColors.sliderBackground())
   val fontColorProperty = new ColorProperty[W](
@@ -50,15 +50,15 @@ trait ComponentWidget extends ExtraWidget {
     .key
   def setTab(tabKey: WidgetKey): Unit =
     ws.xwTabs.find(_.key == tabKey) match {
-      case None ⇒ throw XWException("Tab " + tabKey + " does not exist.")
-      case Some(newTab) ⇒
+      case None => throw XWException("Tab " + tabKey + " does not exist.")
+      case Some(newTab) =>
         tab match {
-          case None ⇒
+          case None =>
             newTab.panel.add(this)
-          case Some(oldTab) if oldTab.key != tabKey ⇒
+          case Some(oldTab) if oldTab.key != tabKey =>
             oldTab.panel.remove(this)
             newTab.panel.add(this)
-          case _ ⇒
+          case _ =>
         }
     }
 

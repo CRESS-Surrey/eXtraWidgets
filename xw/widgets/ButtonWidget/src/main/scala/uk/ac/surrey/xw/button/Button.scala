@@ -48,8 +48,8 @@ class Button(
     override def isButton = true
     override def ownsPrimaryJobs = true
   }
-  this.onActionPerformed { _ ⇒
+  this.onActionPerformed { _ =>
     try ws.evaluateCommands(owner, commands, ws.world.observers, false)
-    catch { case e: CompilerException ⇒ ws.warningMessage(e.getMessage) }
+    catch { case e: CompilerException => ws.warningMessage(e.getMessage) }
   }
 }
