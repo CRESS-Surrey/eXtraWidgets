@@ -19,28 +19,36 @@ import uk.ac.surrey.xw.api.XWException
 object WidgetsLoader {
 
   def loadWidgetKinds(extensionFolder: File): Map[String, WidgetKind[_]] = {
-    val widgetKinds =
+    val widgetJars =
       for {
         folder ← getWidgetsFolder(extensionFolder).listFiles
         if folder.isDirectory
         file ← folder.listFiles
         if file.getName.toUpperCase == (folder.getName + ".jar").toUpperCase
-        classLoader = newClassLoader(file, getClass.getClassLoader)
-        className ← classNamesIn(file)
-        clazz = loadClass(className, classLoader, file.toURI.toURL)
-        modifiers = clazz.getModifiers
-        if isPublic(modifiers) && !isAbstract(modifiers) &&
-          classOf[WidgetKind[_]].isAssignableFrom(clazz)
-      } yield {
-        clazz
-          .getDeclaredConstructor(Seq.empty[Class[_]] : _*)
-          .newInstance()
-          .asInstanceOf[WidgetKind[_ <: ExtraWidget]]
-      }
-    (new TabKind +: widgetKinds)
+      } yield file
+    val widgetKinds = loadWidgetKindsFromJars(widgetJars, getClass.getClassLoader)
+    (Seq(new TabKind) ++ widgetKinds)
       .map(kind ⇒ kind.name -> kind)
       .toMap
   }
+
+  def loadWidgetKindsFromJars(
+    widgetJars: Iterable[File],
+    parentLoader: ClassLoader): Iterable[WidgetKind[? <: ExtraWidget]] =
+    for {
+      file <- widgetJars
+      classLoader = newClassLoader(file, parentLoader)
+      className <- classNamesIn(file)
+      clazz = loadClass(className, classLoader, file.toURI.toURL)
+      modifiers = clazz.getModifiers
+      if isPublic(modifiers) && !isAbstract(modifiers) &&
+        classOf[WidgetKind[?]].isAssignableFrom(clazz)
+    } yield {
+      clazz
+        .getDeclaredConstructor(Seq.empty[Class[?]]*)
+        .newInstance()
+        .asInstanceOf[WidgetKind[? <: ExtraWidget]]
+    }
 
   def classNamesIn(jar: File): Iterator[String] =
     for {
@@ -72,7 +80,7 @@ object WidgetsLoader {
     }
 
   def getManifestAttributes(fileURL: URL): Either[XWException, Attributes] = {
-    val url = new URL("jar", "", fileURL + "!/")
+    val url = new URL("jar", "", fileURL.toString + "!/")
     val connection = url.openConnection.asInstanceOf[JarURLConnection]
     Option(connection.getManifest())
       .toRight(XWException("Can't find Manifest file in widget jar: " + fileURL + "."))

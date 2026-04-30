@@ -12,7 +12,7 @@ abstract class WidgetKind[W <: ExtraWidget] {
   def propertySet: Set[Property[Any, W]] = Set(kindProperty, keyProperty)
   lazy val properties =
     propertySet.map(p ⇒ p.key -> p).toMap
-  lazy val defaultValues = properties.mapValues(
+  lazy val defaultValues = properties.view.mapValues(
     p => p.encode(p.defaultValue)
-  )
+  ).toMap
 }

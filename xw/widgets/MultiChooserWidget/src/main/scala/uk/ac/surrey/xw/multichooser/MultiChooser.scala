@@ -62,7 +62,7 @@ class MultiChooser(
   val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
-  override val kind = new MultiChooserKind[this.type]
+  override val kind: MultiChooserKind[this.type] = new MultiChooserKind[this.type]
 
   val jList = new JList[AnyRef]() {
     setSelectionMode(MULTIPLE_INTERVAL_SELECTION)

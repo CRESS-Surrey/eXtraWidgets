@@ -3,8 +3,7 @@ package uk.ac.surrey.xw.api
 import java.awt.Color
 import java.awt.Color.black
 
-import org.nlogo.awt.Fonts.adjustDefaultFont
-import org.nlogo.window.InterfaceColors.SLIDER_BACKGROUND
+import org.nlogo.theme.InterfaceColors
 
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 import uk.ac.surrey.xw.api.swing.enrichComponent
@@ -25,7 +24,7 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val hiddenProperty = new BooleanProperty[W](
     "HIDDEN", Some((w, b) ⇒ w.setVisible(!b)), !_.isVisible)
   val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.setBackground(_)), _.getBackground, SLIDER_BACKGROUND)
+    "COLOR", Some(_.setBackground(_)), _.getBackground, InterfaceColors.sliderBackground())
   val fontColorProperty = new ColorProperty[W](
     "FONT-COLOR", Some(_.setFontColor(_)), _.getFontColor, black)
   val textSizeProperty = new IntegerProperty[W](
@@ -39,8 +38,6 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
 }
 
 trait ComponentWidget extends ExtraWidget {
-
-  adjustDefaultFont(this)
 
   def setX(x: Int): Unit = setLocation(x, getY)
   def setY(y: Int): Unit = setLocation(getX, y)
@@ -61,6 +58,7 @@ trait ComponentWidget extends ExtraWidget {
           case Some(oldTab) if oldTab.key != tabKey ⇒
             oldTab.panel.remove(this)
             newTab.panel.add(this)
+          case _ ⇒
         }
     }
 
@@ -74,7 +72,7 @@ trait ComponentWidget extends ExtraWidget {
 
   private var _fontSize: Int = 0
   def fontSize = _fontSize
-  def fontSize_=(size: Int) {
+  def fontSize_=(size: Int): Unit = {
     if (size < 1) throw new IllegalStateException(
       "Cannot use a font size smaller than 1" +
       " for widget " + key + "."

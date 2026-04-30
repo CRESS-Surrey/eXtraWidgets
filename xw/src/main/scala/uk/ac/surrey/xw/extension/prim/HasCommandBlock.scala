@@ -14,7 +14,7 @@ trait HasCommandBlock extends CustomAssembled {
     val agentSet = new ArrayAgentSet(agent.kind, null, Array(agent))
     nvmContext.runExclusiveJob(agentSet, nvmContext.ip + 1)
   }
-  def assemble(a: AssemblerAssistant) {
+  def assemble(a: AssemblerAssistant): Unit = {
     a.block()
     a.done()
   }

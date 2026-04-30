@@ -1,8 +1,6 @@
 package uk.ac.surrey.xw.extension.prim
 
-import scala.collection.mutable.Publisher
-import scala.collection.mutable.Subscriber
-import scala.collection.parallel.mutable.ParMap
+import scala.collection.concurrent.TrieMap
 
 import org.nlogo.api.Argument
 import org.nlogo.api.Command
@@ -25,12 +23,12 @@ import uk.ac.surrey.xw.state.{ SetProperty => SetPropEvent }
 import uk.ac.surrey.xw.state.StateEvent
 import uk.ac.surrey.xw.state.Writer
 
-case class ChangeListener(func: StateEvent => Unit)  extends Subscriber[StateEvent, Publisher[StateEvent]] {
-  def notify(pub: Publisher[StateEvent], event: StateEvent): Unit = func(event)
+case class ChangeListener(func: StateEvent => Unit) extends (StateEvent => Unit) {
+  def apply(event: StateEvent): Unit = func(event)
 }
 
 object OnChange {
-  val listeners = ParMap.empty[(WidgetKey, PropertyKey), ChangeListener]
+  val listeners = TrieMap.empty[(WidgetKey, PropertyKey), ChangeListener]
   def removeListeners(writer: Writer, wk: WidgetKey, pk: PropertyKey) =
     listeners.get((wk, pk)).foreach(writer.removeSubscription)
 }
@@ -81,4 +79,3 @@ class OnChangeProperty(writer: Writer, propertyKey: PropertyKey, wcm: WidgetCont
     addListener(context, wcm.currentContext, propertyKey, args(0).getCommand.asInstanceOf[nvm.AnonymousCommand])
   }
 }
-

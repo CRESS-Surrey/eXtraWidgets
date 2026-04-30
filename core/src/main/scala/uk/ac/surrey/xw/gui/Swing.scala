@@ -15,8 +15,8 @@ import uk.ac.surrey.xw.api.XWException
 
 object Swing {
 
-  implicit def enrichComponent(component: Component) = new RichComponent(component)
-  implicit def enrichJComponent(jComponent: JComponent) = new RichJComponent(jComponent)
+  implicit def enrichComponent(component: Component): RichComponent = new RichComponent(component)
+  implicit def enrichJComponent(jComponent: JComponent): RichJComponent = new RichJComponent(jComponent)
 
   class RichComponent(component: Component) {
     def onComponentShown[T](f: ComponentEvent ⇒ T): Unit = {
@@ -45,24 +45,24 @@ object Swing {
   class RichJComponent(component: JComponent) extends RichComponent(component) {
 
     trait AncestorAdapter extends AncestorListener {
-      override def ancestorAdded(e: AncestorEvent) = Unit
-      override def ancestorMoved(e: AncestorEvent) = Unit
-      override def ancestorRemoved(e: AncestorEvent) = Unit
+      override def ancestorAdded(e: AncestorEvent): Unit = ()
+      override def ancestorMoved(e: AncestorEvent): Unit = ()
+      override def ancestorRemoved(e: AncestorEvent): Unit = ()
     }
 
-    def onAncestorAdded[T](f: AncestorEvent ⇒ T) {
+    def onAncestorAdded[T](f: AncestorEvent ⇒ T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
-        override def ancestorAdded(e: AncestorEvent) = f(e)
+        override def ancestorAdded(e: AncestorEvent): Unit = { f(e) }
       })
     }
-    def onAncestorMoved[T](f: AncestorEvent ⇒ T) {
+    def onAncestorMoved[T](f: AncestorEvent ⇒ T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
-        override def ancestorMoved(e: AncestorEvent) = f(e)
+        override def ancestorMoved(e: AncestorEvent): Unit = { f(e) }
       })
     }
-    def onAncestorRemoved[T](f: AncestorEvent ⇒ T) {
+    def onAncestorRemoved[T](f: AncestorEvent ⇒ T): Unit = {
       component.addAncestorListener(new AncestorAdapter() {
-        override def ancestorRemoved(e: AncestorEvent) = f(e)
+        override def ancestorRemoved(e: AncestorEvent): Unit = { f(e) }
       })
     }
   }

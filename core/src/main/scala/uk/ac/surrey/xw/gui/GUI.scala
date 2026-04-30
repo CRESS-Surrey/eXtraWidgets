@@ -1,8 +1,5 @@
 package uk.ac.surrey.xw.gui
 
-import scala.collection.mutable.Publisher
-import scala.collection.mutable.Subscriber
-
 import org.nlogo.app.App
 import org.nlogo.awt.EventQueue.invokeLater
 
@@ -29,18 +26,16 @@ import uk.ac.surrey.xw.state.Writer
 class GUI(
   val app: App,
   val writer: Writer,
-  val widgetKinds: Map[String, WidgetKind[_]])
-  extends Subscriber[StateEvent, Publisher[StateEvent]] {
+  val widgetKinds: Map[String, WidgetKind[_]]) {
 
-  writer.subscribe(this, {
+  writer.subscribe(handleEvent, {
     case SetProperty(_,_,_,fromUI) => !fromUI
     case _ => true
   })
 
-  val tabs = app.tabs
   val tabPropertyKey = new TabKind[Tab].name
 
-  override def notify(pub: Publisher[StateEvent], event: StateEvent): Unit =
+  private def handleEvent(event: StateEvent): Unit =
     invokeLater {
       event match {
         case AddWidget(widgetKey, propertyMap) ⇒

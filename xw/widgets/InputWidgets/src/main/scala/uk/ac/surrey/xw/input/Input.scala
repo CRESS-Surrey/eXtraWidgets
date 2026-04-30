@@ -69,7 +69,7 @@ class TextInput(
   extends LabeledPanelWidget
   with HasTextField {
 
-  override val kind = new TextInputKind[this.type]
+  override val kind: TextInputKind[this.type] = new TextInputKind[this.type]
   add(textField, CENTER)
   override def afterTextUpdate() = updateInState(kind.textProperty)
 }
@@ -93,7 +93,7 @@ class NumericInput(
   extends LabeledPanelWidget
   with HasTextField {
 
-  override val kind = new NumericInputKind[this.type]
+  override val kind: NumericInputKind[this.type] = new NumericInputKind[this.type]
 
   add(textField, CENTER)
 

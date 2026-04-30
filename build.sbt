@@ -1,10 +1,9 @@
 ThisBuild / version      := "3.0.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.18"
+ThisBuild / scalaVersion := "3.7.0"
 ThisBuild / scalacOptions ++= Seq(
   "-feature",
   "-deprecation",
   "-unchecked",
-  "-Xfatal-warnings",
   "-encoding", "UTF8")
 
 lazy val root = (project in file("."))

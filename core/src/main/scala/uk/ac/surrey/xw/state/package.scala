@@ -28,9 +28,9 @@ package object state {
     new ConcurrentSkipListMap[PropertyKey, PropertyValue]().asScala
   }
 
-  implicit def enrichPropertyMap(m: PropertyMap) = new RichPropertyMap(m)
+  implicit def enrichPropertyMap(m: PropertyMap): RichPropertyMap = new RichPropertyMap(m)
   class RichPropertyMap(m: PropertyMap) {
-    def normalizeKeys = m.map { case (k, v) ⇒ normalizeString(k) -> v }
+    def normalizeKeys: PropertyMap = m.map { case (k, v) ⇒ normalizeString(k) -> v }
     def asMutablePropertyMap: MutablePropertyMap = {
       val mm = new ConcurrentSkipListMap[PropertyKey, PropertyValue].asScala
       for ((k, v) ← m) mm += k -> v

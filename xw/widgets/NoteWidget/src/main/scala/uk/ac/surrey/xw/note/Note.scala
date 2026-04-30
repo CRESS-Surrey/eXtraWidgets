@@ -32,5 +32,5 @@ class Note(
   val ws: GUIWorkspace)
   extends JLabel
   with JComponentWidget {
-  val kind = new NoteKind[this.type]
+  val kind: NoteKind[this.type] = new NoteKind[this.type]
 }

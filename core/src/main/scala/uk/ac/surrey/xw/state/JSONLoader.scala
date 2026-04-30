@@ -20,7 +20,7 @@ class JSONLoader(writer: Writer) {
   // Handle the possible values returned by the JSON parser
   def convertJSONValue(v: Any): AnyRef = try v match {
     case l: java.util.List[_] ⇒
-      LogoList(l.asScala.map(convertJSONValue): _*)
+      LogoList.fromIterator(l.asScala.iterator.map(convertJSONValue))
     case s: java.lang.String ⇒ s
     case n: java.lang.Number ⇒ Double.box(n.doubleValue)
     case b: java.lang.Boolean ⇒ b
@@ -41,7 +41,7 @@ class JSONLoader(writer: Writer) {
           "Error parsing JSON input: main value is not a JSON object.", e)
       }
     val errors = (for {
-      (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
+      case (widgetKey: String, jMap: java.util.Map[_, _]) ← javaWidgetMap.asScala
       propertyMap = jMap.asScala.map {
         case (k: String, v) ⇒ k -> convertJSONValue(v)
         case (k, v) => throw new XWException("Key " + k + " is not a string")
@@ -53,7 +53,7 @@ class JSONLoader(writer: Writer) {
         case (k, ps) ⇒
           try {
             writer.add(k, ps)
-            Right(Unit)
+            Right(())
           } catch {
             case e: XWException ⇒ Left(e.getMessage)
           }

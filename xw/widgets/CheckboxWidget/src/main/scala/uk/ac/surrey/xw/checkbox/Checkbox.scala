@@ -22,6 +22,6 @@ class Checkbox(
   val ws: GUIWorkspace)
   extends JCheckBox
   with AbstractButtonWidget {
-  override val kind = new CheckboxKind[this.type]
+  override val kind: CheckboxKind[this.type] = new CheckboxKind[this.type]
   setBorderPainted(true)
 }

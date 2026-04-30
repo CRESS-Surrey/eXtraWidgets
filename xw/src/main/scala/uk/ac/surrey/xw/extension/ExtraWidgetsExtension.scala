@@ -12,6 +12,7 @@ import org.nlogo.workspace.JarLoader
 import uk.ac.surrey.xw.WidgetsLoader
 import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
+import uk.ac.surrey.xw.api.TabKind
 import uk.ac.surrey.xw.api.WidgetKind
 import uk.ac.surrey.xw.extension.prim.Ask
 import uk.ac.surrey.xw.extension.prim.ClearAll
@@ -35,6 +36,7 @@ import uk.ac.surrey.xw.extension.util.getWorkspace
 import uk.ac.surrey.xw.gui.GUI
 import uk.ac.surrey.xw.state.Writer
 import uk.ac.surrey.xw.state.newMutableWidgetMap
+import org.nlogo.workspace.AbstractWorkspace
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
@@ -43,9 +45,10 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   private var primitives: Iterable[(String, Primitive)] = null
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
+    val workspace = getWorkspace(extensionManager)
 
     val xwFolder = {
-      val xwJarURL = new JarLoader(getWorkspace(extensionManager))
+      val xwJarURL = new JarLoader(workspace)
         .locateExtension("xw")
         .getOrElse(throw new ExtensionException("Can't locate xw extension folder."))
       new File(xwJarURL.toURI).getParentFile
@@ -61,7 +64,18 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     }
 
     val kindInfo = new KindInfo(writer, widgetKinds)
+    primitives = primitiveList(writer, widgetKinds, widgetContextManager, kindInfo, workspace)
 
+    for (app ← getApp(extensionManager))
+      new GUI(app, writer, widgetKinds)
+  }
+
+  private def primitiveList(
+    writer: Writer,
+    widgetKinds: Map[KindName, WidgetKind[_]],
+    widgetContextManager: WidgetContextManager,
+    kindInfo: KindInfo,
+    workspace: AbstractWorkspace): Iterable[(String, Primitive)] = {
     val staticPrimitives: Iterable[(String, Primitive)] = Seq(
       "ASK" -> new Ask(widgetContextManager),
       "OF" -> new Of(widgetContextManager),
@@ -73,12 +87,12 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       "CLEAR-ALL" -> new ClearAll(writer),
       "EXPORT" -> new Export(writer),
       "IMPORT" -> new Import(writer),
-      "SELECT-TAB" -> new SelectTab(writer, getWorkspace(extensionManager)),
+      "SELECT-TAB" -> new SelectTab(writer, workspace),
       "ON-CHANGE" -> new OnChange(writer, kindInfo, widgetContextManager))
 
     val kindListPrimitives: Iterable[(String, Primitive)] =
       for {
-        (kindName, pluralName) ← widgetKinds.mapValues(_.pluralName)
+        (kindName, pluralName) ← widgetKinds.view.mapValues(_.pluralName).toMap
       } yield pluralName -> new KindList(kindName, writer)
 
     val constructorPrimitives: Iterable[(String, Primitive)] =
@@ -97,7 +111,9 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       } yield (property.key, property.syntaxType)
       syntaxTypes
         .groupBy(_._1) // group by property key
+        .view
         .mapValues(_.map(_._2).reduce(_ | _)) // and reduce the syntaxType constant
+        .toMap
     }
 
     val getters: Iterable[(String, Primitive)] = for {
@@ -115,18 +131,72 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       onChange = new OnChangeProperty(writer, key, widgetContextManager)
     } yield ("ON-" + key + "-CHANGE") -> onChange
 
-    primitives =
-      staticPrimitives ++ constructorPrimitives ++
-        kindListPrimitives ++ getters ++ setters ++ changeSubscribers
-
-    for (app ← getApp(extensionManager))
-      new GUI(app, writer, widgetKinds)
+    staticPrimitives ++ constructorPrimitives ++
+      kindListPrimitives ++ getters ++ setters ++ changeSubscribers
   }
 
+  private def primitiveMetadataFallback(): Iterable[(String, Primitive)] = {
+    val widgetKinds = {
+      val kinds = WidgetsLoader.loadWidgetKindsFromJars(
+        buildWidgetJars,
+        getClass.getClassLoader)
+      (new TabKind +: kinds.toSeq)
+        .map(kind => kind.name -> kind)
+        .toMap
+    }
+    val metadataWriter = new Writer(newMutableWidgetMap, widgetKinds)
+    val metadataKindInfo = new KindInfo(metadataWriter, widgetKinds)
+    primitiveList(
+      metadataWriter,
+      widgetKinds,
+      new WidgetContextManager,
+      metadataKindInfo,
+      null)
+  }
+
+  private def buildWidgetJars: Seq[File] = {
+    val codeSource = Option(getClass.getProtectionDomain.getCodeSource)
+      .getOrElse(throw new ExtensionException("Can't locate xw extension jar."))
+    val extensionJar = new File(codeSource.getLocation.toURI)
+    val projectCandidates = Seq(
+      Option(extensionJar.getParentFile)
+        .flatMap(file => Option(file.getParentFile))
+        .flatMap(file => Option(file.getParentFile)),
+      Some(new File("xw").getAbsoluteFile),
+      Some(new File(".").getAbsoluteFile)
+    ).flatten.distinct
+    val jars = projectCandidates
+      .flatMap(projectDir => widgetJarsBelow(new File(projectDir, "widgets")))
+      .distinct
+      .sortBy(_.getAbsolutePath)
+    if (jars.isEmpty)
+      throw new ExtensionException(
+        "Can't locate built xw widget jars below any of: " +
+          projectCandidates.map(new File(_, "widgets")).mkString(", ") + ".")
+    jars
+  }
+
+  private def widgetJarsBelow(widgetsDir: File): Seq[File] = {
+    for {
+      widgetDir <- listFiles(widgetsDir).toSeq
+      if widgetDir.isDirectory
+      targetDir = new File(widgetDir, "target")
+      scalaTarget <- listFiles(targetDir).toSeq
+      if scalaTarget.isDirectory && scalaTarget.getName.startsWith("scala-")
+      jar <- listFiles(scalaTarget)
+      if jar.isFile && jar.getName.equalsIgnoreCase(widgetDir.getName + ".jar")
+    } yield jar
+  }
+
+  private def listFiles(file: File): Array[File] =
+    Option(file.listFiles).getOrElse(Array.empty)
+
   def load(primitiveManager: PrimitiveManager): Unit =
-    for ((name, prim) ← primitives)
+    for ((name, prim) ← Option(primitives).getOrElse(primitiveMetadataFallback()))
       primitiveManager.addPrimitive(name, prim)
 
-  override def unload(em: ExtensionManager): Unit = writer.clearAll()
+  override def unload(em: ExtensionManager): Unit =
+    if (writer != null)
+      writer.clearAll()
 
 }

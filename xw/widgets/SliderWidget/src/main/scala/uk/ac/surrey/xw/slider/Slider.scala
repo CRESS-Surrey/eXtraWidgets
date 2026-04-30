@@ -11,8 +11,8 @@ import javax.swing.JSlider
 import scala.language.reflectiveCalls
 
 import org.nlogo.api.Dump
-import org.nlogo.api.MultiErrorHandler
 import org.nlogo.window.GUIWorkspace
+import org.nlogo.window.MultiErrorHandler
 import org.nlogo.window.SliderData
 
 import uk.ac.surrey.xw.api.DoubleProperty
@@ -47,7 +47,7 @@ class Slider(
   val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
-  override val kind = new SliderKind[this.type]
+  override val kind: SliderKind[this.type] = new SliderKind[this.type]
 
   class Data extends SliderData(new MultiErrorHandler {}) {
     def toTicks(v: Double): Int = math.round((v - minimum) / increment).toInt
@@ -56,10 +56,10 @@ class Slider(
     def updateFromTicks(ticks: Int): Boolean = update(fromTicks(ticks))
     def maxToTicks: Int = toTicks(maximum)
     def valueToTicks: Int = toTicks(value)
-    def setIncrement(inc: Double): Unit = { increment = inc; slider.updateFromData() }
-    def setMinimum(min: Double): Unit = { minimum = min; slider.updateFromData() }
-    def setMaximum(max: Double): Unit = { maximum = max; slider.updateFromData() }
-    def setValue(v: Double): Unit = { value = v; slider.updateFromData() }
+    def setIncrement(inc: Double): Unit = { increment = inc; updateSliderFromData() }
+    def setMinimum(min: Double): Unit = { minimum = min; updateSliderFromData() }
+    def setMaximum(max: Double): Unit = { maximum = max; updateSliderFromData() }
+    def setValue(v: Double): Unit = { value = v; updateSliderFromData() }
   }
 
   val sliderData = new Data()
@@ -67,32 +67,34 @@ class Slider(
   val slider = new JSlider() {
     minorTickSpacing = 1
     snapToTicks = true
-    updateFromData()
-    def updateFromData(): Unit = {
-      val newMax = sliderData.maxToTicks
-      val newValue = sliderData.valueToTicks
-      setMaximum(newMax)
-      setValue(newValue)
-    }
+  }
+  updateSliderFromData()
+
+  def updateSliderFromData(): Unit = {
+    val newMax = sliderData.maxToTicks
+    val newValue = sliderData.valueToTicks
+    slider.setMaximum(newMax)
+    slider.setValue(newValue)
   }
   add(slider, NORTH)
 
   override def borderPadding = createEmptyBorder(0, 4, 0, 4)
   override def labelPosition = CENTER
 
-  val valueLabel = new JLabel() {
-    def update(): Unit = setText(valueString(sliderData.value))
-    update()
-  }
+  val valueLabel = new JLabel()
+  updateValueLabel()
   add(valueLabel, EAST)
 
   private var _units = ""
-  def setUnits(units: String): Unit = { _units = units; valueLabel.update() }
+  def setUnits(units: String): Unit = { _units = units; updateValueLabel() }
   def units = _units
+
+  def updateValueLabel(): Unit =
+    valueLabel.setText(valueString(sliderData.value))
 
   slider.onStateChange { _ ⇒
     sliderData.updateFromTicks(slider.getValue)
-    valueLabel.update()
+    updateValueLabel()
     updateInState(kind.valueProperty)
   }
 

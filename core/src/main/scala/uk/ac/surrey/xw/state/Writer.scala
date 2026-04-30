@@ -1,6 +1,8 @@
 package uk.ac.surrey.xw.state
 
-import scala.collection.mutable.Publisher
+import java.util.concurrent.CopyOnWriteArrayList
+
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 import uk.ac.surrey.xw.api.KindName
 import uk.ac.surrey.xw.api.PropertyKey
@@ -21,10 +23,25 @@ class Writer(
   widgetMap: MutableWidgetMap,
   widgetKinds: Map[KindName, WidgetKind[_]])
   extends Reader(widgetMap)
-  with Publisher[StateEvent]
   with State {
 
-  override type Pub = Publisher[StateEvent]
+  private val subscribers =
+    new CopyOnWriteArrayList[(StateEvent ⇒ Unit, StateEvent ⇒ Boolean)]
+
+  def subscribe(listener: StateEvent ⇒ Unit): Unit =
+    subscribe(listener, _ ⇒ true)
+
+  def subscribe(listener: StateEvent ⇒ Unit, filter: StateEvent ⇒ Boolean): Unit =
+    subscribers.add(listener -> filter)
+
+  def removeSubscription(listener: StateEvent ⇒ Unit): Unit =
+    subscribers.removeIf(entry ⇒ entry._1 == listener)
+
+  private def publish(event: StateEvent): Unit =
+    subscribers.asScala.foreach {
+      case (listener, filter) if filter(event) ⇒ listener(event)
+      case _ ⇒
+    }
 
   private var tabCreationSeq: Seq[WidgetKey] = Seq.empty
   override def tabCreationOrder(tabKey: WidgetKey) =
@@ -109,7 +126,7 @@ class Writer(
     }
   }
 
-  def clearAll() {
+  def clearAll(): Unit = {
     widgetKeyVector.sortBy { k ⇒ // tabs last
       propertyMap(k).right.toOption
         .flatMap(_.get("KIND"))

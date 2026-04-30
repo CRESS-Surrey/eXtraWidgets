@@ -52,7 +52,7 @@ class Chooser(
   val ws: GUIWorkspace)
   extends LabeledPanelWidget {
 
-  override val kind = new ChooserKind[this.type]
+  override val kind: ChooserKind[this.type] = new ChooserKind[this.type]
 
   val combo = new JComboBox[AnyRef]()
   add(combo, CENTER)

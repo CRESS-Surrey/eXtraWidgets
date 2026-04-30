@@ -39,7 +39,7 @@ package object util {
             Dump.list(list) + " does not contain two elements.", e)
         }
         key -> value
-      }(collection.breakOut)
+      }.toMap
     }
   }
 

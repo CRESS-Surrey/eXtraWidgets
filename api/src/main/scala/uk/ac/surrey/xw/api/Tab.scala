@@ -6,7 +6,7 @@ import java.awt.Color.white
 import javax.swing.JPanel
 import javax.swing.JScrollPane
 
-import org.nlogo.app.App
+import org.nlogo.swing.TabLabel
 import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
@@ -37,19 +37,19 @@ class Tab(
   extends JPanel
   with ExtraWidget {
 
-  val kind = new TabKind[this.type]
+  val kind: TabKind[this.type] = new TabKind[this.type]
 
   private var _order = 0d
-  def setOrder(order: Double) = {
+  def setOrder(order: Double): Unit = {
     _order = order
     ws.reorderTabs(state)
   }
-  def getOrder = _order
+  def getOrder: Double = _order
 
-  override def isOptimizedDrawingEnabled = false
+  override def isOptimizedDrawingEnabled: Boolean = false
 
   val tabs = ws.tabs
-  val tabsMenu = App.app.menuBar.tabsMenu
+  val tabManager = ws.tabManager
 
   setOpaque(true)
 
@@ -75,34 +75,31 @@ class Tab(
   private var _title = ""
   def setTitle(title: String): Unit = {
     _title = title
-    tabs.setTitleAt(index, title)
-    tabsMenu.getItem(index).setText(title)
+    if ((0 until tabs.getTabCount).exists(i => tabs.getComponentAt(i) == this)) {
+      tabs.setTitleAt(index, title)
+      tabs.getTabLabelAt(index).foreach(_.setText(title))
+      tabManager.updateTabActions()
+    }
   }
   def getTitle: String = _title
 
   def addToAppTabs(): Unit =
     (0 until tabs.getTabCount)
-      .find { i ⇒
-        tabs.getComponentAt(i) match {
-          case _: org.nlogo.app.interfacetab.InterfaceTab ⇒ false
-          case _: Tab ⇒ false
-          case _ ⇒ true
-        }
+      .find { i =>
+        val component = tabs.getComponentAt(i)
+        component != tabManager.interfaceTab && !component.isInstanceOf[Tab]
       }
-      .foreach { i ⇒
+      .foreach { i =>
         tabs.insertTab(_title, null, this, null, i)
-        rebuildTabsMenu()
+        tabs.setTabComponentAt(i, new TabLabel(tabs, _title, this))
+        tabManager.updateTabActions()
       }
-
-  private def rebuildTabsMenu(): Unit = {
-    tabsMenu.removeAll()
-    for (i ← 0 until tabs.getTabCount)
-      tabs.addMenuItem(i, tabs.getTitleAt(i))
-  }
 
   def removeFromAppTabs(): Unit = {
-    tabs.remove(this)
-    tabs.updateTabsMenu()
+    if ((0 until tabs.getTabCount).exists(i => tabs.getComponentAt(i) == this)) {
+      tabs.remove(this)
+      tabManager.updateTabActions()
+    }
   }
 
 }

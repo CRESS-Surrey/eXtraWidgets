@@ -5,8 +5,8 @@ import javax.swing.JButton
 import org.nlogo.api.SimpleJobOwner
 import org.nlogo.core.AgentKind.Observer
 import org.nlogo.core.CompilerException
+import org.nlogo.theme.InterfaceColors
 import org.nlogo.window.GUIWorkspace
-import org.nlogo.window.InterfaceColors.BUTTON_BACKGROUND
 
 import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ComponentWidget
@@ -21,7 +21,7 @@ class ButtonKind[W <: Button] extends ComponentWidgetKind[W] {
   override val name = "BUTTON"
   override val newWidget = new Button(_, _, _)
   override val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.setBackground(_)), _.getBackground, BUTTON_BACKGROUND)
+    "COLOR", Some(_.setBackground(_)), _.getBackground, InterfaceColors.buttonBackground())
   override val heightProperty = new IntegerProperty[W](
     "HEIGHT", Some(_.setHeight(_)), _.getHeight, 50)
   val labelProperty = new StringProperty[W](
@@ -42,7 +42,7 @@ class Button(
   extends JButton
   with ComponentWidget {
   setBorderPainted(false)
-  val kind = new ButtonKind[this.type]
+  val kind: ButtonKind[this.type] = new ButtonKind[this.type]
   var commands = ""
   val owner = new SimpleJobOwner(key, ws.world.mainRNG, Observer) {
     override def isButton = true

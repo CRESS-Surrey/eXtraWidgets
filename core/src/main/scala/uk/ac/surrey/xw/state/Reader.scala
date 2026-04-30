@@ -1,8 +1,8 @@
 package uk.ac.surrey.xw.state
 
 import scala.Vector
-import scala.collection.JavaConverters.mapAsJavaMapConverter
 import scala.collection.JavaConverters.asJavaCollectionConverter
+import scala.collection.JavaConverters.mapAsJavaMapConverter
 
 import org.nlogo.core.LogoList
 import org.nlogo.core.Nobody
@@ -85,9 +85,9 @@ class Reader(
       case _ ⇒ x.toString
     }
     Jsoner.prettyPrint(Jsoner.serialize(new JsonObject(
-      widgetMap.mapValues {
-        _.mapValues(convert).asJava
-      }.asJava
+      widgetMap.view.mapValues { properties =>
+        properties.view.mapValues(convert).toMap.asJava
+      }.toMap.asJava
     )))
   }
 }

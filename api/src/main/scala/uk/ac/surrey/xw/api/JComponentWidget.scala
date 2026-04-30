@@ -2,10 +2,11 @@ package uk.ac.surrey.xw.api
 
 import javax.swing.BorderFactory.createCompoundBorder
 import javax.swing.BorderFactory.createEmptyBorder
+import javax.swing.BorderFactory.createLineBorder
 import javax.swing.JComponent
 import javax.swing.border.Border
 
-import org.nlogo.swing.Utils.createWidgetBorder
+import org.nlogo.theme.InterfaceColors
 
 abstract class JComponentWidgetKind[W <: JComponentWidget]
   extends ComponentWidgetKind[W] {
@@ -20,7 +21,7 @@ trait JComponentWidget extends JComponent with ComponentWidget {
   def borderPadding: Border = _borderPadding
 
   private val _borderWhenOpaque =
-    createCompoundBorder(createWidgetBorder, borderPadding)
+    createCompoundBorder(createLineBorder(InterfaceColors.widgetHandle()), borderPadding)
   def borderWhenOpaque: Border = _borderWhenOpaque
   private val _borderWhenTransparent =
     createCompoundBorder(createEmptyBorder(3, 3, 2, 2), borderPadding)

@@ -29,18 +29,18 @@ package object api {
       .map { case Array(a, b) ⇒ (if (a.isLower && b.isUpper) "-" else "") + b }
       .mkString)
 
-  implicit def toRunnable[T](block: ⇒ T) =
-    new Runnable() { def run() { block } }
+  implicit def toRunnable[T](block: ⇒ T): Runnable =
+    new Runnable() { def run(): Unit = { block } }
 
   def const[T](v: T): () ⇒ T = () ⇒ v
 
-  implicit def enrichOption[A](o: Option[A]) = new RichOption(o)
+  implicit def enrichOption[A](o: Option[A]): RichOption[A] = new RichOption(o)
   class RichOption[A](o: Option[A]) {
     def orException(msg: String): Either[XWException, A] =
       o.toRight(new XWException(msg, null))
   }
 
-  implicit def enrichEither[L, R](either: Either[L, R]) = new RichEither(either)
+  implicit def enrichEither[L, R](either: Either[L, R]): RichEither[L, R] = new RichEither(either)
   class RichEither[L, R](either: Either[L, R]) {
     def rightOrThrow: R = either match {
       case Right(r) ⇒ r
