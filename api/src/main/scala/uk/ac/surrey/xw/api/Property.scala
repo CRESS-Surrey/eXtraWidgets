@@ -118,15 +118,39 @@ class DoubleProperty[W](
   }
 }
 
+object ColorProperty {
+  // Color properties store "default" literally so reporters, export/import,
+  // and later theme changes know whether the model chose a concrete color.
+  val DefaultValue = "default"
+
+  def isDefaultValue(value: Any): Boolean =
+    value match {
+      case s: String => s.equalsIgnoreCase(DefaultValue)
+      case _ => false
+    }
+}
+
 class ColorProperty[W](
   _key: PropertyKey,
-  setter: Option[(W, Color) => Unit],
+  colorSetter: Option[(W, Color) => Unit],
   getter: W => Color,
-  override val defaultValue: Color = Color.white)
-  extends Property(_key, setter, getter, defaultValue) {
-  val syntaxType = NumberType | ListType
+  defaultColor: => Color = Color.white)
+  extends Property[AnyRef, W](
+    _key,
+    None,
+    w => getter(w),
+    ColorProperty.DefaultValue) {
+
+  val syntaxType = NumberType | ListType | StringType
+
   override def encode(x: Any): AnyRef =
     x.asInstanceOf[AnyRef] match {
+      case s: String if ColorProperty.isDefaultValue(s) =>
+        ColorProperty.DefaultValue
+      case s: String =>
+        throw new IllegalArgumentException(
+          "Expected a color number, RGB/RGBA list, or \"default\" but got " +
+            Dump.logoObject(s, true, false) + " instead.")
       case c: java.awt.Color => {
         val closestDouble = getClosestColorNumberByARGB(c.getRGB)
         val closestARGB = getARGBbyPremodulatedColorNumber(closestDouble)
@@ -139,15 +163,29 @@ class ColorProperty[W](
       }
       case n: java.lang.Number => Double.box(modulateDouble(n.doubleValue))
       case ll: LogoList => encode(decode(ll))
-      case _ => super.encode(x)
+      case _ =>
+        throw new IllegalArgumentException(
+          "Expected a color number, RGB/RGBA list, or \"default\" but got " +
+            Dump.logoObject(x.asInstanceOf[AnyRef], true, false) + " instead.")
     }
-  override def decode(x: AnyRef): java.awt.Color = {
-    x match {
-      case c: java.lang.Double => getColor(Double.box(modulateDouble(c)))
-      case ll: LogoList => getColor(validRGBList(ll.toVector))
-      case _ => super.decode(x)
-    }
+
+  override def decode(x: AnyRef): AnyRef = x match {
+    case s: String if ColorProperty.isDefaultValue(s) => ColorProperty.DefaultValue
+    case s: String =>
+      throw new IllegalArgumentException(
+        "Expected a color number, RGB/RGBA list, or \"default\" but got " +
+          Dump.logoObject(s, true, false) + " instead.")
+    case c: java.awt.Color => c
+    case n: java.lang.Number => getColor(Double.box(modulateDouble(n.doubleValue)))
+    case ll: LogoList => getColor(validRGBList(ll.toVector))
+    case _ =>
+      throw new IllegalArgumentException(
+        "Expected a color number, RGB/RGBA list, or \"default\" but got " +
+          Dump.logoObject(x, true, false) + " instead.")
   }
+
+  override def set(w: W, value: AnyRef): Unit =
+    colorSetter.foreach(_(w, resolve(value)))
 
   override def get(w: W): AnyRef = {
     val c = getter(w)
@@ -156,6 +194,18 @@ class ColorProperty[W](
     val rgba = if (a == 255) rgb else rgb :+ a
     LogoList.fromVector(rgba.map(Double.box(_)))
   }
+
+  override def readOnly: Boolean =
+    colorSetter.isEmpty
+
+  private def resolve(value: AnyRef): Color =
+    decode(value) match {
+      case s: String if ColorProperty.isDefaultValue(s) => defaultColor
+      case c: Color => c
+      case x => throw new IllegalArgumentException(
+        "Expected a color number, RGB/RGBA list, or \"default\" but got " +
+          Dump.logoObject(x.asInstanceOf[AnyRef], true, false) + " instead.")
+    }
 
   /**
    * Throws an error if the rgb list if not a proper list of

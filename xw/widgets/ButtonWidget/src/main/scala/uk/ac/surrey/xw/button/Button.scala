@@ -1,5 +1,7 @@
 package uk.ac.surrey.xw.button
 
+import java.awt.Insets
+
 import javax.swing.JButton
 
 import org.nlogo.api.JobOwner
@@ -7,7 +9,6 @@ import org.nlogo.api.SimpleJobOwner
 import org.nlogo.core.AgentKind.Observer
 import org.nlogo.core.CompilerException
 import org.nlogo.nvm.Workspace
-import org.nlogo.theme.InterfaceColors
 import org.nlogo.window.GUIWorkspace
 
 import uk.ac.surrey.xw.api.ColorProperty
@@ -16,6 +17,7 @@ import uk.ac.surrey.xw.api.ComponentWidgetKind
 import uk.ac.surrey.xw.api.IntegerProperty
 import uk.ac.surrey.xw.api.State
 import uk.ac.surrey.xw.api.StringProperty
+import uk.ac.surrey.xw.api.ThemeColors
 import uk.ac.surrey.xw.api.WidgetKey
 import uk.ac.surrey.xw.api.swing.enrichAbstractButton
 
@@ -23,7 +25,9 @@ class ButtonKind[W <: Button] extends ComponentWidgetKind[W] {
   override val name = "BUTTON"
   override val newWidget = new Button(_, _, _)
   override val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.setBackground(_)), _.getBackground, InterfaceColors.buttonBackground())
+    "COLOR", Some(_.setBackground(_)), _.getBackground, ThemeColors.buttonBackground)
+  override val fontColorProperty = new ColorProperty[W](
+    "FONT-COLOR", Some(_.setFontColor(_)), _.getFontColor, ThemeColors.buttonText)
   override val heightProperty = new IntegerProperty[W](
     "HEIGHT", Some(_.setHeight(_)), _.getHeight, 50)
   val labelProperty = new StringProperty[W](
@@ -50,6 +54,7 @@ class Button(
   extends JButton
   with ComponentWidget {
   setBorderPainted(false)
+  setMargin(new Insets(2, 6, 2, 6))
   val kind: ButtonKind[this.type] = new ButtonKind[this.type]
   var commands = ""
   val owner = new SimpleJobOwner(key, ws.world.mainRNG, Observer) {

@@ -1,7 +1,6 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.BorderLayout
-import java.awt.Color.white
 
 import javax.swing.JPanel
 import javax.swing.JScrollPane
@@ -16,7 +15,8 @@ class TabKind[W <: Tab] extends WidgetKind[W] {
   val name = "TAB"
   val defaultProperty = None
   val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.panel.setBackground(_)), _.panel.getBackground, white)
+    "COLOR", Some(_.panel.setBackground(_)), _.panel.getBackground,
+    ThemeColors.tabBackground)
   val titleProperty = new StringProperty[W](
     "TITLE", Some(_.setTitle(_)), _.getTitle)
   val enabledProperty = new BooleanProperty[W](

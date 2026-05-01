@@ -45,6 +45,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   private var widgetContextManager: WidgetContextManager = null
   private var writer: Writer = null
   private var primitives: Iterable[(String, Primitive)] = null
+  private var gui: Option[GUI] = None
 
   override def runOnce(extensionManager: ExtensionManager): Unit = {
     val workspace = getWorkspace(extensionManager)
@@ -68,8 +69,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     val kindInfo = new KindInfo(writer, widgetKinds)
     primitives = primitiveList(writer, widgetKinds, widgetContextManager, kindInfo, workspace)
 
-    for (app <- getApp(extensionManager))
-      new GUI(app, writer, widgetKinds)
+    gui = getApp(extensionManager).map(new GUI(_, writer, widgetKinds))
   }
 
   private def primitiveList(
@@ -190,7 +190,10 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       primitiveManager.addPrimitive(name, prim)
 
   override def unload(em: ExtensionManager): Unit =
-    if (writer != null)
+    if (writer != null) {
+      gui.foreach(_.dispose())
+      gui = None
       writer.clearAll()
+    }
 
 }

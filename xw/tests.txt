@@ -9,6 +9,33 @@ colors-are-stored-as-numbers
   O> xw:ask "s2" [ xw:set-color [215 50 40] ]
   [ xw:color ] xw:of xw:sliders => [15 [215 50 40 255] 15]
 
+default-colors-can-be-reset-after-explicit-colors
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:create-slider "s1"
+  [ xw:color ] xw:of "t1" => "default"
+  [ xw:color ] xw:of "s1" => "default"
+  [ xw:font-color ] xw:of "s1" => "default"
+  O> xw:ask "s1" [ xw:set-color red xw:set-font-color blue ]
+  [ list xw:color xw:font-color ] xw:of "s1" => [15 105]
+  O> xw:ask "s1" [ xw:set-color "default" xw:set-font-color "default" ]
+  [ list xw:color xw:font-color ] xw:of "s1" => ["default" "default"]
+  xw:widgets xw:with [ xw:color = "default" ] => ["s1"]
+  O> xw:ask "s1" [ xw:set-color "not-a-color" ] => ERROR Extension exception: Expected a color number, RGB/RGBA list, or "default" but got "not-a-color" instead.
+
+default-color-settings-survive-export-import
+  extensions [xw]
+  O> xw:create-tab "t1"
+  O> xw:create-slider "s1"
+  O> xw:create-button "b1" [ xw:set-color red ]
+  O> xw:export "target/default-color-settings.json"
+  O> xw:clear-all
+  O> xw:import "target/default-color-settings.json"
+  [ xw:color ] xw:of "t1" => "default"
+  [ xw:color ] xw:of "s1" => "default"
+  [ xw:font-color ] xw:of "s1" => "default"
+  [ xw:color ] xw:of "b1" => 15
+
 sliders-can-be-positionned-relative-to-one-another
   extensions [xw]
   O> xw:create-tab "t1"

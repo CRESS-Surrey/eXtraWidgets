@@ -20,12 +20,23 @@ to setup-gui-test
   xw:create-tab "tab-b" [
     xw:set-title "XW Test B"
     xw:set-order 1
+    xw:set-color yellow
   ]
 
   xw:create-note "note" [
     xw:set-tab "tab-a"
-    xw:set-text "GUI test widgets"
+    xw:set-text "Default colour widgets"
     xw:set-x 10
+    xw:set-y 10
+    xw:set-width 220
+  ]
+  xw:create-note "explicit-color-note" [
+    xw:set-tab "tab-a"
+    xw:set-text "Explicit colour note"
+    xw:set-color yellow
+    xw:set-font-color blue
+    xw:set-opaque? true
+    xw:set-x 260
     xw:set-y 10
     xw:set-width 220
   ]
@@ -77,20 +88,20 @@ to setup-gui-test
     xw:set-x 260
     xw:set-y 245
   ]
+  xw:create-button "default-btn" [
+    xw:set-tab "tab-a"
+    xw:set-label "Default Button"
+    xw:set-x 260
+    xw:set-y 305
+  ]
   xw:create-button "btn" [
     xw:set-tab "tab-a"
     xw:set-label "Run"
     xw:set-commands "run-test-button"
+    xw:set-color red
+    xw:set-font-color white
     xw:set-x 10
     xw:set-y 305
-  ]
-
-  xw:create-note "tab-b-note" [
-    xw:set-tab "tab-b"
-    xw:set-text "This widget should be on XW Test B."
-    xw:set-x 10
-    xw:set-y 10
-    xw:set-width 260
   ]
 
   foreach ["s" "cb" "ch" "mc" "txt" "num"] [ key ->
@@ -104,7 +115,13 @@ to setup-gui-test
     "Manual checks:\n"
     "1. The extra tabs should be XW Test B, then XW Test A.\n"
     "2. XW Test A should be selected.\n"
-    "3. On XW Test A, set Slider to 60, uncheck Checkbox, choose gamma, "
+    "3. Switch NetLogo between light and dark themes. XW Test A and the "
+    "default-colour widgets, including Default Button, should follow the theme; "
+    "the yellow note, red Run button, and yellow XW Test B page should keep "
+    "their explicit colours.\n"
+    "4. XW Test A should display every bundled xw widget kind: note, slider, "
+    "checkbox, chooser, multi-chooser, text input, numeric input, and button.\n"
+    "5. On XW Test A, set Slider to 60, uncheck Checkbox, choose gamma, "
     "select green and blue in Multi using Ctrl-click or Command-click if needed, "
     "set Text to typed, set Number to 42, "
     "and click Run once.\n\n"
@@ -116,10 +133,19 @@ to check-created-state
   ; They prove that xw registered the expected widget state before we test
   ; desktop-only behavior such as tab placement and user-driven callbacks.
   require sort xw:tabs = ["tab-a" "tab-b"] "extra tabs were not registered"
-  require sort xw:widgets = ["btn" "cb" "ch" "mc" "note" "num" "s" "tab-b-note" "txt"] "extra widgets were not registered"
+  require sort xw:widgets = ["btn" "cb" "ch" "default-btn" "explicit-color-note" "mc" "note" "num" "s" "txt"] "extra widgets were not registered"
   require [ xw:title ] xw:of "tab-a" = "XW Test A" "tab-a title was not stored"
   require [ xw:title ] xw:of "tab-b" = "XW Test B" "tab-b title was not stored"
-  require [ xw:tab ] xw:of "tab-b-note" = "tab-b" "tab-b-note is not on tab-b"
+  require [ xw:color ] xw:of "tab-a" = "default" "tab-a should follow the theme by default"
+  require [ xw:color ] xw:of "tab-b" = yellow "tab-b should keep an explicit colour"
+  require [ xw:color ] xw:of "s" = "default" "slider colour should follow the theme by default"
+  require [ xw:font-color ] xw:of "s" = "default" "slider font colour should follow the theme by default"
+  require [ xw:color ] xw:of "explicit-color-note" = yellow "explicit colour note should keep yellow"
+  require [ xw:font-color ] xw:of "explicit-color-note" = blue "explicit colour note should keep blue text"
+  require [ xw:color ] xw:of "default-btn" = "default" "default button should follow the theme"
+  require [ xw:font-color ] xw:of "default-btn" = "default" "default button font colour should follow the theme"
+  require [ xw:color ] xw:of "btn" = red "button should keep an explicit colour"
+  require [ xw:font-color ] xw:of "btn" != "default" "button font colour should be explicit"
   require xw:get "s" = 25 "slider initial value is wrong"
   require xw:get "cb" = true "checkbox initial value is wrong"
   require xw:get "ch" = "beta" "chooser initial value is wrong"
@@ -156,7 +182,7 @@ end
 to check-tab-removal
   xw:remove "tab-a"
   require xw:tabs = ["tab-b"] "removing tab-a did not leave exactly tab-b"
-  require xw:widgets = ["tab-b-note"] "removing tab-a did not remove its child widgets"
+  require empty? xw:widgets "removing tab-a did not remove its child widgets"
 
   xw:remove "tab-b"
   require empty? xw:tabs "tabs remain after removing both extra tabs"
@@ -193,12 +219,14 @@ end]]></code>
     <button x="25" y="175" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="170">clear-gui-test</button>
     <monitor x="220" precision="0" y="25" height="60" fontSize="11" width="125">button-count</monitor>
     <monitor x="220" precision="3" y="95" height="120" fontSize="10" width="250">events</monitor>
-    <note x="25" y="235" backgroundDark="0" fontSize="12" width="450" markdown="false" height="176" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">1. Click setup-gui-test.
+    <note x="25" y="235" backgroundDark="0" fontSize="12" width="450" markdown="false" height="196" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">1. Click setup-gui-test.
 2. Follow the popup instructions on the xw tabs.
-3. Click check-manual-edits.
-4. Click check-tab-removal.
+3. Confirm all xw widget kinds are visible.
+4. Include the light/dark theme colour check.
+5. Click check-manual-edits.
+6. Click check-tab-removal.
 
-The buttons raise NetLogo errors if a mechanical check fails. The only visual checks are tab order, tab selection, and whether the widgets render on the expected xw tabs.</note>
+The buttons raise NetLogo errors if a mechanical check fails. The visual checks are tab order, tab selection, every widget kind, and default vs explicit colours.</note>
   </widgets>
   <info><![CDATA[## XW GUI Test
 
@@ -212,7 +240,9 @@ It assumes that NetLogo can load `extensions [xw]`. For migration testing, the u
 2. Click `setup-gui-test`.
 3. Confirm that two extra tabs are visible: `XW Test B` before `XW Test A`.
 4. Confirm that `XW Test A` is selected.
-5. On `XW Test A`, make these edits:
+5. Confirm that `XW Test A` displays every bundled xw widget kind: note, slider, checkbox, chooser, multi-chooser, text input, numeric input, and button.
+6. Switch NetLogo between light and dark themes. Confirm that `XW Test A` and the default-colour widgets, including `Default Button`, follow the theme, while the yellow note, red `Run` button, and yellow `XW Test B` page keep their explicit colours.
+7. On `XW Test A`, make these edits:
 
    - set `Slider` to `60`
    - uncheck `Checkbox`
@@ -222,8 +252,8 @@ It assumes that NetLogo can load `extensions [xw]`. For migration testing, the u
    - set `Number` to `42`, then press Enter or move focus away
    - click `Run` once
 
-6. Return to the Interface tab and click `check-manual-edits`.
-7. Click `check-tab-removal`.
+8. Return to the Interface tab and click `check-manual-edits`.
+9. Click `check-tab-removal`.
 
 If a mechanical check fails, the model raises a NetLogo error with a message beginning `XW GUI test failed:`. If the test completes, it displays `GUI test finished successfully.`
 
@@ -237,6 +267,7 @@ This test complements the headless test suite. It checks the migration-sensitive
 - user-driven edits flow back to `xw:get`
 - user-driven edits trigger `xw:on-change`
 - xw button clicks run their command string
+- default-colour widgets follow NetLogo theme changes while explicitly coloured widgets keep their colours
 - removing an xw tab removes its child widgets from xw's registry]]></info>
   <linkShapes>
     <shape name="default" curviness="0.0">

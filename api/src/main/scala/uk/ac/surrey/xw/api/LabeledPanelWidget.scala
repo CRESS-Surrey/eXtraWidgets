@@ -3,6 +3,7 @@ package uk.ac.surrey.xw.api
 import java.awt.BorderLayout
 import java.awt.BorderLayout.NORTH
 
+import javax.swing.BorderFactory.createEmptyBorder
 import javax.swing.JLabel
 import javax.swing.JPanel
 
@@ -21,7 +22,9 @@ trait LabeledPanelWidget
   setLayout(new BorderLayout())
   def setText(text: String) = label.setText(Option(text).getOrElse(key))
   def getText = label.getText
-  val label = new JLabel(key)
+  val label = new JLabel(key) {
+    setBorder(createEmptyBorder(0, 0, 2, 0))
+  }
   def labelPosition = NORTH
   add(label, labelPosition)
 }

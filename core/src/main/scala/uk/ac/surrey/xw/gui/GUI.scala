@@ -2,9 +2,12 @@ package uk.ac.surrey.xw.gui
 
 import org.nlogo.app.App
 import org.nlogo.awt.EventQueue.invokeLater
+import org.nlogo.theme.ThemeSync
 
+import uk.ac.surrey.xw.api.ColorProperty
 import uk.ac.surrey.xw.api.ComponentWidget
 import uk.ac.surrey.xw.api.ExtraWidget
+import uk.ac.surrey.xw.api.JComponentWidget
 import uk.ac.surrey.xw.api.PropertyKey
 import uk.ac.surrey.xw.api.PropertyMap
 import uk.ac.surrey.xw.api.PropertyValue
@@ -33,7 +36,17 @@ class GUI(
     case _ => true
   })
 
+  private val themeSync = new ThemeSync {
+    override def syncTheme(): Unit =
+      syncThemeDefaults()
+  }
+
+  app.addSyncComponent(themeSync)
+
   val tabPropertyKey = new TabKind[Tab].name
+
+  def dispose(): Unit =
+    app.removeSyncComponent(themeSync)
 
   private def handleEvent(event: StateEvent): Unit =
     invokeLater {
@@ -70,6 +83,39 @@ class GUI(
     getWidget(widgetKey).foreach(
       _.setProperty(propertyKey, propertyValue)
     )
+
+  private def syncThemeDefaults(): Unit =
+    invokeLater {
+      // xw stores "default" as the user's chosen color setting.  Theme changes
+      // should update only those live widgets, leaving explicit colors and the
+      // persisted state untouched.
+      for {
+        widgetKey <- writer.widgetKeyVector
+        widget <- getWidget(widgetKey)
+        propertyMap <- writer.propertyMap(widgetKey).toOption
+      } {
+        propertyMap.foreach {
+          case (propertyKey, propertyValue)
+              if ColorProperty.isDefaultValue(propertyValue) &&
+                isColorProperty(widget, propertyKey) =>
+            widget.setProperty(propertyKey, propertyValue)
+          case _ =>
+        }
+
+        // Borders also read NetLogo theme colors, but they are not properties,
+        // so refresh them separately when NetLogo switches theme.
+        widget match {
+          case jComponentWidget: JComponentWidget => jComponentWidget.updateBorder()
+          case _ =>
+        }
+        widget.repaint()
+      }
+    }
+
+  private def isColorProperty(widget: ExtraWidget, propertyKey: PropertyKey): Boolean =
+    widget.kind.properties
+      .get(normalizeString(propertyKey))
+      .exists(_.isInstanceOf[ColorProperty[?]])
 
   private def removeWidget(widgetKey: WidgetKey): Unit =
     for (w <- getWidget(widgetKey)) w match {

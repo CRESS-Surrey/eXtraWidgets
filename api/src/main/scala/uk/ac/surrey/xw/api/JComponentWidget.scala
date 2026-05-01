@@ -17,17 +17,19 @@ abstract class JComponentWidgetKind[W <: JComponentWidget]
 
 trait JComponentWidget extends JComponent with ComponentWidget {
 
-  private val _borderPadding = createEmptyBorder(1, 1, 1, 1)
+  private val _borderPadding = createEmptyBorder(2, 4, 3, 4)
   def borderPadding: Border = _borderPadding
 
-  private val _borderWhenOpaque =
-    createCompoundBorder(createLineBorder(InterfaceColors.widgetHandle()), borderPadding)
-  def borderWhenOpaque: Border = _borderWhenOpaque
-  private val _borderWhenTransparent =
-    createCompoundBorder(createEmptyBorder(3, 3, 2, 2), borderPadding)
-  def borderWhenTransparent: Border = _borderWhenTransparent
+  // Keep this as a plain Swing border plus padding. Swing's rounded LineBorder
+  // is barely rounded at 1px and inconsistent with opaque component
+  // backgrounds; real rounded corners would require custom painting or a
+  // NetLogo widget panel mixin, which is more machinery than xw needs here.
+  def borderWhenOpaque: Border =
+    createCompoundBorder(createLineBorder(ThemeColors.widgetBorder, 1), borderPadding)
+  def borderWhenTransparent: Border =
+    createCompoundBorder(createLineBorder(InterfaceColors.Transparent, 1), borderPadding)
 
-  def updateBorder() =
+  def updateBorder(): Unit =
     if (isOpaque) setBorder(borderWhenOpaque)
     else setBorder(borderWhenTransparent)
 }

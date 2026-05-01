@@ -28,7 +28,9 @@ class SetProperty(
         " for widgets of kind " + kindInfo.kindName(widgetKey) + "."
     )
 
-    val propertyValue = property.encode(args(0).get)
+    val propertyValue =
+      try property.encode(args(0).get)
+      catch { case e: IllegalArgumentException => throw XWException(e.getMessage, e) }
     writer.set(propertyKey, widgetKey, propertyValue, fromUI = false)
   }
 }

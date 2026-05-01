@@ -1,9 +1,6 @@
 package uk.ac.surrey.xw.api
 
 import java.awt.Color
-import java.awt.Color.black
-
-import org.nlogo.theme.InterfaceColors
 
 import uk.ac.surrey.xw.api.RichWorkspace.enrichWorkspace
 import uk.ac.surrey.xw.api.swing.enrichComponent
@@ -24,9 +21,9 @@ abstract class ComponentWidgetKind[W <: ComponentWidget] extends WidgetKind[W] {
   val hiddenProperty = new BooleanProperty[W](
     "HIDDEN", Some((w, b) => w.setVisible(!b)), !_.isVisible)
   val colorProperty = new ColorProperty[W](
-    "COLOR", Some(_.setBackground(_)), _.getBackground, InterfaceColors.sliderBackground())
+    "COLOR", Some(_.setBackground(_)), _.getBackground, ThemeColors.widgetBackground)
   val fontColorProperty = new ColorProperty[W](
-    "FONT-COLOR", Some(_.setFontColor(_)), _.getFontColor, black)
+    "FONT-COLOR", Some(_.setFontColor(_)), _.getFontColor, ThemeColors.widgetText)
   val textSizeProperty = new IntegerProperty[W](
     "FONT-SIZE", Some(_.fontSize = _), _.fontSize, 12)
   override def propertySet = super.propertySet ++ Set(
