@@ -246,6 +246,38 @@ Longer-term packaging goal:
   review extension metadata, homepage, packaged layout, generated `prims.json`,
   versioning, and any NetLogo extension manager requirements before release.
 
+Open GitHub issue snapshot from 2026-05-01:
+
+- `#169` "Any plans for NetLogo 7?": effectively fixed by this migration once
+  there is a usable NetLogo 7 release.  Keep it open until release/announcement.
+- `#168` "syntax errors in the context demo section": should be handled during
+  the docs refresh.  Low-hanging; also intersects with the current anonproc
+  syntax guidance.
+- `#165` "Tabs accumulate in the Tabs menu": possibly fixed by the NetLogo 7
+  tab integration, but not proven.  Include this in desktop lifecycle
+  verification.
+- `#159` "Create Widget in the default Interface Tab": not fixed.  Still a
+  larger feature with NetLogo desktop/zoom implications.
+- `#158` "There is not new line in xw:note": not fixed.  Notes still use
+  `JLabel`; HTML line breaks work, raw newline behavior likely does not.
+  Potentially low-hanging, but needs care around text escaping and Swing HTML.
+- `#157` "Synchronize all property access to a single thread": not fixed.
+  Migration improved event plumbing, but this remains a deeper concurrency
+  design issue.
+- `#154` "Allow buttons to take tasks as commands": not fixed.  More
+  approachable now that callback command-block infrastructure has been tested,
+  but still an API/export/import decision.
+- `#147` "Command center doesn't scroll after `show` from an xw button":
+  unknown.  Needs GUI verification; may be affected by current button job-owner
+  behavior.
+- `#144` "Button styling doesn't work on OS X": maybe improved, not proven.
+  Needs Mac testing specifically.
+- `#142` "Invalid chooser selected item": still appears open.  Current chooser
+  code still does not validate selected items before writing state.
+- `#137` "Tab creation order export/import": likely still open.  Import creates
+  tabs before child widgets, but original tab creation order is not persisted as
+  separate data.
+
 ## What Is Left To Do
 
 ### 1. API And Primitive Compatibility Audit
@@ -323,6 +355,11 @@ Useful areas to inspect:
 - callback behavior that existed before the migration, not just the new tests
   added while migrating
 
+Use the GitHub issues above as input to this audit.  Good candidates for
+legacy regression tests are chooser validation (`#142`), tab creation order
+export/import (`#137`), note newline behavior (`#158`), and button command
+side effects (`#147`).
+
 Prefer compact headless tests where possible.  Use the GUI smoke model only for
 desktop behavior that cannot be proven headlessly.
 
@@ -360,6 +397,9 @@ Classify issues into:
 
 Do this after the API/primitive audit, because the audit will give better
 context for whether an issue is truly fixed or merely changed.
+
+The 2026-05-01 snapshot above is only a starting point.  Re-check GitHub before
+acting because the issue list may have changed.
 
 ### 6. Final Package Checks
 
