@@ -16,7 +16,7 @@ This is a handoff note for the `netlogo-7-migration` branch. It records the stat
 - The normal headless test suite is enabled and passing.
 - The `xw / test` suite currently runs 24 tests, including focused coverage for `xw:on-change`, property-specific `xw:on-...-change`, button command execution, installed widget discovery, and malformed property-map parsing.
 - The package task produces `xw/xw-3.0.0-SNAPSHOT.zip`.
-- A manual NetLogo 7 desktop GUI test model exists at `test-models/xw-gui-test.nlogox`. It contains its own Info-tab instructions and phase-specific popup prompts.
+- A manual NetLogo 7 desktop GUI test model exists at `test-models/xw-gui-test.nlogox`. It contains its own Info-tab instructions and phase-specific popup prompts, and it passed a manual run in NetLogo 7.0.3 on 2026-05-01.
 
 ## Commit Trail
 
@@ -33,6 +33,9 @@ This is a handoff note for the `netlogo-7-migration` branch. It records the stat
 - `6bf7099 Use packaged widget jars for primitive metadata`
 - `e1313d7 Test installed widget jar discovery`
 - `07f6b2c Fix property map parse errors`
+- `49506c6 Refresh migration notes`
+- `0e45c60 Add NetLogo GUI test model`
+- `e7359d7 Fix GUI tab selection timing`
 
 The commit messages are intentionally small, but the important context is that this branch first made the project compile and test under NetLogo 7, then moved generated test JSON files under `target`, then did a dedicated source-wide cleanup of deprecated unicode Scala operators, and finally cleaned Scala 3 warnings before turning fatal warnings back on. Later commits added targeted coverage for callback/job behavior and packaged-extension loading, preserved dynamic primitive metadata generation without directory-scanning workarounds, and fixed the property-map parsing error paths.
 
@@ -182,14 +185,14 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 
 ## Known Fragile Areas
 
-- The GUI tab integration has only been compile-tested and indirectly covered by headless tests. It still needs a manual or automated GUI smoke test in a real NetLogo 7 desktop session.
-- `RichWorkspace.app` finds the `App` through `ws.getFrame.asInstanceOf[AppFrame].getLinkChildren.collectFirst`. This works at compile time against NetLogo 7.0.3, but it is coupled to NetLogo desktop internals and should be manually verified.
-- `Tab.addToAppTabs`, `Tab.removeFromAppTabs`, `Tab.setTitle`, and `RichWorkspace.reorderTabs` depend on NetLogo 7 tab ordering and `TabLabel` behavior. These are likely to be the highest-risk GUI behaviors.
-- `SelectTab` is intentionally a no-op in headless mode. That matches the existing test expectation that selecting tabs should not crash headless, but it does not verify desktop selection behavior.
+- The GUI tab integration has now passed the manual desktop smoke test in NetLogo 7.0.3. It is still coupled to NetLogo desktop internals, so keep it on the release verification checklist.
+- `RichWorkspace.app` finds the `App` through `ws.getFrame.asInstanceOf[AppFrame].getLinkChildren.collectFirst`. This has been manually smoke-tested against NetLogo 7.0.3, but it remains coupled to NetLogo desktop internals.
+- `Tab.addToAppTabs`, `Tab.removeFromAppTabs`, `Tab.setTitle`, and `RichWorkspace.reorderTabs` depend on NetLogo 7 tab ordering and `TabLabel` behavior. The manual GUI test covers tab creation, ordering, selection, and removal, but these remain the highest-risk desktop behaviors.
+- `SelectTab` is intentionally a no-op in headless mode. That matches the existing test expectation that selecting tabs should not crash headless; desktop selection is covered by the manual GUI test model.
 - `ExtraWidgetsExtension.primitiveMetadataFallback()` remains a build-time bridge because NetLogo's `PrimsJson` tool calls `load` without an installed extension folder. The previous directory-scanning workaround has been removed; the fallback now uses the widget jars that sbt is already packaging.
-- `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. Headless tests now cover `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks, but desktop/user-driven callback scheduling still needs a real NetLogo 7 GUI smoke test.
-- The smoke test proved package loading and basic headless primitive operation, but it did not prove Swing widget rendering, tab placement, user-driven event updates, GUI button clicks, or desktop unload/reload behavior.
-- `test-models/xw-gui-test.nlogox` has been generated and verified to load through NetLogo 7 headless, but it still needs to be run manually in the NetLogo 7 desktop UI.
+- `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. Headless tests cover `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks; the manual GUI test covers user-driven widget edits and GUI button clicks.
+- The smoke test proved package loading and basic headless primitive operation, and the manual GUI test proved Swing widget rendering, tab placement, user-driven event updates, GUI button clicks, and tab removal. Desktop unload/reload behavior still needs explicit verification.
+- `test-models/xw-gui-test.nlogox` has been generated, verified to load through NetLogo 7 headless, and manually run successfully in the NetLogo 7.0.3 desktop UI.
 - `xw/build.sbt` currently has `netLogoHomepage := "https://github.com/NetLogo/NetLogo-Extension-Plugin"`, which looks like plugin sample metadata rather than the xw project homepage. Review before release.
 
 ## Suggested Next Steps
@@ -197,12 +200,10 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 1. Push and resume from `netlogo-7-migration`.
 2. Run `sbt clean test` and `sbt 'xw / packageZip'` on the new machine with Java 17.
 3. Run `sbt 'xw / packagedSmoke'` to verify the packaged zip from a fresh temporary install layout.
-4. Install the packaged zip, or symlink this repository's `xw` directory, into a real NetLogo 7 desktop extensions directory.
-5. Open `test-models/xw-gui-test.nlogox` in NetLogo 7.0.3 and follow its Info-tab/popup instructions.
-6. In that GUI test, verify tab ordering and selection visually, then use the model buttons to mechanically assert user-driven widget edits, GUI button clicks, `xw:on-change` callbacks, and tab removal.
-7. If the generated GUI test passes, also test desktop unload/reload behavior by closing and reopening the model in a fresh NetLogo process.
-8. Review `primitiveMetadataFallback()` after the rest of the migration is stable and decide whether the current sbt-to-`PrimsJson` handoff should remain as supported build infrastructure.
-9. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
+4. Keep `test-models/xw-gui-test.nlogox` in the release verification checklist and rerun it after GUI-affecting changes.
+5. Test desktop unload/reload behavior by closing and reopening the GUI test model in a fresh NetLogo process.
+6. Review `primitiveMetadataFallback()` after the rest of the migration is stable and decide whether the current sbt-to-`PrimsJson` handoff should remain as supported build infrastructure.
+7. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
 
 ## Useful Resume Checklist
 
