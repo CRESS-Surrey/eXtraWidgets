@@ -1,6 +1,6 @@
 # NetLogo 7 Migration Notes
 
-This is a handoff note for the `netlogo-7-migration` branch. It records the state of the migration as of 2026-04-30 so the work can be resumed from the repository alone, without depending on chat history or temporary files on the original machine.
+This is a handoff note for the `netlogo-7-migration` branch. It records the state of the migration as of 2026-05-01 so the work can be resumed from the repository alone, without depending on chat history or temporary files on the original machine.
 
 ## Current State
 
@@ -14,6 +14,7 @@ This is a handoff note for the `netlogo-7-migration` branch. It records the stat
 - Version in `build.sbt`: `3.0.0-SNAPSHOT`
 - Fatal warning enforcement has been restored with Scala 3 `-Werror` in `build.sbt`.
 - The normal headless test suite is enabled and passing.
+- The `xw / test` suite currently runs 24 tests, including focused coverage for `xw:on-change`, property-specific `xw:on-...-change`, button command execution, installed widget discovery, and malformed property-map parsing.
 - The package task produces `xw/xw-3.0.0-SNAPSHOT.zip`.
 
 ## Commit Trail
@@ -23,8 +24,16 @@ This is a handoff note for the `netlogo-7-migration` branch. It records the stat
 - `24deb7c Write test exports under target`
 - `16f3b94 Replace deprecated unicode arrows`
 - `0c879b9 Clean Scala 3 warnings`
+- `b9da884 Test and fix on-change callbacks`
+- `fba80d0 Use concise one-argument anonproc syntax in tests`
+- `5f890f3 Note concise anonproc doc guidance`
+- `72742dd Test button command execution`
+- `b9d5744 Add explicit packaged smoke task`
+- `6bf7099 Use packaged widget jars for primitive metadata`
+- `e1313d7 Test installed widget jar discovery`
+- `07f6b2c Fix property map parse errors`
 
-The commit messages are intentionally small, but the important context is that this branch first made the project compile and test under NetLogo 7, then moved generated test JSON files under `target`, then did a dedicated source-wide cleanup of deprecated unicode Scala operators, and finally cleaned Scala 3 warnings before turning fatal warnings back on.
+The commit messages are intentionally small, but the important context is that this branch first made the project compile and test under NetLogo 7, then moved generated test JSON files under `target`, then did a dedicated source-wide cleanup of deprecated unicode Scala operators, and finally cleaned Scala 3 warnings before turning fatal warnings back on. Later commits added targeted coverage for callback/job behavior and packaged-extension loading, preserved dynamic primitive metadata generation without directory-scanning workarounds, and fixed the property-map parsing error paths.
 
 ## Verified Commands
 
@@ -47,6 +56,16 @@ env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
 Result: package generation passed and produced `xw/xw-3.0.0-SNAPSHOT.zip`.
 
 The package task also ran NetLogo's `org.nlogo.build.PrimsJson` and generated `prims.json` successfully. This matters because xw has dynamic primitives derived from widget kinds and properties, which makes metadata generation more complicated than a typical static NetLogo extension.
+
+This command passed on 2026-05-01:
+
+```bash
+env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
+  PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:/usr/bin:/bin \
+  sbt 'xw / test'
+```
+
+Result: 24 tests run, 24 passed.
 
 ## Packaged Smoke Test
 
@@ -148,6 +167,7 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/prim/SelectTab.scala` now works against `AbstractWorkspace` and only performs GUI tab selection when the workspace is a `GUIWorkspace`; in headless mode it intentionally does nothing.
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/ExtraWidgetsExtension.scala` now uses NetLogo 7 extension loading behavior and `JarLoader(workspace).locateExtension("xw")` to find the installed extension folder.
 - `ExtraWidgetsExtension` has `primitiveMetadataFallback()` for metadata generation when NetLogo's `PrimsJson` calls `load` without a prior `runOnce`. `xw/build.sbt` now derives the widget jar list from `netLogoPackageExtras`, passes it through the build-only `uk.ac.surrey.xw.primitiveMetadataWidgetJars` system property, and the fallback reuses real `WidgetKind` classes to build primitive metadata.
+- `WidgetsLoader.loadWidgetKinds` still discovers externally authored widget jars in the installed extension layout under `widgets/<WidgetName>/<WidgetName>.jar`; this is covered by a focused test and is independent from `netLogoPackageExtras`.
 - `Writer` was moved away from deprecated Scala 2 publisher APIs and now has its own subscriber/listener mechanism.
 - Java collection conversions were moved from `scala.collection.JavaConverters` to `scala.jdk.CollectionConverters`.
 - Deprecated `Either.right` projections were removed where they caused Scala 3 warnings.
@@ -156,6 +176,8 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - `Manifest` usage in `Property` was reduced to `ClassTag`.
 - The unicode operator cleanup replaced source-level operators such as `=>` and `<-` with ASCII equivalents. This was done as a dedicated commit after discussion, to keep the earlier migration diffs focused.
 - `xw/tests.txt` now writes temporary export/import JSON files under `target/` so tests do not modify tracked repository files.
+- NetLogo test code now uses concise one-argument anonymous procedure syntax where possible, such as `[ value -> ... ]`; bracketed argument lists remain appropriate for multi-argument anonymous procedures, such as `[ [a b] -> ... ]`.
+- `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` had pre-existing exception-handling bugs in `toPropertyMap`; these have been fixed and covered by focused ScalaTest tests.
 
 ## Known Fragile Areas
 
@@ -164,9 +186,8 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - `Tab.addToAppTabs`, `Tab.removeFromAppTabs`, `Tab.setTitle`, and `RichWorkspace.reorderTabs` depend on NetLogo 7 tab ordering and `TabLabel` behavior. These are likely to be the highest-risk GUI behaviors.
 - `SelectTab` is intentionally a no-op in headless mode. That matches the existing test expectation that selecting tabs should not crash headless, but it does not verify desktop selection behavior.
 - `ExtraWidgetsExtension.primitiveMetadataFallback()` remains a build-time bridge because NetLogo's `PrimsJson` tool calls `load` without an installed extension folder. The previous directory-scanning workaround has been removed; the fallback now uses the widget jars that sbt is already packaging.
-- `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. This area should be tested with `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks in NetLogo 7.
-- There is suspicious pre-existing code in `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` around exception handling, including `throw throw new ExtensionException(...)` and a catch case that constructs an `ExtensionException`. This was not changed during warning cleanup to keep diffs focused.
-- The smoke test proved package loading and basic headless primitive operation, but it did not prove Swing widget rendering, tab placement, user-driven event updates, button clicks, or desktop unload/reload behavior.
+- `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. Headless tests now cover `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks, but desktop/user-driven callback scheduling still needs a real NetLogo 7 GUI smoke test.
+- The smoke test proved package loading and basic headless primitive operation, but it did not prove Swing widget rendering, tab placement, user-driven event updates, GUI button clicks, or desktop unload/reload behavior.
 - `xw/build.sbt` currently has `netLogoHomepage := "https://github.com/NetLogo/NetLogo-Extension-Plugin"`, which looks like plugin sample metadata rather than the xw project homepage. Review before release.
 
 ## Suggested Next Steps
@@ -177,10 +198,9 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 4. Install the packaged zip into a real NetLogo 7 desktop extensions directory and manually smoke-test GUI behavior.
 5. In the GUI smoke test, load a model with `extensions [xw]`, create a tab, create each bundled widget kind, reorder tabs via `xw:set-order`, rename tabs via `xw:set-title`, remove tabs, and run `xw:select-tab` by index and by key.
 6. Test user-driven widget changes in the GUI and confirm state updates flow back to `xw:get` and `xw:of`.
-7. Test button commands and `xw:on-change` callbacks because they touch NetLogo job/context internals.
+7. Test GUI button clicks and `xw:on-change` callbacks triggered by user-driven widget changes because they touch NetLogo job/context internals outside the headless execution path.
 8. Review `primitiveMetadataFallback()` after the rest of the migration is stable and decide whether the current sbt-to-`PrimsJson` handoff should remain as supported build infrastructure.
-9. Review and clean the suspicious exception handling in `extension/util/package.scala`.
-10. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
+9. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
 
 ## Useful Resume Checklist
 
