@@ -136,7 +136,7 @@ public class Smoke {
 }
 ```
 
-If this smoke test is worth keeping, convert it into a tracked test or scripted sbt task. Leaving it only as an ad hoc command is fine for handoff, but not ideal as permanent regression coverage.
+This smoke test has since been converted into the explicit `xw / packagedSmoke` sbt task. It is intentionally not part of the default `test` task because it launches a child JVM and verifies release/package layout rather than ordinary extension behavior. Run it during migration/release verification.
 
 ## Important Migration Changes Already Made
 
@@ -174,7 +174,7 @@ If this smoke test is worth keeping, convert it into a tracked test or scripted 
 
 1. Push and resume from `netlogo-7-migration`.
 2. Run `sbt clean test` and `sbt 'xw / packageZip'` on the new machine with Java 17.
-3. Re-run the packaged smoke test from a fresh temporary install layout.
+3. Run `sbt 'xw / packagedSmoke'` to verify the packaged zip from a fresh temporary install layout.
 4. Install the packaged zip into a real NetLogo 7 desktop extensions directory and manually smoke-test GUI behavior.
 5. In the GUI smoke test, load a model with `extensions [xw]`, create a tab, create each bundled widget kind, reorder tabs via `xw:set-order`, rename tabs via `xw:set-title`, remove tabs, and run `xw:select-tab` by index and by key.
 6. Test user-driven widget changes in the GUI and confirm state updates flow back to `xw:get` and `xw:of`.
@@ -193,6 +193,7 @@ git status --short --branch
 java -version
 env JAVA_HOME=<java-17-home> PATH=<java-17-home>/bin:/usr/bin:/bin sbt clean test
 env JAVA_HOME=<java-17-home> PATH=<java-17-home>/bin:/usr/bin:/bin sbt 'xw / packageZip'
+env JAVA_HOME=<java-17-home> PATH=<java-17-home>/bin:/usr/bin:/bin sbt 'xw / packagedSmoke'
 ```
 
 If the build fails from missing dependencies, let sbt/coursier download them. The migration has already needed NetLogo artifacts, NetLogo extension plugin artifacts, Scala 3 artifacts, JOGL, GlueGen, and json-simple.
