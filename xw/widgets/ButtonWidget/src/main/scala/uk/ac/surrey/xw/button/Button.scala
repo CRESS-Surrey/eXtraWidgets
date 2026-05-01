@@ -2,9 +2,11 @@ package uk.ac.surrey.xw.button
 
 import javax.swing.JButton
 
+import org.nlogo.api.JobOwner
 import org.nlogo.api.SimpleJobOwner
 import org.nlogo.core.AgentKind.Observer
 import org.nlogo.core.CompilerException
+import org.nlogo.nvm.Workspace
 import org.nlogo.theme.InterfaceColors
 import org.nlogo.window.GUIWorkspace
 
@@ -35,6 +37,12 @@ class ButtonKind[W <: Button] extends ComponentWidgetKind[W] {
     Set(labelProperty, commandsProperty)
 }
 
+object ButtonCommandRunner {
+  def run(ws: Workspace, owner: JobOwner, commands: String, warn: String => Unit): Unit =
+    try ws.evaluateCommands(owner, commands, ws.world.observers, false)
+    catch { case e: CompilerException => warn(e.getMessage) }
+}
+
 class Button(
   val key: WidgetKey,
   val state: State,
@@ -49,7 +57,6 @@ class Button(
     override def ownsPrimaryJobs = true
   }
   this.onActionPerformed { _ =>
-    try ws.evaluateCommands(owner, commands, ws.world.observers, false)
-    catch { case e: CompilerException => ws.warningMessage(e.getMessage) }
+    ButtonCommandRunner.run(ws, owner, commands, ws.warningMessage)
   }
 }
