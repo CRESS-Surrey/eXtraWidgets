@@ -88,11 +88,12 @@ class Writer(
 
   def remove(widgetKey: WidgetKey): Unit = {
     if (get(kindPropertyKey, widgetKey) == tabKindName) {
-      // Special case: if we're removing a tab, also
-      // remove the widgets on that tab from the widget map
-      widgetMap --= widgetMap.collect {
+      // Special case: if we're removing a tab, also remove the widgets on that
+      // tab and publish their removal so listeners can clean themselves up.
+      val childKeys = widgetMap.collect {
         case (k, ps) if ps.get(tabPropertyKey) == Some(widgetKey) => k
-      }
+      }.toVector
+      childKeys.foreach(remove)
       tabCreationSeq = tabCreationSeq.filterNot(_ == widgetKey)
     }
     widgetMap -= widgetKey

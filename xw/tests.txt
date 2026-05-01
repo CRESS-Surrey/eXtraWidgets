@@ -293,6 +293,57 @@ default-getters-and-setters
   O> xw:set "b" nobody => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
   xw:get "b" => ERROR Extension exception: There is no default property defined for widget kind BUTTON.
 
+on-change-runs-for-default-property
+  extensions [xw]
+  globals [changed-key changed-value change-count]
+  O> set changed-key "" set changed-value nobody set change-count 0
+  O> xw:create-tab "t"
+  O> xw:create-slider "s" [ xw:set-value 0 ]
+  O> xw:on-change "s" [ value -> set changed-key xw:key set changed-value value set change-count change-count + 1 ]
+  O> xw:set "s" 7
+  O> wait 0.2
+  changed-key => "s"
+  changed-value => 7
+  change-count => 1
+
+on-change-runs-for-specific-property
+  extensions [xw]
+  globals [changed-key changed-value change-count]
+  O> set changed-key "" set changed-value nobody set change-count 0
+  O> xw:create-tab "t"
+  O> xw:create-slider "s" [ xw:set-value 0 xw:on-value-change [ value -> set changed-key xw:key set changed-value value set change-count change-count + 1 ] ]
+  O> xw:ask "s" [ xw:set-value 8 ]
+  O> wait 0.2
+  changed-key => "s"
+  changed-value => 8
+  change-count => 1
+
+on-change-replaces-existing-listener
+  extensions [xw]
+  globals [first-count second-count]
+  O> set first-count 0 set second-count 0
+  O> xw:create-tab "t"
+  O> xw:create-slider "s" [ xw:set-value 0 ]
+  O> xw:on-change "s" [ value -> set first-count first-count + 1 ]
+  O> xw:on-change "s" [ value -> set second-count second-count + 1 ]
+  O> xw:set "s" 1
+  O> wait 0.2
+  first-count => 0
+  second-count => 1
+
+on-change-listeners-are-removed-with-tab-children
+  extensions [xw]
+  globals [change-count]
+  O> set change-count 0
+  O> xw:create-tab "t"
+  O> xw:create-slider "s" [ xw:set-value 0 xw:on-value-change [ value -> set change-count change-count + 1 ] ]
+  O> xw:remove "t"
+  O> xw:create-tab "replacement-tab"
+  O> xw:create-slider "s" [ xw:set-value 0 ]
+  O> xw:ask "s" [ xw:set-value 1 ]
+  O> wait 0.2
+  change-count => 0
+
 disabling-tab-leaves-enabled-property-of-widgets-alone
   extensions [xw]
   O> xw:create-tab "t"
