@@ -22,14 +22,15 @@ to setup-gui-test
     xw:set-order 1
   ]
 
-  xw:select-tab "tab-a"
   xw:create-note "note" [
+    xw:set-tab "tab-a"
     xw:set-text "GUI test widgets"
     xw:set-x 10
     xw:set-y 10
     xw:set-width 220
   ]
   xw:create-slider "s" [
+    xw:set-tab "tab-a"
     xw:set-label "Slider"
     xw:set-minimum 0
     xw:set-maximum 100
@@ -39,12 +40,14 @@ to setup-gui-test
     xw:set-width 240
   ]
   xw:create-checkbox "cb" [
+    xw:set-tab "tab-a"
     xw:set-label "Checkbox"
     xw:set-selected? true
     xw:set-x 10
     xw:set-y 125
   ]
   xw:create-chooser "ch" [
+    xw:set-tab "tab-a"
     xw:set-label "Chooser"
     xw:set-items ["alpha" "beta" "gamma"]
     xw:set-selected-item "beta"
@@ -52,6 +55,7 @@ to setup-gui-test
     xw:set-y 175
   ]
   xw:create-multi-chooser "mc" [
+    xw:set-tab "tab-a"
     xw:set-label "Multi"
     xw:set-items ["red" "green" "blue"]
     xw:set-selected-items ["red"]
@@ -60,18 +64,21 @@ to setup-gui-test
     xw:set-height 120
   ]
   xw:create-text-input "txt" [
+    xw:set-tab "tab-a"
     xw:set-label "Text"
     xw:set-text "initial"
     xw:set-x 10
     xw:set-y 245
   ]
   xw:create-numeric-input "num" [
+    xw:set-tab "tab-a"
     xw:set-label "Number"
     xw:set-value 10
     xw:set-x 260
     xw:set-y 245
   ]
   xw:create-button "btn" [
+    xw:set-tab "tab-a"
     xw:set-label "Run"
     xw:set-commands "run-test-button"
     xw:set-x 10
@@ -91,6 +98,7 @@ to setup-gui-test
   ]
 
   check-created-state
+  xw:select-tab "tab-a"
   user-message (word
     "Setup complete.\n\n"
     "Manual checks:\n"
