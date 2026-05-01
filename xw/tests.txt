@@ -1,7 +1,7 @@
 colors-are-stored-as-numbers
   extensions [xw]
   O> xw:create-tab "t1"
-  O> foreach ["s1" "s2" "s3"] [ [s] -> xw:create-slider s [ xw:set-color red ] ]
+  O> foreach ["s1" "s2" "s3"] [ s -> xw:create-slider s [ xw:set-color red ] ]
   [ xw:color ] xw:of xw:sliders => [15 15 15]
   O> xw:ask one-of xw:sliders [ xw:set-color [215 50 41] ]
   [ xw:color ] xw:of xw:sliders => [15 15 15]
@@ -12,7 +12,7 @@ colors-are-stored-as-numbers
 sliders-can-be-positionned-relative-to-one-another
   extensions [xw]
   O> xw:create-tab "t1"
-  O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
+  O> foreach n-values 5 [ i -> word "s" i ] xw:create-slider
   O> (foreach (but-last xw:sliders) (but-first xw:sliders) [ [s1 s2] -> xw:ask s2 [ xw:set-y [ xw:y + xw:height + 10 ] xw:of s1 ]])
   [ xw:y ] xw:of xw:sliders => [10 70 130 190 250]
 
@@ -27,14 +27,14 @@ all-kinds-can-be-created-queried-and-deleted
   xw:numeric-inputs => []
   xw:buttons => []
   O> xw:create-tab "t1"
-  O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
-  O> foreach n-values 5 [ [i] -> word "n" i ] xw:create-note
-  O> foreach n-values 5 [ [i] -> word "cb" i ] xw:create-checkbox
-  O> foreach n-values 5 [ [i] -> word "c" i ] xw:create-chooser
-  O> foreach n-values 5 [ [i] -> word "mc" i ] xw:create-multi-chooser
-  O> foreach n-values 5 [ [i] -> word "ti" i ] xw:create-text-input
-  O> foreach n-values 5 [ [i] -> word "ni" i ] xw:create-numeric-input
-  O> foreach n-values 5 [ [i] -> word "b" i ] xw:create-button
+  O> foreach n-values 5 [ i -> word "s" i ] xw:create-slider
+  O> foreach n-values 5 [ i -> word "n" i ] xw:create-note
+  O> foreach n-values 5 [ i -> word "cb" i ] xw:create-checkbox
+  O> foreach n-values 5 [ i -> word "c" i ] xw:create-chooser
+  O> foreach n-values 5 [ i -> word "mc" i ] xw:create-multi-chooser
+  O> foreach n-values 5 [ i -> word "ti" i ] xw:create-text-input
+  O> foreach n-values 5 [ i -> word "ni" i ] xw:create-numeric-input
+  O> foreach n-values 5 [ i -> word "b" i ] xw:create-button
   xw:tabs => ["t1"]
   xw:notes => ["n0" "n1" "n2" "n3" "n4"]
   xw:checkboxes => ["cb0" "cb1" "cb2" "cb3" "cb4"]
@@ -74,7 +74,7 @@ readme-demo
   [ xw:items ] xw:of "shapes" => ["airplane" "arrow" "bug" "butterfly" "turtle"]
   O> xw:ask "shapes" [ xw:set-selected-items n-of 2 xw:items ]
   [ length xw:selected-items ] xw:of "shapes" => 2
-  [ reduce and map [ [itm] -> member? itm xw:items ] xw:selected-items ] xw:of "shapes" => true
+  [ reduce and map [ itm -> member? itm xw:items ] xw:selected-items ] xw:of "shapes" => true
   O> xw:ask "shapes" [ xw:set-y [ xw:y + xw:height + 10 ] xw:of "population" ]
   [ xw:y ] xw:of "shapes" => 70
   O> xw:ask "shapes" [ xw:set-height 150 ]
@@ -126,14 +126,14 @@ widgets-removed-with-tab
 test-ask-with-of
   extensions [xw]
   O> xw:create-tab "t1"
-  O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
-  O> foreach n-values 5 [ [i] -> word "n" i ] xw:create-note
-  O> foreach n-values 5 [ [i] -> word "cb" i ] xw:create-checkbox
-  O> foreach n-values 5 [ [i] -> word "c" i ] xw:create-chooser
-  O> foreach n-values 5 [ [i] -> word "mc" i ] xw:create-multi-chooser
-  O> foreach n-values 5 [ [i] -> word "ti" i ] xw:create-text-input
-  O> foreach n-values 5 [ [i] -> word "ni" i ] xw:create-numeric-input
-  O> foreach n-values 5 [ [i] -> word "b" i ] xw:create-button
+  O> foreach n-values 5 [ i -> word "s" i ] xw:create-slider
+  O> foreach n-values 5 [ i -> word "n" i ] xw:create-note
+  O> foreach n-values 5 [ i -> word "cb" i ] xw:create-checkbox
+  O> foreach n-values 5 [ i -> word "c" i ] xw:create-chooser
+  O> foreach n-values 5 [ i -> word "mc" i ] xw:create-multi-chooser
+  O> foreach n-values 5 [ i -> word "ti" i ] xw:create-text-input
+  O> foreach n-values 5 [ i -> word "ni" i ] xw:create-numeric-input
+  O> foreach n-values 5 [ i -> word "b" i ] xw:create-button
   length xw:widgets => 40
   O> xw:ask xw:widgets [ xw:set-color red ]
   length xw:widgets xw:with [ xw:color = red ] => 40
@@ -148,15 +148,15 @@ test-export-import
   extensions [xw]
   globals [glob1 glob2 glob3]
   O> xw:create-tab "t1"
-  O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
-  O> foreach n-values 5 [ [i] -> word "n" i ] xw:create-note
-  O> foreach n-values 5 [ [i] -> word "cb" i ] xw:create-checkbox
-  O> foreach n-values 5 [ [i] -> word "c" i ] xw:create-chooser
+  O> foreach n-values 5 [ i -> word "s" i ] xw:create-slider
+  O> foreach n-values 5 [ i -> word "n" i ] xw:create-note
+  O> foreach n-values 5 [ i -> word "cb" i ] xw:create-checkbox
+  O> foreach n-values 5 [ i -> word "c" i ] xw:create-chooser
   O> xw:create-tab "t2"
-  O> foreach n-values 5 [ [i] -> word "mc" i ] xw:create-multi-chooser
-  O> foreach n-values 5 [ [i] -> word "ti" i ] xw:create-text-input
-  O> foreach n-values 5 [ [i] -> word "ni" i ] xw:create-numeric-input
-  O> foreach n-values 5 [ [i] -> word "b" i ] xw:create-button
+  O> foreach n-values 5 [ i -> word "mc" i ] xw:create-multi-chooser
+  O> foreach n-values 5 [ i -> word "ti" i ] xw:create-text-input
+  O> foreach n-values 5 [ i -> word "ni" i ] xw:create-numeric-input
+  O> foreach n-values 5 [ i -> word "b" i ] xw:create-button
   O> set glob1 xw:tabs
   O> set glob2 xw:widgets
   O> set glob3 [ xw:tab ] xw:of xw:widgets
@@ -203,11 +203,11 @@ export-import-preserves-values
 import-multiple-files
   extensions [xw]
   O> xw:create-tab "t1"
-  O> foreach n-values 5 [ [i] -> word "s" i ] xw:create-slider
+  O> foreach n-values 5 [ i -> word "s" i ] xw:create-slider
   O> xw:export "target/t1.json"
   O> xw:clear-all
   O> xw:create-tab "t2"
-  O> foreach n-values 5 [ [i] -> word "mc" i ] xw:create-multi-chooser
+  O> foreach n-values 5 [ i -> word "mc" i ] xw:create-multi-chooser
   O> xw:export "target/t2.json"
   O> xw:clear-all
   O> xw:import "target/t1.json"
