@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model version="NetLogo 7.0.3" snapToGrid="false">
+  <code><![CDATA[extensions [xw]
+
+globals [events button-count]
+
+to setup-gui-test
+  ; This procedure builds the extra tabs and widgets used by the GUI smoke test.
+  ; It intentionally performs mechanical assertions before asking you to make
+  ; manual edits, so format/loading failures stop the test immediately.
+  clear-all
+  set events []
+  set button-count 0
+  xw:clear-all
+
+  xw:create-tab "tab-a" [
+    xw:set-title "XW Test A"
+    xw:set-order 2
+  ]
+  xw:create-tab "tab-b" [
+    xw:set-title "XW Test B"
+    xw:set-order 1
+  ]
+
+  xw:select-tab "tab-a"
+  xw:create-note "note" [
+    xw:set-text "GUI test widgets"
+    xw:set-x 10
+    xw:set-y 10
+    xw:set-width 220
+  ]
+  xw:create-slider "s" [
+    xw:set-label "Slider"
+    xw:set-minimum 0
+    xw:set-maximum 100
+    xw:set-value 25
+    xw:set-x 10
+    xw:set-y 60
+    xw:set-width 240
+  ]
+  xw:create-checkbox "cb" [
+    xw:set-label "Checkbox"
+    xw:set-selected? true
+    xw:set-x 10
+    xw:set-y 125
+  ]
+  xw:create-chooser "ch" [
+    xw:set-label "Chooser"
+    xw:set-items ["alpha" "beta" "gamma"]
+    xw:set-selected-item "beta"
+    xw:set-x 10
+    xw:set-y 175
+  ]
+  xw:create-multi-chooser "mc" [
+    xw:set-label "Multi"
+    xw:set-items ["red" "green" "blue"]
+    xw:set-selected-items ["red"]
+    xw:set-x 260
+    xw:set-y 60
+    xw:set-height 120
+  ]
+  xw:create-text-input "txt" [
+    xw:set-label "Text"
+    xw:set-text "initial"
+    xw:set-x 10
+    xw:set-y 245
+  ]
+  xw:create-numeric-input "num" [
+    xw:set-label "Number"
+    xw:set-value 10
+    xw:set-x 260
+    xw:set-y 245
+  ]
+  xw:create-button "btn" [
+    xw:set-label "Run"
+    xw:set-commands "run-test-button"
+    xw:set-x 10
+    xw:set-y 305
+  ]
+
+  xw:create-note "tab-b-note" [
+    xw:set-tab "tab-b"
+    xw:set-text "This widget should be on XW Test B."
+    xw:set-x 10
+    xw:set-y 10
+    xw:set-width 260
+  ]
+
+  foreach ["s" "cb" "ch" "mc" "txt" "num"] [ key ->
+    xw:on-change key [ value -> record-change xw:key value ]
+  ]
+
+  check-created-state
+  user-message (word
+    "Setup complete.\n\n"
+    "Manual checks:\n"
+    "1. The extra tabs should be XW Test B, then XW Test A.\n"
+    "2. XW Test A should be selected.\n"
+    "3. On XW Test A, set Slider to 60, uncheck Checkbox, choose gamma, "
+    "select green and blue in Multi using Ctrl-click or Command-click if needed, "
+    "set Text to typed, set Number to 42, "
+    "and click Run once.\n\n"
+    "Then return to the Interface tab and click check-manual-edits.")
+end
+
+to check-created-state
+  ; These assertions are deliberately independent from the visual checks above.
+  ; They prove that xw registered the expected widget state before we test
+  ; desktop-only behavior such as tab placement and user-driven callbacks.
+  require sort xw:tabs = ["tab-a" "tab-b"] "extra tabs were not registered"
+  require sort xw:widgets = ["btn" "cb" "ch" "mc" "note" "num" "s" "tab-b-note" "txt"] "extra widgets were not registered"
+  require [ xw:title ] xw:of "tab-a" = "XW Test A" "tab-a title was not stored"
+  require [ xw:title ] xw:of "tab-b" = "XW Test B" "tab-b title was not stored"
+  require [ xw:tab ] xw:of "tab-b-note" = "tab-b" "tab-b-note is not on tab-b"
+  require xw:get "s" = 25 "slider initial value is wrong"
+  require xw:get "cb" = true "checkbox initial value is wrong"
+  require xw:get "ch" = "beta" "chooser initial value is wrong"
+  require xw:get "mc" = ["red"] "multi-chooser initial value is wrong"
+  require xw:get "txt" = "initial" "text input initial value is wrong"
+  require xw:get "num" = 10 "numeric input initial value is wrong"
+end
+
+to check-manual-edits
+  ; Run this after making the edits described by setup-gui-test.  The short
+  ; wait gives xw's NetLogo job callbacks time to run before assertions read
+  ; the recorded state.
+  wait 0.2
+  require xw:get "s" = 60 "slider user edit did not reach xw:get"
+  require xw:get "cb" = false "checkbox user edit did not reach xw:get"
+  require xw:get "ch" = "gamma" "chooser user edit did not reach xw:get"
+  require sort xw:get "mc" = ["blue" "green"] "multi-chooser user edit did not reach xw:get"
+  require xw:get "txt" = "typed" "text input user edit did not reach xw:get"
+  require xw:get "num" = 42 "numeric input user edit did not reach xw:get"
+  require button-count = 1 "button click did not run its command exactly once"
+
+  let changed-keys remove-duplicates map [ event -> first event ] events
+  foreach ["s" "cb" "ch" "mc" "txt" "num" "btn"] [ key ->
+    require member? key changed-keys (word "no callback/event was recorded for " key)
+  ]
+
+  print events
+  user-message (word
+    "Manual edit checks passed.\n\n"
+    "Next, click check-tab-removal.  It should remove both extra tabs and "
+    "prove that their widgets are removed from xw's registry.")
+end
+
+to check-tab-removal
+  xw:remove "tab-a"
+  require xw:tabs = ["tab-b"] "removing tab-a did not leave exactly tab-b"
+  require xw:widgets = ["tab-b-note"] "removing tab-a did not remove its child widgets"
+
+  xw:remove "tab-b"
+  require empty? xw:tabs "tabs remain after removing both extra tabs"
+  require empty? xw:widgets "widgets remain after removing both extra tabs"
+
+  user-message "GUI test finished successfully."
+end
+
+to clear-gui-test
+  xw:clear-all
+  set events []
+  set button-count 0
+end
+
+to run-test-button
+  set button-count button-count + 1
+  record-change "btn" button-count
+end
+
+to record-change [key value]
+  set events lput (list key value) events
+end
+
+to require [condition message]
+  if not condition [
+    error (word "XW GUI test failed: " message)
+  ]
+end]]></code>
+  <widgets>
+    <view x="503" wrappingAllowedX="true" y="20" frameRate="30.0" minPycor="-8" height="241" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="true" width="241" tickCounterLabel="ticks" maxPycor="8" updateMode="1" maxPxcor="8" minPxcor="-8"></view>
+    <button x="25" y="25" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="170">setup-gui-test</button>
+    <button x="25" y="75" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="170">check-manual-edits</button>
+    <button x="25" y="125" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="170">check-tab-removal</button>
+    <button x="25" y="175" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="170">clear-gui-test</button>
+    <monitor x="220" precision="0" y="25" height="60" fontSize="11" width="125">button-count</monitor>
+    <monitor x="220" precision="3" y="95" height="120" fontSize="10" width="250">events</monitor>
+    <note x="25" y="235" backgroundDark="0" fontSize="12" width="450" markdown="false" height="176" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">1. Click setup-gui-test.
+2. Follow the popup instructions on the xw tabs.
+3. Click check-manual-edits.
+4. Click check-tab-removal.
+
+The buttons raise NetLogo errors if a mechanical check fails. The only visual checks are tab order, tab selection, and whether the widgets render on the expected xw tabs.</note>
+  </widgets>
+  <info><![CDATA[## XW GUI Test
+
+This model is a manual, repeatable GUI smoke test for the xw extension on NetLogo 7.
+
+It assumes that NetLogo can load `extensions [xw]`. For migration testing, the usual setup is to symlink this repository's `xw` directory into the NetLogo 7.0.3 `extensions` directory after running `sbt 'xw / packageZip'`.
+
+## How To Run It
+
+1. Open this model in NetLogo 7.0.3.
+2. Click `setup-gui-test`.
+3. Confirm that two extra tabs are visible: `XW Test B` before `XW Test A`.
+4. Confirm that `XW Test A` is selected.
+5. On `XW Test A`, make these edits:
+
+   - set `Slider` to `60`
+   - uncheck `Checkbox`
+   - set `Chooser` to `gamma`
+   - select `green` and `blue` in `Multi`, using Ctrl-click or Command-click if needed
+   - set `Text` to `typed`, then press Enter or move focus away
+   - set `Number` to `42`, then press Enter or move focus away
+   - click `Run` once
+
+6. Return to the Interface tab and click `check-manual-edits`.
+7. Click `check-tab-removal`.
+
+If a mechanical check fails, the model raises a NetLogo error with a message beginning `XW GUI test failed:`. If the test completes, it displays `GUI test finished successfully.`
+
+## What This Covers
+
+This test complements the headless test suite. It checks the migration-sensitive desktop behavior that headless tests cannot prove:
+
+- xw tabs render in the NetLogo 7 desktop UI
+- tab title/order/selection behavior is usable
+- all bundled xw widget kinds render
+- user-driven edits flow back to `xw:get`
+- user-driven edits trigger `xw:on-change`
+- xw button clicks run their command string
+- removing an xw tab removes its child widgets from xw's registry]]></info>
+  <linkShapes>
+    <shape name="default" curviness="0.0">
+      <lines>
+        <line x="-0.2" visible="false">
+          <dash value="0.0"></dash>
+          <dash value="1.0"></dash>
+        </line>
+        <line x="0.0" visible="true">
+          <dash value="1.0"></dash>
+          <dash value="0.0"></dash>
+        </line>
+        <line x="0.2" visible="false">
+          <dash value="0.0"></dash>
+          <dash value="1.0"></dash>
+        </line>
+      </lines>
+      <indicator>
+        <shape name="link direction" rotatable="true" editableColorIndex="0">
+          <line endX="90" startY="150" marked="true" color="-1920102913" endY="180" startX="150"></line>
+          <line endX="210" startY="150" marked="true" color="-1920102913" endY="180" startX="150"></line>
+        </shape>
+      </indicator>
+    </shape>
+  </linkShapes>
+  <previewCommands>setup-gui-test</previewCommands>
+</model>

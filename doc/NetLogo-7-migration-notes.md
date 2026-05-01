@@ -16,6 +16,7 @@ This is a handoff note for the `netlogo-7-migration` branch. It records the stat
 - The normal headless test suite is enabled and passing.
 - The `xw / test` suite currently runs 24 tests, including focused coverage for `xw:on-change`, property-specific `xw:on-...-change`, button command execution, installed widget discovery, and malformed property-map parsing.
 - The package task produces `xw/xw-3.0.0-SNAPSHOT.zip`.
+- A manual NetLogo 7 desktop GUI test model exists at `test-models/xw-gui-test.nlogox`. It contains its own Info-tab instructions and phase-specific popup prompts.
 
 ## Commit Trail
 
@@ -188,6 +189,7 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - `ExtraWidgetsExtension.primitiveMetadataFallback()` remains a build-time bridge because NetLogo's `PrimsJson` tool calls `load` without an installed extension folder. The previous directory-scanning workaround has been removed; the fallback now uses the widget jars that sbt is already packaging.
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. Headless tests now cover `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks, but desktop/user-driven callback scheduling still needs a real NetLogo 7 GUI smoke test.
 - The smoke test proved package loading and basic headless primitive operation, but it did not prove Swing widget rendering, tab placement, user-driven event updates, GUI button clicks, or desktop unload/reload behavior.
+- `test-models/xw-gui-test.nlogox` has been generated and verified to load through NetLogo 7 headless, but it still needs to be run manually in the NetLogo 7 desktop UI.
 - `xw/build.sbt` currently has `netLogoHomepage := "https://github.com/NetLogo/NetLogo-Extension-Plugin"`, which looks like plugin sample metadata rather than the xw project homepage. Review before release.
 
 ## Suggested Next Steps
@@ -195,10 +197,10 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 1. Push and resume from `netlogo-7-migration`.
 2. Run `sbt clean test` and `sbt 'xw / packageZip'` on the new machine with Java 17.
 3. Run `sbt 'xw / packagedSmoke'` to verify the packaged zip from a fresh temporary install layout.
-4. Install the packaged zip into a real NetLogo 7 desktop extensions directory and manually smoke-test GUI behavior.
-5. In the GUI smoke test, load a model with `extensions [xw]`, create a tab, create each bundled widget kind, reorder tabs via `xw:set-order`, rename tabs via `xw:set-title`, remove tabs, and run `xw:select-tab` by index and by key.
-6. Test user-driven widget changes in the GUI and confirm state updates flow back to `xw:get` and `xw:of`.
-7. Test GUI button clicks and `xw:on-change` callbacks triggered by user-driven widget changes because they touch NetLogo job/context internals outside the headless execution path.
+4. Install the packaged zip, or symlink this repository's `xw` directory, into a real NetLogo 7 desktop extensions directory.
+5. Open `test-models/xw-gui-test.nlogox` in NetLogo 7.0.3 and follow its Info-tab/popup instructions.
+6. In that GUI test, verify tab ordering and selection visually, then use the model buttons to mechanically assert user-driven widget edits, GUI button clicks, `xw:on-change` callbacks, and tab removal.
+7. If the generated GUI test passes, also test desktop unload/reload behavior by closing and reopening the model in a fresh NetLogo process.
 8. Review `primitiveMetadataFallback()` after the rest of the migration is stable and decide whether the current sbt-to-`PrimsJson` handoff should remain as supported build infrastructure.
 9. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
 
