@@ -181,7 +181,7 @@ If this smoke test is worth keeping, convert it into a tracked test or scripted 
 7. Test button commands and `xw:on-change` callbacks because they touch NetLogo job/context internals.
 8. Review `primitiveMetadataFallback()` and decide whether it should remain as a supported build-time mechanism or be replaced with a cleaner NetLogo 7 metadata approach.
 9. Review and clean the suspicious exception handling in `extension/util/package.scala`.
-10. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes.
+10. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
 
 ## Useful Resume Checklist
 
