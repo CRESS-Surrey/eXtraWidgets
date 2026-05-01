@@ -29,21 +29,26 @@ be updated in full until the implementation migration is complete.
 
 - Branch: `netlogo-7-migration`
 - Local status at handover time: clean before this handover edit
-- Local branch status at handover time: ahead of `origin/netlogo-7-migration`
-  by 14 commits
+- Local branch status at handover time: ahead of `origin/netlogo-7-migration`;
+  run `git status --short --branch` for the current count before pushing
 - Last code commit before this handover: `ebeffa3 Remove stale migration cleanup leftovers`
-- Migration target: NetLogo `7.0.3`
+- Final release target to revisit: NetLogo `7.0.4`, once its artifacts settle
+- Current configured/verified NetLogo version: `7.0.3`
 - Scala version: `3.7.0`
 - sbt version: `1.7.2`
 - Verified Java: OpenJDK 17 with
   `JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64`
-- NetLogo extension plugin:
+- Current NetLogo extension plugin:
   `org.nlogo:netlogo-extension-plugin:7.0.3-d1d7e42`
 - Project version: `3.0.0-SNAPSHOT`
 
-Java 17 is the intended alignment point for this branch.  Continue running
-verification commands with Java 17 unless there is a specific reason to test
-another JDK.
+NetLogo 7.0.4 was reported as released on 2026-05-01 after the latest code
+verification.  An immediate retarget attempt on 2026-05-02 found the newly
+published artifacts too raw to adopt cleanly, so the branch is intentionally
+still configured and verified against 7.0.3 for now.  Do not add local shims or
+workarounds just to bridge this temporary state; recheck the 7.0.4 artifacts in
+a few days and retarget cleanly if possible.  Java 17 remains the intended
+alignment point for this branch.
 
 ## Recent Commit Trail
 
@@ -70,6 +75,8 @@ e7359d7 Fix GUI tab selection timing
 fffa407 Record GUI test pass
 3572535 Add theme-aware default colours
 ebeffa3 Remove stale migration cleanup leftovers
+16f37b0 Update NetLogo 7 migration handover
+ccc0988 Record issue triage in migration handover
 ```
 
 ## What Is Done
@@ -79,7 +86,8 @@ The project compiles and tests under NetLogo 7 with Scala 3:
 - `build.sbt` uses Scala `3.7.0` with fatal warnings enabled.
 - `project/build.properties` uses sbt `1.7.2`.
 - `project/plugins.sbt` uses the NetLogo 7 extension plugin.
-- `xw/build.sbt` targets NetLogo `7.0.3`.
+- `xw/build.sbt` currently targets NetLogo `7.0.3`; keep it there until the
+  7.0.4 artifacts can pass the test/package workflow without local shims.
 - The normal `xw / test` suite passes.
 - The package task produces `xw/xw-3.0.0-SNAPSHOT.zip`.
 - NetLogo's `PrimsJson` generation runs successfully.
@@ -94,7 +102,7 @@ NetLogo 7 desktop integration has been migrated:
   `xw:create-tab ... xw:select-tab ...` works reliably in one NetLogo job.
 - `xw:select-tab` is a no-op in headless mode, which is covered by tests.
 - The manual GUI smoke test model at `test-models/xw-gui-test.nlogox` passed in
-  NetLogo 7.0.3.
+  NetLogo 7.0.3; rerun it when revisiting 7.0.4.
 
 Dynamic widget discovery and metadata generation are in good shape:
 
@@ -172,7 +180,8 @@ env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
   sbt 'xw / test'
 ```
 
-At handover time this passed with 26 tests.
+At handover time this passed with 26 tests against the current 7.0.3 build.
+Rerun during the later 7.0.4 retarget check.
 
 ```bash
 env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
@@ -180,7 +189,7 @@ env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
   sbt 'xw / packageZip' 'xw / packagedSmoke'
 ```
 
-At handover time this passed and printed:
+At handover time this passed against the current 7.0.3 build and printed:
 
 ```text
 xw smoke ok
@@ -198,7 +207,7 @@ env JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
 The GUI smoke test is manual:
 
 1. Build/package the extension.
-2. Ensure NetLogo 7.0.3 can load `extensions [xw]`.
+2. Ensure the target NetLogo 7 desktop app can load `extensions [xw]`.
 3. Open `test-models/xw-gui-test.nlogox` in the NetLogo 7 desktop app.
 4. Click `setup-gui-test` and follow the popup plus Info-tab instructions.
 
@@ -222,6 +231,11 @@ These are not considered migration leftovers:
 
 Review before release:
 
+- Revisit the NetLogo 7.0.4 retarget before release.  The first attempt on
+  2026-05-02 failed during test compilation against newly published artifacts,
+  so the branch was left on the clean 7.0.3 baseline.  Recheck the NetLogo jar,
+  test jar, extension plugin, desktop app, and release notes before changing
+  the build again.
 - `xw/build.sbt` still has
   `netLogoHomepage := "https://github.com/NetLogo/NetLogo-Extension-Plugin"`.
   This looks like sample plugin metadata and should probably be changed to the
@@ -280,7 +294,46 @@ Open GitHub issue snapshot from 2026-05-01:
 
 ## What Is Left To Do
 
-### 1. API And Primitive Compatibility Audit
+### 1. Revisit NetLogo 7.0.4 After Artifacts Settle
+
+NetLogo 7.0.4 became the intended release target on 2026-05-01, after the
+branch had already been verified against NetLogo 7.0.3.  An immediate retarget
+attempt on 2026-05-02 was deliberately backed out because it looked like an
+artifact-publishing problem rather than an xw migration problem.
+
+What was checked:
+
+- NetLogo Maven metadata listed `7.0.4` as latest/release with
+  `lastUpdated` `20260501174339`.
+- NetLogo extension plugin metadata still listed `7.0.3-d1d7e42` as
+  latest/release, with no obvious 7.0.4-specific plugin build.
+- After changing `api/build.sbt` and `xw/build.sbt` to `7.0.4`, main xw
+  sources compiled but `sbt 'xw / test'` failed during test compilation.
+- The failure was a Scala compiler assertion while typechecking
+  `xw/src/test/scala/uk/ac/surrey/xw/extension/Tests.scala`, which extends
+  `org.nlogo.headless.TestLanguage(TxtsInDir("xw"))`.
+- `javap` showed NetLogo 7.0.4's `TestLanguage` implements
+  `org.nlogo.util.AnyFunSuiteEx`, but that class was not present in either
+  `netlogo-7.0.4.jar` or `netlogo-7.0.4-tests.jar`.
+
+Do not add a test-scope shim for `org.nlogo.util.AnyFunSuiteEx` unless there is
+later evidence that this is a stable NetLogo 7.0.4 shape and not just a fresh
+release artifact issue.  The preferred next action is to wait a few days, then:
+
+- recheck NetLogo and netlogo-extension-plugin Maven metadata
+- check whether `netlogo-7.0.4.jar` or `netlogo-7.0.4-tests.jar` now includes
+  `org.nlogo.util.AnyFunSuiteEx`
+- install NetLogo 7.0.4 locally
+- update `api/build.sbt` and `xw/build.sbt` from `7.0.3` to `7.0.4`
+- run `sbt 'xw / test'`
+- run `sbt 'xw / packageZip' 'xw / packagedSmoke'`
+- point the NetLogo 7.0.4 install's `extensions/xw` at this repo's `xw`
+  directory, or otherwise install the newly built package
+- rerun `test-models/xw-gui-test.nlogox` in the NetLogo 7.0.4 desktop app
+- check whether any 7.0.4 release notes mention extension API, GUI, tab, theme,
+  or packaging changes relevant to xw
+
+### 2. API And Primitive Compatibility Audit
 
 This is the next substantive step.
 
@@ -322,7 +375,7 @@ used as compatibility fixtures via git history if needed, for example:
 git show ebeffa3^:tests/export-import-preserves-values.json
 ```
 
-### 2. Add Or Adjust Tests Found By The Audit
+### 3. Add Or Adjust Tests Found By The Audit
 
 Only add tests for behavior that matters long-term.  Avoid tests whose only
 purpose is to lock in migration mechanics.
@@ -337,7 +390,7 @@ Likely valuable additions if not already covered enough:
 - a regression test for primitive metadata generation if the API audit touches
   dynamic primitive construction
 
-### 3. Pre-Migration Test Coverage Audit
+### 4. Pre-Migration Test Coverage Audit
 
 When work resumes, also look beyond migration-specific behavior and evaluate
 coverage for xw behavior that predates NetLogo 7.  The goal is not to inflate
@@ -363,7 +416,7 @@ side effects (`#147`).
 Prefer compact headless tests where possible.  Use the GUI smoke model only for
 desktop behavior that cannot be proven headlessly.
 
-### 4. Desktop Lifecycle Verification
+### 5. Desktop Lifecycle Verification
 
 The GUI smoke test passed, but still explicitly verify lifecycle behavior before
 calling the implementation complete:
@@ -383,7 +436,7 @@ The relevant code is:
 - `core/src/main/scala/uk/ac/surrey/xw/gui/GUI.scala`
 - `api/src/main/scala/uk/ac/surrey/xw/api/Tab.scala`
 
-### 5. GitHub Issue Review
+### 6. GitHub Issue Review
 
 Before declaring the migration complete, review the open issues on the GitHub
 repo.  This requires checking current GitHub state, not relying on memory.
@@ -401,7 +454,7 @@ context for whether an issue is truly fixed or merely changed.
 The 2026-05-01 snapshot above is only a starting point.  Re-check GitHub before
 acting because the issue list may have changed.
 
-### 6. Final Package Checks
+### 7. Final Package Checks
 
 After code/test fixes from the audit:
 
@@ -425,7 +478,7 @@ jar tf xw/xw-3.0.0-SNAPSHOT.zip
 Use the appropriate command for the artifact being inspected; `unzip -l` is the
 more direct command for the zip.
 
-### 7. Documentation Update
+### 8. Documentation Update
 
 Only do this after the implementation and verification are complete.
 
