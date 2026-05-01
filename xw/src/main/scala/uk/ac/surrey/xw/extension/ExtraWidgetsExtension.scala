@@ -40,6 +40,8 @@ import org.nlogo.workspace.AbstractWorkspace
 
 class ExtraWidgetsExtension extends DefaultClassManager {
 
+  private val primitiveMetadataWidgetJarsProperty = "uk.ac.surrey.xw.primitiveMetadataWidgetJars"
+
   private var widgetContextManager: WidgetContextManager = null
   private var writer: Writer = null
   private var primitives: Iterable[(String, Primitive)] = null
@@ -136,9 +138,14 @@ class ExtraWidgetsExtension extends DefaultClassManager {
   }
 
   private def primitiveMetadataFallback(): Iterable[(String, Primitive)] = {
+    // NetLogo's PrimsJson generator calls load() directly on a fresh class
+    // manager. At that point runOnce() has not discovered the installed xw
+    // folder, so sbt supplies the same widget jars it will put in the package.
+    // We still build the primitive metadata from real WidgetKind classes rather
+    // than maintaining a second, hardcoded primitive list.
     val widgetKinds = {
       val kinds = WidgetsLoader.loadWidgetKindsFromJars(
-        buildWidgetJars,
+        primitiveMetadataWidgetJars,
         getClass.getClassLoader)
       (new TabKind +: kinds.toSeq)
         .map(kind => kind.name -> kind)
@@ -154,42 +161,29 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       null)
   }
 
-  private def buildWidgetJars: Seq[File] = {
-    val codeSource = Option(getClass.getProtectionDomain.getCodeSource)
-      .getOrElse(throw new ExtensionException("Can't locate xw extension jar."))
-    val extensionJar = new File(codeSource.getLocation.toURI)
-    val projectCandidates = Seq(
-      Option(extensionJar.getParentFile)
-        .flatMap(file => Option(file.getParentFile))
-        .flatMap(file => Option(file.getParentFile)),
-      Some(new File("xw").getAbsoluteFile),
-      Some(new File(".").getAbsoluteFile)
-    ).flatten.distinct
-    val jars = projectCandidates
-      .flatMap(projectDir => widgetJarsBelow(new File(projectDir, "widgets")))
-      .distinct
-      .sortBy(_.getAbsolutePath)
-    if (jars.isEmpty)
+  private def primitiveMetadataWidgetJars: Seq[File] = {
+    val configuredJars = Option(System.getProperty(primitiveMetadataWidgetJarsProperty))
+      .map(_.trim)
+      .filter(_.nonEmpty)
+      .getOrElse(
+        throw new ExtensionException(
+          "Can't locate xw widget jars for primitive metadata. " +
+            s"Set $primitiveMetadataWidgetJarsProperty when generating prims.json."))
+
+    val jars = configuredJars
+      .split(File.pathSeparator)
+      .toSeq
+      .filter(_.nonEmpty)
+      .map(path => new File(path).getAbsoluteFile)
+
+    val missingJars = jars.filterNot(_.isFile)
+    if (missingJars.nonEmpty)
       throw new ExtensionException(
-        "Can't locate built xw widget jars below any of: " +
-          projectCandidates.map(new File(_, "widgets")).mkString(", ") + ".")
+        "Can't locate xw widget jars for primitive metadata: " +
+          missingJars.mkString(", ") + ".")
+
     jars
   }
-
-  private def widgetJarsBelow(widgetsDir: File): Seq[File] = {
-    for {
-      widgetDir <- listFiles(widgetsDir).toSeq
-      if widgetDir.isDirectory
-      targetDir = new File(widgetDir, "target")
-      scalaTarget <- listFiles(targetDir).toSeq
-      if scalaTarget.isDirectory && scalaTarget.getName.startsWith("scala-")
-      jar <- listFiles(scalaTarget)
-      if jar.isFile && jar.getName.equalsIgnoreCase(widgetDir.getName + ".jar")
-    } yield jar
-  }
-
-  private def listFiles(file: File): Array[File] =
-    Option(file.listFiles).getOrElse(Array.empty)
 
   def load(primitiveManager: PrimitiveManager): Unit =
     for ((name, prim) <- Option(primitives).getOrElse(primitiveMetadataFallback()))

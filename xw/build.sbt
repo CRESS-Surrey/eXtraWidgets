@@ -31,6 +31,36 @@ Compile / packageBin := (Compile / packageBin).dependsOn(
 lazy val packagedSmoke = taskKey[Unit](
   "Build the xw zip, install it into a temporary NetLogo extensions folder, and smoke-test that installed copy.")
 
+lazy val primitiveMetadataWidgetJars = taskKey[Seq[File]](
+  "The widget jars xw needs when NetLogo generates prims.json without an installed extension directory.")
+
+lazy val preparePrimitiveMetadata = taskKey[Unit](
+  "Pass xw's packaged widget jars to PrimsJson through a build-time system property.")
+
+primitiveMetadataWidgetJars := {
+  // xw discovers primitives from WidgetKind classes.  At runtime those classes
+  // are found in the installed extension's `widgets/` directory, but NetLogo's
+  // PrimsJson build tool calls the class manager before such an installed
+  // directory exists.  Deriving this list from netLogoPackageExtras keeps the
+  // build-time metadata path tied to the packaging configuration instead of a
+  // second hardcoded list in Scala code.
+  netLogoPackageExtras.value.collect {
+    case (jar, Some(path)) if path.replace('\\', '/').startsWith("widgets/") =>
+      jar.getAbsoluteFile
+  }
+}
+
+preparePrimitiveMetadata := {
+  // Only the PrimsJson build process reads this property.  It is intentionally
+  // not part of the packaged extension API; installed xw still discovers widget
+  // jars from the extension folder at runtime.
+  System.setProperty(
+    "uk.ac.surrey.xw.primitiveMetadataWidgetJars",
+    primitiveMetadataWidgetJars.value.map(_.getAbsolutePath).mkString(File.pathSeparator))
+}
+
+Compile / runMain := (Compile / runMain).dependsOn(preparePrimitiveMetadata).evaluated
+
 packagedSmoke := {
   val log = streams.value.log
 

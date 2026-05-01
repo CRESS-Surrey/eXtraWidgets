@@ -147,7 +147,7 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - NetLogo 7 GUI API changes were handled in `api/src/main/scala/uk/ac/surrey/xw/api/RichWorkspace.scala` and `api/src/main/scala/uk/ac/surrey/xw/api/Tab.scala`, using `App`, `AppFrame`, `TabManager`, `TabsPanel`, and `TabLabel`.
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/prim/SelectTab.scala` now works against `AbstractWorkspace` and only performs GUI tab selection when the workspace is a `GUIWorkspace`; in headless mode it intentionally does nothing.
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/ExtraWidgetsExtension.scala` now uses NetLogo 7 extension loading behavior and `JarLoader(workspace).locateExtension("xw")` to find the installed extension folder.
-- `ExtraWidgetsExtension` has `primitiveMetadataFallback()` for metadata generation when NetLogo's `PrimsJson` calls `load` without a prior `runOnce`. This fallback loads built widget jars directly, constructs a metadata-only `Writer` and `KindInfo`, and reuses `primitiveList`.
+- `ExtraWidgetsExtension` has `primitiveMetadataFallback()` for metadata generation when NetLogo's `PrimsJson` calls `load` without a prior `runOnce`. `xw/build.sbt` now derives the widget jar list from `netLogoPackageExtras`, passes it through the build-only `uk.ac.surrey.xw.primitiveMetadataWidgetJars` system property, and the fallback reuses real `WidgetKind` classes to build primitive metadata.
 - `Writer` was moved away from deprecated Scala 2 publisher APIs and now has its own subscriber/listener mechanism.
 - Java collection conversions were moved from `scala.collection.JavaConverters` to `scala.jdk.CollectionConverters`.
 - Deprecated `Either.right` projections were removed where they caused Scala 3 warnings.
@@ -163,8 +163,7 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 - `RichWorkspace.app` finds the `App` through `ws.getFrame.asInstanceOf[AppFrame].getLinkChildren.collectFirst`. This works at compile time against NetLogo 7.0.3, but it is coupled to NetLogo desktop internals and should be manually verified.
 - `Tab.addToAppTabs`, `Tab.removeFromAppTabs`, `Tab.setTitle`, and `RichWorkspace.reorderTabs` depend on NetLogo 7 tab ordering and `TabLabel` behavior. These are likely to be the highest-risk GUI behaviors.
 - `SelectTab` is intentionally a no-op in headless mode. That matches the existing test expectation that selecting tabs should not crash headless, but it does not verify desktop selection behavior.
-- `ExtraWidgetsExtension.primitiveMetadataFallback()` is a pragmatic migration bridge. It allows `PrimsJson` and packaging to work even though xw primitives are dynamically generated from bundled widget jars. A more proper long-term update may be to make primitive metadata generation explicit and less dependent on finding build output directories.
-- `buildWidgetJars` currently searches candidate project directories for widget jar build outputs during metadata fallback. This is acceptable for the build, but should be reviewed before considering the migration complete.
+- `ExtraWidgetsExtension.primitiveMetadataFallback()` remains a build-time bridge because NetLogo's `PrimsJson` tool calls `load` without an installed extension folder. The previous directory-scanning workaround has been removed; the fallback now uses the widget jars that sbt is already packaging.
 - `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` still uses NetLogo internals such as `Activation`, `Context`, and `makeConcurrentJob` for anonymous command execution. This area should be tested with `xw:on-change`, property-specific `xw:on-...-change`, and button command callbacks in NetLogo 7.
 - There is suspicious pre-existing code in `xw/src/main/scala/uk/ac/surrey/xw/extension/util/package.scala` around exception handling, including `throw throw new ExtensionException(...)` and a catch case that constructs an `ExtensionException`. This was not changed during warning cleanup to keep diffs focused.
 - The smoke test proved package loading and basic headless primitive operation, but it did not prove Swing widget rendering, tab placement, user-driven event updates, button clicks, or desktop unload/reload behavior.
@@ -179,7 +178,7 @@ This smoke test has since been converted into the explicit `xw / packagedSmoke` 
 5. In the GUI smoke test, load a model with `extensions [xw]`, create a tab, create each bundled widget kind, reorder tabs via `xw:set-order`, rename tabs via `xw:set-title`, remove tabs, and run `xw:select-tab` by index and by key.
 6. Test user-driven widget changes in the GUI and confirm state updates flow back to `xw:get` and `xw:of`.
 7. Test button commands and `xw:on-change` callbacks because they touch NetLogo job/context internals.
-8. Review `primitiveMetadataFallback()` and decide whether it should remain as a supported build-time mechanism or be replaced with a cleaner NetLogo 7 metadata approach.
+8. Review `primitiveMetadataFallback()` after the rest of the migration is stable and decide whether the current sbt-to-`PrimsJson` handoff should remain as supported build infrastructure.
 9. Review and clean the suspicious exception handling in `extension/util/package.scala`.
 10. Update user and developer documentation for NetLogo 7, Scala 3, Java 17, and any installation changes. When updating NetLogo code examples, use concise one-argument anonymous procedure syntax such as `[ value -> ... ]`; keep bracketed argument lists for multi-argument anonymous procedures such as `[ [a b] -> ... ]`.
 
@@ -198,7 +197,7 @@ env JAVA_HOME=<java-17-home> PATH=<java-17-home>/bin:/usr/bin:/bin sbt 'xw / pac
 
 If the build fails from missing dependencies, let sbt/coursier download them. The migration has already needed NetLogo artifacts, NetLogo extension plugin artifacts, Scala 3 artifacts, JOGL, GlueGen, and json-simple.
 
-If package generation fails around primitive metadata, start by looking at `ExtraWidgetsExtension.load`, `primitiveMetadataFallback`, and `buildWidgetJars`.
+If package generation fails around primitive metadata, start by looking at `ExtraWidgetsExtension.load`, `primitiveMetadataFallback`, `primitiveMetadataWidgetJars`, and the `preparePrimitiveMetadata` task in `xw/build.sbt`.
 
 If GUI behavior fails while headless tests pass, start by looking at `RichWorkspace`, `Tab`, `GUI`, and `SelectTab`.
 
