@@ -67,7 +67,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     }
 
     val kindInfo = new KindInfo(writer, widgetKinds)
-    primitives = primitiveList(writer, widgetKinds, widgetContextManager, kindInfo, workspace)
+    primitives = primitiveList(writer, widgetKinds, widgetContextManager, kindInfo, Some(workspace))
 
     gui = getApp(extensionManager).map(new GUI(_, writer, widgetKinds))
   }
@@ -77,7 +77,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
     widgetKinds: Map[KindName, WidgetKind[?]],
     widgetContextManager: WidgetContextManager,
     kindInfo: KindInfo,
-    workspace: AbstractWorkspace): Iterable[(String, Primitive)] = {
+    workspace: Option[AbstractWorkspace]): Iterable[(String, Primitive)] = {
     val staticPrimitives: Iterable[(String, Primitive)] = Seq(
       "ASK" -> new Ask(widgetContextManager),
       "OF" -> new Of(widgetContextManager),
@@ -158,7 +158,7 @@ class ExtraWidgetsExtension extends DefaultClassManager {
       widgetKinds,
       new WidgetContextManager,
       metadataKindInfo,
-      null)
+      None)
   }
 
   private def primitiveMetadataWidgetJars: Seq[File] = {

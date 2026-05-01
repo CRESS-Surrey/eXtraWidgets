@@ -15,11 +15,11 @@ import uk.ac.surrey.xw.api.XWException
 import uk.ac.surrey.xw.api.toRunnable
 import uk.ac.surrey.xw.state.Reader
 
-class SelectTab(reader: Reader, ws: AbstractWorkspace) extends Command {
+class SelectTab(reader: Reader, workspace: Option[AbstractWorkspace]) extends Command {
   override def getSyntax = commandSyntax(right = List(NumberType | StringType))
   def perform(args: Array[Argument], context: Context): Unit =
-    ws match {
-      case guiWS: GUIWorkspace =>
+    workspace match {
+      case Some(guiWS: GUIWorkspace) =>
         args(0).get match {
           case n: java.lang.Number =>
             onGUIThread {

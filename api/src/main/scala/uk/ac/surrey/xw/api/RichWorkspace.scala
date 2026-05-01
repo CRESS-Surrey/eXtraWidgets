@@ -15,9 +15,14 @@ object RichWorkspace {
 
 class RichWorkspace(ws: GUIWorkspace) {
 
-  def app: App = ws.getFrame.asInstanceOf[AppFrame].getLinkChildren
-    .collectFirst { case app: App => app }
-    .getOrElse(throw new XWException("Can't access application tabs."))
+  def app: App = ws.getFrame match {
+    case frame: AppFrame =>
+      frame.getLinkChildren
+        .collectFirst { case app: App => app }
+        .getOrElse(throw new XWException("Can't access application tabs."))
+    case _ =>
+      throw new XWException("Can't access application tabs.")
+  }
 
   def tabManager: TabManager = app.tabManager
 
